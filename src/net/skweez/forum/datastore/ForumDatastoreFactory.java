@@ -2,13 +2,9 @@ package net.skweez.forum.datastore;
 
 public class ForumDatastoreFactory {
 	
-	private static IForumDatastore datastore;
+	private static IForumDatastore datastore = new SimpleForumDatastore();
 	
 	public static IForumDatastore getConfiguredDatastore() {
-		if (datastore == null) {
-			datastore = new SimpleForumDatastore();
-		}
-		
 		return datastore;
 	}
 
