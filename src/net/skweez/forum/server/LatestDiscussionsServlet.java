@@ -1,12 +1,14 @@
 package net.skweez.forum.server;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.skweez.forum.datastore.ForumDatastoreFactory;
 import net.skweez.forum.model.Discussion;
 
 import com.thoughtworks.xstream.XStream;
@@ -21,10 +23,11 @@ public class LatestDiscussionsServlet extends HttpServlet {
 		response.setContentType("text/json;charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		Discussion discussion = new Discussion();
+		List<Discussion> discussions = ForumDatastoreFactory
+				.getConfiguredDatastore().getDiscussions();
 
 		XStream xstream = new XStream(new JsonHierarchicalStreamDriver());
-		xstream.toXML(discussion, response.getOutputStream());
+		xstream.toXML(discussions, response.getOutputStream());
 	}
 
 }

@@ -13,7 +13,7 @@ public class ForumServer extends Server {
 		context.setContextPath("/");
 		setHandler(context);
 
-		context.addServlet(LatestDiscussionsServlet.class, "/latest");
+		context.addServlet(LatestDiscussionsServlet.class, "/discussion");
 	}
 
 	public static void main(String... args) throws Exception {
