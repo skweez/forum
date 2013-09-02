@@ -5,6 +5,12 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class ForumServer extends Server {
 
+	public static void main(String... args) throws Exception {
+		Server server = new ForumServer();
+		server.start();
+		server.join();
+	}
+
 	public ForumServer() {
 		super(8080);
 
@@ -14,11 +20,5 @@ public class ForumServer extends Server {
 		setHandler(context);
 
 		context.addServlet(LatestDiscussionsServlet.class, "/discussion");
-	}
-
-	public static void main(String... args) throws Exception {
-		Server server = new ForumServer();
-		server.start();
-		server.join();
 	}
 }
