@@ -2,12 +2,44 @@
 <head>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
-$( document ).ready(function() {
-	$.getJSON('discussion', function(data) {
-		$.each(data.list, function(i, discussion) {
-			$('#discussions').append('<li><a href="discussion.html?id='+discussion.id+'">'+discussion.title+'</a></li>');
+function renderDiscussion(discussion) {
+	$('#discussions').append('<li><a href="discussion.html?id='+discussion.id+'">'+discussion.title+'</a></li>');
+}
+
+function reloadDiscussions() {
+	$('#discussions').empty();
+	$.getJSON('discussion', function(discussions) {
+		$.each(discussions, function(i, discussion) {
+			renderDiscussion(discussion);
 		});
 	});
+}
+
+$( document ).ready(function() {
+	
+	reloadDiscussions();
+	
+	$("#newDiscussionForm").submit(function(event) {
+		 
+		  /* stop form from submitting normally */
+		  event.preventDefault();
+		 
+		  /* get some values from elements on the page: */
+		  var $form = $( this ),
+		      term = $form.find( 'input[name="title"]' ).val(),
+		      url = $form.attr( 'action' );
+		 
+		  /* Send the data using post */
+		  var posting = $.post( url, { title: term } );
+		  
+		  posting.done(function( data, textStatus, jqXHR ) {
+			  var location = jqXHR.getResponseHeader("Location");
+			  $.getJSON(location, function(discussion) {
+				  renderDiscussion(discussion);
+			  });
+		  });
+	});
+		  
 });
 </script>
 </head>
@@ -15,7 +47,7 @@ $( document ).ready(function() {
 <h1>Latest Discussions</h1>
 <ul id="discussions">
 </ul>
-<form method="POST" action="discussion">
+<form method="POST" action="discussion" id="newDiscussionForm">
 Titel: <input type="text" name="title">
 <input type="submit" value="Speichern">
 </form>

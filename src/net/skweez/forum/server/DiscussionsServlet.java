@@ -1,6 +1,7 @@
 package net.skweez.forum.server;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,13 +13,19 @@ import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.model.Discussion;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import com.thoughtworks.xstream.io.json.JsonWriter;
 
 @SuppressWarnings("serial")
 public class DiscussionsServlet extends HttpServlet {
 
 	private final XStream xstream = new XStream(
-			new JsonHierarchicalStreamDriver());
+			new JsonHierarchicalStreamDriver() {
+				public HierarchicalStreamWriter createWriter(Writer writer) {
+					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+				}
+			});
 
 	private final DiscussionDatastore datastore = DatastoreFactory.getDefault()
 			.getDiscussionDatastore();
@@ -40,7 +47,13 @@ public class DiscussionsServlet extends HttpServlet {
 	}
 
 	private int getIdFromPathInfo(String pathInfo) {
-		return 0;
+		int id = -1;
+		try {
+			id = Integer.parseInt(pathInfo.substring(1));
+		} catch (NumberFormatException e) {
+			System.out.println("Unparsable ID supplied:\n"+e.getLocalizedMessage());
+		}
+		return id;
 	}
 
 	private void respond(HttpServletResponse response, Object answer)
@@ -61,9 +74,6 @@ public class DiscussionsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response)
 			throws ServletException, IOException {
-
-		System.out.println(request.getRequestURI());
-
 		DiscussionDatastore datastore = DatastoreFactory.getDefault()
 				.getDiscussionDatastore();
 
@@ -72,8 +82,13 @@ public class DiscussionsServlet extends HttpServlet {
 		String title = request.getParameter("title");
 		discussion.setTitle(title);
 
-		datastore.createDiscussion(discussion);
+		int newId = datastore.createDiscussion(discussion);
 
-		response.sendRedirect("/");
+		if (newId != -1) {
+			response.setStatus(HttpServletResponse.SC_CREATED);
+			response.setHeader("Location", "discussion/" + newId);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
 	}
 }
