@@ -19,6 +19,7 @@ public class ForumServer extends Server {
 				ServletContextHandler.SESSIONS);
 		servletHandler.setContextPath("/");
 		servletHandler.setResourceBase("htdocs");
+		servletHandler.setWelcomeFiles(new String[] { "index.html" });
 
 		servletHandler.addServlet(DefaultServlet.class, "/");
 		servletHandler.addServlet(DiscussionsServlet.class, "/discussion/*");
