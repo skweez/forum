@@ -1,6 +1,7 @@
 package net.skweez.forum.server;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 
 public class ForumServer extends Server {
@@ -14,11 +15,14 @@ public class ForumServer extends Server {
 	public ForumServer() {
 		super(8080);
 
-		ServletContextHandler context = new ServletContextHandler(
+		ServletContextHandler servletHandler = new ServletContextHandler(
 				ServletContextHandler.SESSIONS);
-		context.setContextPath("/");
-		setHandler(context);
+		servletHandler.setContextPath("/");
+		servletHandler.setResourceBase("htdocs");
 
-		context.addServlet(DiscussionsServlet.class, "/discussion/*");
+		servletHandler.addServlet(DefaultServlet.class, "/");
+		servletHandler.addServlet(DiscussionsServlet.class, "/discussion/*");
+
+		setHandler(servletHandler);
 	}
 }
