@@ -40,7 +40,7 @@ public class DiscussionsServlet extends RestServletBase<Discussion> {
 	/** {@inheritDoc} */
 	@Override
 	protected String post(Discussion discussion) {
-		return "discussion/" + datastore.createDiscussion(discussion);
+		return "api/discussions/" + datastore.createDiscussion(discussion);
 	}
 
 	/** {@inheritDoc} */

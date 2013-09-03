@@ -22,7 +22,8 @@ public class ForumServer extends Server {
 		servletHandler.setWelcomeFiles(new String[] { "index.html" });
 
 		servletHandler.addServlet(DefaultServlet.class, "/");
-		servletHandler.addServlet(DiscussionsServlet.class, "/discussion/*");
+		servletHandler.addServlet(DiscussionsServlet.class,
+				"/api/discussions/*");
 
 		setHandler(servletHandler);
 	}

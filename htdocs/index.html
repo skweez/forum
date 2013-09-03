@@ -8,7 +8,7 @@ function renderDiscussion(discussion) {
 
 function reloadDiscussions() {
 	$('#discussions').empty();
-	$.getJSON('discussion', function(discussions) {
+	$.getJSON('api/discussions', function(discussions) {
 		$.each(discussions, function(i, discussion) {
 			renderDiscussion(discussion);
 		});
@@ -48,7 +48,7 @@ $( document ).ready(function() {
 <h1>Latest Discussions</h1>
 <ul id="discussions">
 </ul>
-<form method="POST" action="discussion" id="newDiscussionForm">
+<form method="POST" action="api/discussions" id="newDiscussionForm">
 Titel: <input type="text" name="title">
 <input type="submit" value="Speichern">
 </form>
