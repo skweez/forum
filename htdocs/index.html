@@ -24,14 +24,12 @@ $( document ).ready(function() {
 		  /* stop form from submitting normally */
 		  event.preventDefault();
 		 
-		  /* get some values from elements on the page: */
-		  var $form = $( this ),
-		      term = $form.find( 'input[name="title"]' ).val(),
-		      url = $form.attr( 'action' );
-		 
 		  /* Send the data using post */
 		  // TODO need to find a cleaner way to create the JSON
-		  var posting = $.post( url, '{"net.skweez.forum.model.Discussion": {title: "' + term + '"}}' );
+		  var json = '{"net.skweez.forum.model.Discussion":{'
+			  + $('#newDiscussionForm').serialize()
+			  + '}}';
+		  var posting = $.post("api/discussions", json);
 		  
 		  posting.done(function( data, textStatus, jqXHR ) {
 			  var location = jqXHR.getResponseHeader("Location");
