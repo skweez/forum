@@ -1,8 +1,23 @@
 <html>
+<head>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+$( document ).ready(function() {
+	$.getJSON('discussion', function(data) {
+		$.each(data.list, function(i, discussion) {
+			$('#discussions').append('<li><a href="discussion.html?id='+discussion.id+'">'+discussion.title+'</a></li>');
+		});
+	});
+});
+</script>
+</head>
 <body>
 <h1>Latest Discussions</h1>
-<ul>
-<li><a href="discussion.html?id=139">Suche/Biete Faden</a></li>
+<ul id="discussions">
 </ul>
+<form method="POST" action="discussion">
+Titel: <input type="text" name="title">
+<input type="submit" value="Speichern">
+</form>
 </body>
 </html>

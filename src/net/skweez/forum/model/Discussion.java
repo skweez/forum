@@ -31,6 +31,10 @@ public class Discussion {
 		return title;
 	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public List<Post> getComments() {
 		return comments;
 	}

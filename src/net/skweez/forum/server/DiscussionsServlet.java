@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
+import net.skweez.forum.model.Discussion;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
@@ -54,5 +55,25 @@ public class DiscussionsServlet extends HttpServlet {
 			response.getOutputStream().println(
 					HttpServletResponse.SC_NOT_FOUND + " - Not found");
 		}
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response)
+			throws ServletException, IOException {
+
+		System.out.println(request.getRequestURI());
+
+		DiscussionDatastore datastore = DatastoreFactory.getDefault()
+				.getDiscussionDatastore();
+
+		Discussion discussion = new Discussion();
+
+		String title = request.getParameter("title");
+		discussion.setTitle(title);
+
+		datastore.createDiscussion(discussion);
+
+		response.sendRedirect("/");
 	}
 }
