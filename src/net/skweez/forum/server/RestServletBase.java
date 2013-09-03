@@ -18,8 +18,9 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
 
 /**
  * Abstract base class for servlets that behave REST-like. Sub-classes should
- * implement {@link #get(String)}, {@link #getCollection(Map)},
- * {@link #put(String, Object)},
+ * implement {@link #post(Object)}, {@link #get(String)},
+ * {@link #getCollection(Map)}, {@link #put(String, Object)}, and
+ * {@link #delete(String)}.
  * 
  * @author mks
  * 
