@@ -131,10 +131,17 @@ public abstract class RestServletBase<T> extends HttpServlet {
 
 	/** {@inheritDoc} */
 	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPut(req, resp);
+	protected void doPut(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		if (request.getPathInfo() != null) {
+			// TODO (mks) does PUT send JSON like POST?
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		} else {
+			response.setContentType("text/plain;charset=utf-8");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getOutputStream().println(
+					HttpServletResponse.SC_NOT_FOUND + " - Not found");
+		}
 	}
 
 	/**
@@ -147,10 +154,17 @@ public abstract class RestServletBase<T> extends HttpServlet {
 
 	/** {@inheritDoc} */
 	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doDelete(req, resp);
+	protected void doDelete(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		if (request.getPathInfo() != null) {
+			delete(request.getPathInfo());
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		} else {
+			response.setContentType("text/plain;charset=utf-8");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			response.getOutputStream().println(
+					HttpServletResponse.SC_NOT_FOUND + " - Not found");
+		}
 	}
 
 	/**

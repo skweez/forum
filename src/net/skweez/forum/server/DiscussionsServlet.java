@@ -45,15 +45,14 @@ public class DiscussionsServlet extends RestServletBase<Discussion> {
 
 	/** {@inheritDoc} */
 	@Override
-	protected boolean put(String pathInfo, Discussion newObject) {
-		// TODO Auto-generated method stub
-		return false;
+	protected boolean put(String pathInfo, Discussion discussion) {
+		return datastore.updateDiscussion(getIdFromPathInfo(pathInfo),
+				discussion);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	protected boolean delete(String pathInfo) {
-		// TODO Auto-generated method stub
-		return false;
+		return datastore.deleteDiscussion(getIdFromPathInfo(pathInfo));
 	}
 }

@@ -47,7 +47,7 @@ public class SimpleDiscussionDatastore implements DiscussionDatastore {
 	@Override
 	public synchronized int createDiscussion(Discussion discussion) {
 		discussion.setId(nextId++);
-		updateDiscussion(discussion);
+		updateDiscussion(discussion.getId(), discussion);
 		return discussion.getId();
 	}
 
@@ -59,15 +59,15 @@ public class SimpleDiscussionDatastore implements DiscussionDatastore {
 
 	/** {@inheritDoc} */
 	@Override
-	public synchronized boolean updateDiscussion(Discussion discussion) {
-		discussions.put(discussion.getId(), discussion);
+	public synchronized boolean updateDiscussion(int id, Discussion discussion) {
+		discussions.put(id, discussion);
 		return true;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public synchronized boolean deleteDiscussion(Discussion discussion) {
-		discussions.remove(discussion.getId());
+	public synchronized boolean deleteDiscussion(int id) {
+		discussions.remove(id);
 		return true;
 	}
 

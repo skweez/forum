@@ -24,12 +24,12 @@ public interface DiscussionDatastore {
 	 * Updates the given discussion in the datastore. Returns <code>true</code>
 	 * on success, <code>false</code> otherwise.
 	 */
-	boolean updateDiscussion(Discussion discussion);
+	boolean updateDiscussion(int id, Discussion discussion);
 
 	/**
 	 * Deletes the discussion from the datastore. Returns <code>true</code> on
 	 * success, <code>false</code> otherwise.
 	 */
-	boolean deleteDiscussion(Discussion discussion);
+	boolean deleteDiscussion(int id);
 
 }
