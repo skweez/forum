@@ -30,7 +30,8 @@ $( document ).ready(function() {
 		      url = $form.attr( 'action' );
 		 
 		  /* Send the data using post */
-		  var posting = $.post( url, { title: term } );
+		  // TODO need to find a cleaner way to create the JSON
+		  var posting = $.post( url, '{"net.skweez.forum.model.Discussion": {title: "' + term + '"}}' );
 		  
 		  posting.done(function( data, textStatus, jqXHR ) {
 			  var location = jqXHR.getResponseHeader("Location");

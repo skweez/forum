@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="lib/xstream-1.4.4.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-9.0.5.v20130815/jetty-servlet-9.0.5.v20130815.jar"/>
 	<classpathentry kind="lib" path="lib/jetty-9.0.5.v20130815/jetty-security-9.0.5.v20130815.jar"/>
+	<classpathentry kind="lib" path="lib/jettison-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
