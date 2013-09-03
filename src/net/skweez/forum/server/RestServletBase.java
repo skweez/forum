@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
@@ -57,12 +58,23 @@ public abstract class RestServletBase<T> extends HttpServlet {
 			return;
 		}
 
-		@SuppressWarnings("unchecked")
-		T newObject = (T) jsonInStream.fromXML(request.getInputStream());
-		String pathInfo = post((T) newObject);
+		Object newObject;
+		try {
+			newObject = jsonInStream.fromXML(request.getInputStream());
+		} catch (XStreamException e) {
+			System.err.println(e.getMessage());
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
 
-		response.setStatus(HttpServletResponse.SC_CREATED);
-		response.setHeader("Location", pathInfo);
+		try {
+			@SuppressWarnings("unchecked")
+			String pathInfo = post((T) newObject);
+			response.setStatus(HttpServletResponse.SC_CREATED);
+			response.setHeader("Location", pathInfo);
+		} catch (ClassCastException e) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		}
 	};
 
 	/**
