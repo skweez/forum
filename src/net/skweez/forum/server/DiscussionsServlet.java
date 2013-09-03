@@ -1,21 +1,20 @@
 package net.skweez.forum.server;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.skweez.forum.datastore.ForumDatastoreFactory;
-import net.skweez.forum.model.Discussion;
+import net.skweez.forum.datastore.DatastoreFactory;
+import net.skweez.forum.datastore.DiscussionDatastore;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 
 @SuppressWarnings("serial")
-public class LatestDiscussionsServlet extends HttpServlet {
+public class DiscussionsServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -23,11 +22,14 @@ public class LatestDiscussionsServlet extends HttpServlet {
 		response.setContentType("text/json;charset=utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
 
-		List<Discussion> discussions = ForumDatastoreFactory
-				.getConfiguredDatastore().getDiscussions();
+		System.out.println(request.getRequestURI());
 
 		XStream xstream = new XStream(new JsonHierarchicalStreamDriver());
-		xstream.toXML(discussions, response.getOutputStream());
+
+		DiscussionDatastore datastore = DatastoreFactory.getDefault()
+				.getDiscussionDatastore();
+		xstream.toXML(datastore.selectAllDiscussions(),
+				response.getOutputStream());
 	}
 
 }

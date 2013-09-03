@@ -19,6 +19,6 @@ public class ForumServer extends Server {
 		context.setContextPath("/");
 		setHandler(context);
 
-		context.addServlet(LatestDiscussionsServlet.class, "/discussion");
+		context.addServlet(DiscussionsServlet.class, "/discussion/*");
 	}
 }
