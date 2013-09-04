@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.skweez.forum.model.Discussion;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
@@ -48,6 +50,10 @@ public abstract class RestServletBase<T> extends HttpServlet {
 	 */
 	private final XStream jsonInStream = new XStream(
 			new JettisonMappedXmlDriver());
+
+	public RestServletBase() {
+		jsonInStream.alias("Discussion", Discussion.class);
+	}
 
 	/** {@inheritDoc} */
 	@Override

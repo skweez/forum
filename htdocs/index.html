@@ -26,9 +26,9 @@ $( document ).ready(function() {
 		 
 		  /* Send the data using post */
 		  // TODO need to find a cleaner way to create the JSON
-		  var json = '{"net.skweez.forum.model.Discussion":{'
-			  + $('#newDiscussionForm').serialize()
-			  + '}}';
+		  var json = "{Discussion:{"
+			  + $("#newDiscussionForm").serialize()
+			  + "}}";
 		  var posting = $.post("api/discussions", json);
 		  
 		  posting.done(function( data, textStatus, jqXHR ) {
