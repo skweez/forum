@@ -20,16 +20,14 @@ $( document ).ready(function() {
 	reloadDiscussions();
 	
 	$("#newDiscussionForm").submit(function(event) {
-		 
+		
 		  /* stop form from submitting normally */
 		  event.preventDefault();
 		 
 		  /* Send the data using post */
-		  // TODO need to find a cleaner way to create the JSON
-		  var json = "{Discussion:{"
-			  + $("#newDiscussionForm").serialize()
-			  + "}}";
-		  var posting = $.post("api/discussions", json);
+		  var discussion = {"Discussion":{title:$("#title").val()}};
+		  console.log(JSON.stringify(discussion));
+		  var posting = $.post("api/discussions", JSON.stringify(discussion));
 		  
 		  posting.done(function( data, textStatus, jqXHR ) {
 			  var location = jqXHR.getResponseHeader("Location");
@@ -42,13 +40,16 @@ $( document ).ready(function() {
 });
 </script>
 </head>
+
 <body>
 <h1>Latest Discussions</h1>
-<ul id="discussions">
-</ul>
-<form method="POST" action="api/discussions" id="newDiscussionForm">
-Titel: <input type="text" name="title">
-<input type="submit" value="Speichern">
+
+<ul id="discussions"></ul>
+
+<form method="POST" action="" id="newDiscussionForm">
+	Title: <input type="text" name="title" id="title">
+	<input type="submit" value="Speichern">
 </form>
+
 </body>
 </html>
