@@ -2,7 +2,6 @@ package net.skweez.forum;
 
 import java.io.InputStream;
 import java.io.Writer;
-import java.net.URI;
 import java.util.Collection;
 
 import javax.ws.rs.Consumes;
@@ -32,7 +31,7 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
 /**
  * Discussions resource
  */
-@Path("discussions")
+@Path("api/discussions")
 public class DiscussionResource {
 	
 	@Context UriInfo uriInfo;
