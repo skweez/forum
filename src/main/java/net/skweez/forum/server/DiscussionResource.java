@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -77,6 +78,10 @@ public class DiscussionResource {
 	public String getDiscussion(@PathParam("id") int id) {
 		Discussion discussion = datastore.findDiscussion(id);
 
+		// Return 404 if discussion is not found
+		if (discussion == null)
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+
 		return jsonOutStream.toXML(discussion);
 	}
 
@@ -90,15 +95,16 @@ public class DiscussionResource {
 		} catch (XStreamException e) {
 			System.err.println(e.getMessage());
 			builder = Response.status(Status.BAD_REQUEST);
-			return null;
+			return builder.build();
 		}
 		
 		int newId = datastore.createDiscussion(newDiscussion);
-		
+
 		builder = Response.ok();
-		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(String.valueOf(newId));
+		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
+				String.valueOf(newId));
 		builder.location(newResourceUri.build());
-		
-    	return builder.build();
+
+		return builder.build();
     }
 }
