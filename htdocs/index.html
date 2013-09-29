@@ -1,55 +1,31 @@
 <html>
 <head>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript"
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="skweez.js"></script>
 <script type="text/javascript">
-function renderDiscussion(discussion) {
-	$('#discussions').append('<li><a href="discussion.html?id='+discussion.id+'">'+discussion.title+'</a></li>');
-}
-
-function reloadDiscussions() {
-	$('#discussions').empty();
-	$.getJSON('api/discussions', function(discussions) {
-		$.each(discussions, function(i, discussion) {
-			renderDiscussion(discussion);
-		});
-	});
-}
-
-$( document ).ready(function() {
-	
-	reloadDiscussions();
-	
-	$("#newDiscussionForm").submit(function(event) {
-		
-		  /* stop form from submitting normally */
-		  event.preventDefault();
-		 
-		  /* Send the data using post */
-		  var discussion = {"Discussion":{title:$("#title").val()}};
-		  console.log(JSON.stringify(discussion));
-		  var posting = $.post("api/discussions", JSON.stringify(discussion));
-		  
-		  posting.done(function( data, textStatus, jqXHR ) {
-			  var location = jqXHR.getResponseHeader("Location");
-			  $.getJSON(location, function(discussion) {
-				  renderDiscussion(discussion);
-			  });
-		  });
-	});
-		  
-});
+    $(document).ready(function() {
+        var listElement = $('#discussions');
+         
+        Discussion.reloadAndRenderAllDiscussions(listElement);
+         
+        $("#newDiscussionForm").submit(function(event) {
+            event.preventDefault();
+            new Discussion($("#title").val()).postDiscussionAndRender(listElement);
+        });
+    });
 </script>
 </head>
-
+ 
 <body>
-<h1>Latest Discussions</h1>
-
-<ul id="discussions"></ul>
-
-<form method="POST" action="" id="newDiscussionForm">
-	Title: <input type="text" name="title" id="title">
-	<input type="submit" value="Speichern">
-</form>
-
+    <h1>Latest Discussions</h1>
+ 
+    <ul id="discussions"></ul>
+ 
+    <form method="POST" action="" id="newDiscussionForm">
+        Title:
+        <input type="text" name="title" id="title">
+        <input type="submit" value="Speichern">
+    </form>
 </body>
 </html>
