@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -70,8 +71,17 @@ public class DiscussionResource {
         return jsonOutStream.toXML(allDiscussions);
     }
     
+	@GET
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getDiscussion(@PathParam("id") int id) {
+		Discussion discussion = datastore.findDiscussion(id);
+
+		return jsonOutStream.toXML(discussion);
+	}
+
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
     public Response createDiscussion(InputStream inputStream) {
     	Discussion newDiscussion;
     	ResponseBuilder builder;
@@ -87,7 +97,7 @@ public class DiscussionResource {
 		
 		builder = Response.ok();
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(String.valueOf(newId));
-		builder.contentLocation(newResourceUri.build());
+		builder.location(newResourceUri.build());
 		
     	return builder.build();
     }
