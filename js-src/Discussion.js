@@ -42,14 +42,12 @@ Discussion.prototype.postDiscussionAndRender = function(domElement) {
     });
 }
  
-Discussion.prototype.postDiscussionAndRender = function(domElement) {
-    this.postToServer(function(data, textStatus, jqXHR) {
-        $.getJSON(jqXHR.getResponseHeader("Location"), function(result) {
-            Discussion.fromObject(result).render(domElement);
-        });
-    });
-}
- 
 Discussion.prototype.postToServer = function(successFunction) {
-    $.post(Discussion.API_PATH, this.toJson(), successFunction);
+    $.ajax({
+    		type: "POST",
+    		url: Discussion.API_PATH,
+    		contentType: "application/json",
+    		data: this.toJson(),
+    		success: successFunction
+    });
 }
