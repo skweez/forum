@@ -73,7 +73,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>net.skweez.forum2.Main</mainClass>
+                    <mainClass>net.skweez.forum.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>

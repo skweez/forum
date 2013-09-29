@@ -22,7 +22,7 @@ public class Main {
      */
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
-        // in net.skweez.forum2 package
+		// in net.skweez.forum package
 		final ResourceConfig rc = new ResourceConfig()
 				.packages("net.skweez.forum");
 
