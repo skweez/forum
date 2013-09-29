@@ -36,8 +36,14 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
 @Path("discussions")
 public class DiscussionResource {
 	
+	/**
+	 * The UriInfo in this context.
+	 */
 	@Context UriInfo uriInfo;
 
+	/**
+	 * Initialize datastore.
+	 */
 	final DiscussionDatastore datastore = DatastoreFactory.getDefault()
 			.getDiscussionDatastore();
 	
@@ -58,12 +64,16 @@ public class DiscussionResource {
 			new JettisonMappedXmlDriver());
 
 	/**
-	 * 
+	 * Constructor
 	 */
 	public DiscussionResource() {
+		// Map json object names to java objects.
 		jsonInStream.alias("Discussion", Discussion.class);
 	}
 	
+	/**
+	 * @return all discussions.
+	 */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getAllDiscussions() {
@@ -72,6 +82,11 @@ public class DiscussionResource {
         return jsonOutStream.toXML(allDiscussions);
     }
     
+	/**
+	 * @param id
+	 *            The id of the requested discussion
+	 * @return the discussion. Returns 404 if discussion is not found.
+	 */
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -85,6 +100,13 @@ public class DiscussionResource {
 		return jsonOutStream.toXML(discussion);
 	}
 
+	/**
+	 * Create a new discussion.
+	 * 
+	 * @param inputStream
+	 * @return the location of the created discussion. Returns 400 if there is a
+	 *         error.
+	 */
     @POST
 	@Consumes(MediaType.APPLICATION_JSON)
     public Response createDiscussion(InputStream inputStream) {

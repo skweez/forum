@@ -17,9 +17,16 @@ import com.google.javascript.jscomp.CompilerOptions;
 import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.SourceFile;
  
+/**
+ * The servlet that serves js files.
+ * 
+ * @author mks
+ * 
+ */
+@SuppressWarnings("serial")
 public class JsServlet extends DefaultServlet {
- 
-    @Override
+
+	@Override
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/javascript;charset=utf-8");
@@ -27,6 +34,11 @@ public class JsServlet extends DefaultServlet {
         response.getWriter().println(compileJavascript());
     }
  
+	/**
+	 * Compile js files with the google closure-compiler.
+	 * 
+	 * @return the compiled js source
+	 */
     protected String compileJavascript() {
         Compiler compiler = new Compiler();
  
