@@ -1,3 +1,5 @@
+goog.provide('skweez.forum.Utils')
+
 // net.skweez.forum.Ajax method
 nsfAjax = function(uri, method, data) {
 	var request = {

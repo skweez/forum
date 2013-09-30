@@ -1,3 +1,5 @@
+goog.require('skweez.forum.Utils')
+
 // The discussions view model
 function DiscussionsViewModel() {
 	var self = this;
