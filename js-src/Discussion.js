@@ -52,9 +52,3 @@ function CreateDiscussionsViewModel() {
 		self.title("");
 	}
 }
-
-var discussionsViewModel = new DiscussionsViewModel();
-var createDiscussionsViewModel = new CreateDiscussionsViewModel();
-
-ko.applyBindings(discussionsViewModel, $('div#discussions')[0]);
-ko.applyBindings(createDiscussionsViewModel, $('#newDiscussion')[0]);
