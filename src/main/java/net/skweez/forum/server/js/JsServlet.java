@@ -43,7 +43,7 @@ public class JsServlet extends DefaultServlet {
         Compiler compiler = new Compiler();
  
         CompilerOptions options = new CompilerOptions();
-        CompilationLevel.SIMPLE_OPTIMIZATIONS
+		CompilationLevel.SIMPLE_OPTIMIZATIONS
                 .setOptionsForCompilationLevel(options);
  
         List<SourceFile> extern = new ArrayList<SourceFile>();

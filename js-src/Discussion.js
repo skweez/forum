@@ -1,63 +1,58 @@
-function Discussion(title) {
- 
-    this.id = -1;
- 
-    this.title = title;
-}
- 
-/** The URL path used to call the server. */
-Discussion.API_PATH = "api/discussions";
- 
-Discussion.reloadAndRenderAllDiscussions = function(domElement) {
-    domElement.empty();
-    $.getJSON(Discussion.API_PATH, function(result) {
-        $.each(result, function(i, object) {
-            Discussion.fromObject(object).render(domElement);
-        });
-    });
-}
- 
-Discussion.fromObject = function(object) {
-    var discussion = new Discussion(object.title);
-    discussion.id = object.id;
-    return discussion;
-}
+// The discussions view model
+function DiscussionsViewModel() {
+	var self = this;
+	self.discussionsURI = '/api/discussions';
+	self.discussions = ko.observableArray();
 
-Discussion.getDiscussionWithId = function(id, discussion) {
-	$.getJSON(Discussion.API_PATH + '/' + id, function(object) {
-		discussion = Discussion.fromObject(object);
+	// Show new discussion dialog
+	self.beginCreateNewDiscussion = function() {
+		$('#newDiscussion').modal('show');
+	}
+
+	// Add new discussion
+	self.addDiscussion = function(discussion) {
+		nsfAjax(self.discussionsURI, 'POST', discussion).done(
+				function(data, textStatus, jqXHR) {
+					$.getJSON(jqXHR.getResponseHeader("Location"), function(
+							discussion) {
+						self.discussions.push({
+							id : ko.observable(discussion.id),
+							title : ko.observable(discussion.title)
+						});
+					});
+				});
+	}
+
+	// Get all discussions from the server
+	nsfAjax(self.discussionsURI, 'GET').done(function(discussions) {
+		if (discussions) {
+			for (var i = 0; i < discussions.length; i++) {
+				self.discussions.push({
+					id : ko.observable(discussions[i].id),
+					title : ko.observable(discussions[i].title)
+				});
+			}
+		}
 	});
 }
- 
-Discussion.prototype.render = function(domElement) {
-    domElement.append('<li><a href="discussion.html?id=' + this.id + '">'
-            + this.title + '</a></li>');
-}
- 
-Discussion.prototype.toJson = function() {
-    return JSON.stringify({
-        "Discussion" : this
-    });
-}
- 
-Discussion.prototype.postDiscussionAndRender = function(domElement) {
-    this.postToServer(function(data, textStatus, jqXHR) {
-        $.getJSON(jqXHR.getResponseHeader("Location"), function(result) {
-            Discussion.fromObject(result).render(domElement);
-        });
-    });
-}
- 
-Discussion.prototype.postToServer = function(successFunction) {
-    $.ajax({
-    		type: "POST",
-    		url: Discussion.API_PATH,
-    		contentType: "application/json",
-    		data: this.toJson(),
-    		success: successFunction
-    });
+
+function CreateDiscussionsViewModel() {
+	var self = this;
+	self.title = ko.observable();
+
+	self.createDiscussion = function() {
+		$('#newDiscussion').modal('hide');
+		discussionsViewModel.addDiscussion({
+			'Discussion' : {
+				title : self.title()
+			}
+		});
+		self.title("");
+	}
 }
 
-Discussion.prototype.reloadAndRenderAllPosts = function(domElement) {
-	
-}
+var discussionsViewModel = new DiscussionsViewModel();
+var createDiscussionsViewModel = new CreateDiscussionsViewModel();
+
+ko.applyBindings(discussionsViewModel, $('div#discussions')[0]);
+ko.applyBindings(createDiscussionsViewModel, $('#newDiscussion')[0]);
