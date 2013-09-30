@@ -1,35 +1,55 @@
 <html>
 <head>
-<script type="text/javascript"
-    src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src="skweez.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-    	var discussion;
-    	Discussion.getDiscussionWithId(getURLParameter('id'), discussion);
-    	
-    	$('#discussion_title').html(discussion.title);
-    	
-        var listElement = $('#posts');
-         
-        //Post.reloadAndRenderAllPosts(listElement);
-         
-        //$("#newPostForm").submit(function(event) {
-        //    event.preventDefault();
-        //    new Post($("#content").val()).postPostAndRender(listElement);
-        //});
-    });
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+	rel="stylesheet" media="screen">
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
 </head>
+
 <body>
-    <h1 id="discussion_title"></h1>
+	<div class="container">
+		<div id="posts">
+			<h1 data-bind="text: discussionTitle"></h1>
+			<table class="table table-striped">
+				<tbody>
+					<!-- ko foreach: posts -->
+					<tr>
+						<td><p data-bind="text: content"></p></td>
+					</tr>
+					<!-- /ko -->
+				</tbody>
+			</table>
+		</div>
+		<div id="createPost">
+			<form role="form">
+				<div class="form-group">
+					<label for="inputPostContent">New Post</label>
+					<textarea class="form-control" data-bind="value: content"
+						id="inputPostContent" rows="3"></textarea>
+				</div>
+			</form>
+			<button data-bind="click: createPost" class="btn btn-primary">Post!</button>
+		</div>
+	</div>
 
-    <ul id="posts"></ul>
+	<script type="text/javascript"
+		src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>
+	<script type="text/javascript"
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script
+		src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="skweez.js"></script>
+	<script type="text/javascript">
+		var id = nsfGetIdFromQueryString();
 
-    <form method="POST" action="" id="newPostForm">
-        Post:
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Speichern">
-    </form>
+		if (id != -1) {
+			var postsViewModel = new PostsViewModel(id);
+			var createPostViewModel = new CreatePostViewModel();
+			ko.applyBindings(postsViewModel, $('#posts')[0]);
+			ko.applyBindings(createPostViewModel, $('#createPost')[0]);
+		}
+	</script>
 </body>
 </html>

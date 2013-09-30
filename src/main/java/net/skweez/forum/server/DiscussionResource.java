@@ -21,8 +21,10 @@ import javax.ws.rs.core.UriInfo;
 
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
+import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
+import net.skweez.forum.model.User;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
@@ -71,6 +73,9 @@ public class DiscussionResource {
 	public DiscussionResource() {
 		// Map json object names to java objects.
 		jsonInStream.alias("Discussion", Discussion.class);
+		jsonInStream.alias("Post", Post.class);
+		jsonInStream.alias("User", User.class);
+		jsonInStream.alias("Category", Category.class);
 	}
 
 	/**
@@ -119,6 +124,33 @@ public class DiscussionResource {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 
 		return jsonOutStream.toXML(discussion.getPosts());
+	}
+
+	/**
+	 * @param discussionId
+	 *            the discussion id
+	 * @param postId
+	 *            the post id
+	 * @return the post. Returns 404 if the discussion or the post is not found
+	 */
+	@GET
+	@Path("{discussoionId}/posts/{postId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getPost(@PathParam("discussionId") int discussionId,
+			@PathParam("postId") int postId) {
+		Discussion discussion = datastore.findDiscussion(discussionId);
+
+		// Return 404 if discussion is not found
+		if (discussion == null)
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+
+		Post post = discussion.getPosts().get(postId);
+
+		// Return 404 if post is not found
+		if (post == null)
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+
+		return jsonOutStream.toXML(post);
 	}
 
 	/**
