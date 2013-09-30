@@ -1,6 +1,6 @@
 package net.skweez.forum.datastore;
 
-import net.skweez.forum.datastore.simple.SimpleDatastoreFactory;
+import net.skweez.forum.datastore.mock.MockDatastoreFactory;
 
 /**
  * Abstract factory that returns datastore objects.
@@ -15,11 +15,13 @@ public abstract class DatastoreFactory {
 	 */
 	public abstract DiscussionDatastore getDiscussionDatastore();
 
+	public abstract PostDatastore getPostDatastore();
+
 	/**
 	 * @return the default datastore factory
 	 */
 	public static DatastoreFactory getDefault() {
-		return new SimpleDatastoreFactory();
+		return new MockDatastoreFactory();
 	}
 
 }
