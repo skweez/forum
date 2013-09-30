@@ -1,31 +1,41 @@
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+	rel="stylesheet">
 <script type="text/javascript"
-    src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.3.0/knockout-min.js"></script>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="skweez.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        var listElement = $('#discussions');
-         
-        Discussion.reloadAndRenderAllDiscussions(listElement);
-         
-        $("#newDiscussionForm").submit(function(event) {
-            event.preventDefault();
-            new Discussion($("#title").val()).postDiscussionAndRender(listElement);
-        });
-    });
+	$(document).ready(
+			function() {
+				var listElement = $('#discussions');
+
+				Discussion.reloadAndRenderAllDiscussions(listElement);
+
+				$("#newDiscussionForm").submit(
+						function(event) {
+							event.preventDefault();
+							new Discussion($("#title").val())
+									.postDiscussionAndRender(listElement);
+						});
+			});
 </script>
 </head>
- 
+
 <body>
-    <h1>Latest Discussions</h1>
- 
-    <ul id="discussions"></ul>
- 
-    <form method="POST" action="" id="newDiscussionForm">
-        Title:
-        <input type="text" name="title" id="title">
-        <input type="submit" value="Speichern">
-    </form>
+	<h1>Latest Discussions</h1>
+
+	<ul id="discussions"></ul>
+
+	<form method="POST" action="" id="newDiscussionForm">
+		Title: <input type="text" name="title" id="title"> <input
+			type="submit" value="Speichern">
+	</form>
 </body>
 </html>
