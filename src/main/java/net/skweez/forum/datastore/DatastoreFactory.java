@@ -15,6 +15,8 @@ public abstract class DatastoreFactory {
 	 */
 	public abstract DiscussionDatastore getDiscussionDatastore();
 
+	public abstract PostDatastore getPostDatastore();
+
 	/**
 	 * @return the default datastore factory
 	 */

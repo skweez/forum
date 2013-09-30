@@ -36,18 +36,19 @@ import com.thoughtworks.xstream.io.json.JsonWriter;
  */
 @Path("discussions")
 public class DiscussionResource {
-	
+
 	/**
 	 * The UriInfo in this context.
 	 */
-	@Context UriInfo uriInfo;
+	@Context
+	UriInfo uriInfo;
 
 	/**
 	 * Initialize datastore.
 	 */
 	final DiscussionDatastore datastore = DatastoreFactory.getDefault()
 			.getDiscussionDatastore();
-	
+
 	/** The XStream object used for serialization. */
 	private final XStream jsonOutStream = new XStream(
 			new JsonHierarchicalStreamDriver() {
@@ -56,7 +57,7 @@ public class DiscussionResource {
 					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
 				}
 			});
-	
+
 	/**
 	 * XStream object used to parse incoming objects. This needs to use
 	 * JettisonMappedXmlDriver.
@@ -71,18 +72,19 @@ public class DiscussionResource {
 		// Map json object names to java objects.
 		jsonInStream.alias("Discussion", Discussion.class);
 	}
-	
+
 	/**
 	 * @return all discussions.
 	 */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getAllDiscussions() {
-		Collection<Discussion> allDiscussions = datastore.selectAllDiscussions();
-		
-        return jsonOutStream.toXML(allDiscussions);
-    }
-    
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getAllDiscussions() {
+		Collection<Discussion> allDiscussions = datastore
+				.selectAllDiscussions();
+
+		return jsonOutStream.toXML(allDiscussions);
+	}
+
 	/**
 	 * @param id
 	 *            The id of the requested discussion
@@ -126,19 +128,17 @@ public class DiscussionResource {
 	 * @return the location of the created discussion. Returns 400 if there is a
 	 *         error.
 	 */
-    @POST
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-    public Response createDiscussion(InputStream inputStream) {
-    	Discussion newDiscussion;
-    	ResponseBuilder builder;
+	public Response createDiscussion(InputStream inputStream) {
+		Discussion newDiscussion;
+		ResponseBuilder builder;
 		try {
-			newDiscussion = (Discussion)jsonInStream.fromXML(inputStream);
+			newDiscussion = (Discussion) jsonInStream.fromXML(inputStream);
 		} catch (XStreamException e) {
-			System.err.println(e.getMessage());
-			builder = Response.status(Status.BAD_REQUEST);
-			return builder.build();
+			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
-		
+
 		int newId = datastore.createDiscussion(newDiscussion);
 
 		builder = Response.ok();
@@ -147,16 +147,16 @@ public class DiscussionResource {
 		builder.location(newResourceUri.build());
 
 		return builder.build();
-    }
-    
-    /**
+	}
+
+	/**
 	 * Create a new post for a discussion.
 	 * 
 	 * @param inputStream
 	 * @return the location of the post. Returns 400 if there is a error.
 	 *         Returns 404 if the discussion does not exist.
 	 */
-    @POST
+	@POST
 	@Path("{id}/posts")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPost(@PathParam("id") int id, InputStream inputStream) {
