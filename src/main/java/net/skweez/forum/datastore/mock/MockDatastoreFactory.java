@@ -5,11 +5,11 @@ import net.skweez.forum.datastore.DiscussionDatastore;
 
 public class MockDatastoreFactory extends DatastoreFactory {
 
-	// private static final
+	private static final MockDiscussionDatastore mockDiscussionDatastore = new MockDiscussionDatastore();
 
 	@Override
 	public DiscussionDatastore getDiscussionDatastore() {
-		return null;
+		return mockDiscussionDatastore;
 	}
 
 }
