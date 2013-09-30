@@ -1,12 +1,35 @@
 <html>
+<head>
+<script type="text/javascript"
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="skweez.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    	var discussion;
+    	Discussion.getDiscussionWithId(getURLParameter('id'), discussion);
+    	
+    	$('#discussion_title').html(discussion.title);
+    	
+        var listElement = $('#posts');
+         
+        //Post.reloadAndRenderAllPosts(listElement);
+         
+        //$("#newPostForm").submit(function(event) {
+        //    event.preventDefault();
+        //    new Post($("#content").val()).postPostAndRender(listElement);
+        //});
+    });
+</script>
+</head>
 <body>
-<ul>
-<li class="Post" id="Comment_2777">
-   Hi!
-</li>
-<li class="Post Mine" id="Comment_2778">
-   Hello
-</li>
-</ul>
+    <h1 id="discussion_title"></h1>
+
+    <ul id="posts"></ul>
+
+    <form method="POST" action="" id="newPostForm">
+        Post:
+        <input type="text" name="content" id="content">
+        <input type="submit" value="Speichern">
+    </form>
 </body>
 </html>

@@ -22,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.model.Discussion;
+import net.skweez.forum.model.Post;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
@@ -101,6 +102,24 @@ public class DiscussionResource {
 	}
 
 	/**
+	 * @param id
+	 *            The id of the discussion for which to get the posts
+	 * @return the posts. Returns 404 if discussion is not found.
+	 */
+	@GET
+	@Path("{id}/posts")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getPostsForDiscussion(@PathParam("id") int id) {
+		Discussion discussion = datastore.findDiscussion(id);
+
+		// Return 404 if discussion is not found
+		if (discussion == null)
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+
+		return jsonOutStream.toXML(discussion.getPosts());
+	}
+
+	/**
 	 * Create a new discussion.
 	 * 
 	 * @param inputStream
@@ -129,4 +148,42 @@ public class DiscussionResource {
 
 		return builder.build();
     }
+    
+    /**
+	 * Create a new post for a discussion.
+	 * 
+	 * @param inputStream
+	 * @return the location of the post. Returns 400 if there is a error.
+	 *         Returns 404 if the discussion does not exist.
+	 */
+    @POST
+	@Path("{id}/posts")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createPost(@PathParam("id") int id, InputStream inputStream) {
+		ResponseBuilder builder;
+		Post newPost;
+		Discussion discussion = datastore.findDiscussion(id);
+
+		// Return 404 if discussion is not found
+		if (discussion == null)
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+
+		try {
+			newPost = (Post) jsonInStream.fromXML(inputStream);
+		} catch (XStreamException e) {
+			System.err.println(e.getMessage());
+			builder = Response.status(Status.BAD_REQUEST);
+			return builder.build();
+		}
+
+		int postIndex = discussion.addPost(newPost);
+		datastore.updateDiscussion(id, discussion);
+
+		builder = Response.ok();
+		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
+				String.valueOf(postIndex));
+		builder.location(newResourceUri.build());
+
+		return builder.build();
+	}
 }

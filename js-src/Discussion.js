@@ -22,6 +22,12 @@ Discussion.fromObject = function(object) {
     discussion.id = object.id;
     return discussion;
 }
+
+Discussion.getDiscussionWithId = function(id, discussion) {
+	$.getJSON(Discussion.API_PATH + '/' + id, function(object) {
+		discussion = Discussion.fromObject(object);
+	});
+}
  
 Discussion.prototype.render = function(domElement) {
     domElement.append('<li><a href="discussion.html?id=' + this.id + '">'
@@ -50,4 +56,8 @@ Discussion.prototype.postToServer = function(successFunction) {
     		data: this.toJson(),
     		success: successFunction
     });
+}
+
+Discussion.prototype.reloadAndRenderAllPosts = function(domElement) {
+	
 }

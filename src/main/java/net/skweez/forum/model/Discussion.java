@@ -10,12 +10,12 @@ public class Discussion {
 
 	private String title;
 
-	private final List<Post> comments;
+	private final List<Post> posts;
 
 	private Category category;
 
 	public Discussion() {
-		comments = new ArrayList<>();
+		posts = new ArrayList<>();
 		category = new Category("general");
 	}
 
@@ -35,8 +35,13 @@ public class Discussion {
 		this.title = title;
 	}
 
-	public List<Post> getComments() {
-		return comments;
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public int addPost(Post post) {
+		this.posts.add(post);
+		return this.posts.indexOf(post);
 	}
 
 	public Category getCategory() {
