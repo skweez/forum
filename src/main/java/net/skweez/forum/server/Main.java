@@ -41,13 +41,6 @@ public class Main {
 
 		server.setHandler(servletHandler);
 
-		/*
-		 * ServletHolder staticServlet =
-		 * context.addServlet(DefaultServlet.class, "/*");
-		 * staticServlet.setInitParameter("resourceBase", "src/main/java");
-		 * staticServlet.setInitParameter("pathInfoOnly", "true");
-		 */
-
 		try {
 			server.start();
 			server.join();
