@@ -29,7 +29,6 @@ public class Config {
 	public Config() {
 		try {
 			configProperties.load(new FileInputStream(CONFIG_FILE));
-			System.out.println("Configured with config file");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
