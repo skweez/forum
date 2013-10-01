@@ -39,14 +39,21 @@ function DiscussionsViewModel() {
 function CreateDiscussionsViewModel() {
 	var self = this;
 	self.title = ko.observable();
+	self.content = ko.observable();
 
 	self.createDiscussion = function() {
 		$('#newDiscussion').modal('hide');
 		discussionsViewModel.addDiscussion({
 			'Discussion' : {
-				title : self.title()
+				title : self.title(),
+				posts : [ {
+					'Post' : {
+						content : self.content()
+					}
+				} ]
 			}
 		});
 		self.title("");
+		self.content("");
 	}
 }
