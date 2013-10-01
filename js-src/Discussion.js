@@ -50,7 +50,8 @@ function CreateDiscussionsViewModel() {
 				title : self.title(),
 				posts : [ {
 					'Post' : {
-						content : self.content()
+						content : self.content(),
+						date : new Date()
 					}
 				} ]
 			}

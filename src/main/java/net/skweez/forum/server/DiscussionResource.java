@@ -28,6 +28,7 @@ import net.skweez.forum.model.User;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
+import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
@@ -76,6 +77,11 @@ public class DiscussionResource {
 		jsonInStream.alias("Post", Post.class);
 		jsonInStream.alias("User", User.class);
 		jsonInStream.alias("Category", Category.class);
+
+		// Use joda-time to be able to parse and generate ISO8601 date formats
+		// that are used by js 'Date()'
+		jsonInStream.registerConverter(new ISO8601DateConverter());
+		jsonOutStream.registerConverter(new ISO8601DateConverter());
 	}
 
 	/**

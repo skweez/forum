@@ -1,5 +1,7 @@
 package net.skweez.forum.model;
 
+import java.util.Date;
+
 /**
  * @author elm
  * 
@@ -14,6 +16,11 @@ public class Post {
 	 * The content of the post
 	 */
 	private String content;
+
+	/**
+	 * The date of the post
+	 */
+	private Date date;
 
 	/**
 	 * @return the post id
@@ -43,5 +50,20 @@ public class Post {
 	 */
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date
+	 *            the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }

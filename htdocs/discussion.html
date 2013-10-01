@@ -16,7 +16,7 @@
 				<tbody>
 					<!-- ko foreach: posts -->
 					<tr>
-						<td><p data-bind="text: content"></p></td>
+						<td style="width:6em; text-align:right;"><span data-bind="text: nsfDateString(date())" style="font-size:0.8em;"></span></td><td><p data-bind="text: content"></p></td>
 					</tr>
 					<!-- /ko -->
 				</tbody>

@@ -15,7 +15,8 @@ function PostsViewModel(id) {
 					$.getJSON(jqXHR.getResponseHeader("Location"), function(
 							post) {
 						self.posts.push({
-							content : ko.observable(post.content)
+							content : ko.observable(post.content),
+							date : ko.observable(post.date)
 						});
 					});
 				});
@@ -33,7 +34,8 @@ function PostsViewModel(id) {
 		if (posts) {
 			for (var i = 0; i < posts.length; i++) {
 				self.posts.push({
-					content : ko.observable(posts[i].content)
+					content : ko.observable(posts[i].content),
+					date : ko.observable(posts[i].date)
 				});
 			}
 		}
@@ -46,8 +48,9 @@ function CreatePostViewModel() {
 
 	self.createPost = function() {
 		postsViewModel.addPost({
-			'Post': {
-				content : self.content()
+			'Post' : {
+				content : self.content(),
+				date : new Date()
 			}
 		});
 		self.content("");
