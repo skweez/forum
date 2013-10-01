@@ -6,6 +6,7 @@ nsfAjax = function(uri, method, data) {
 		url : uri,
 		type : method,
 		contentType : 'application/json',
+		cache : false,
 		data : JSON.stringify(data),
 		error : function(jqXHR, textStatus, errorThrown) {
 			console.log("ajax error: " + jqXHR.status + " " + textStatus + " "
