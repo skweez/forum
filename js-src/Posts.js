@@ -1,3 +1,5 @@
+goog.require('skweez.forum.Utils')
+
 function PostsViewModel(id) {
 	var self = this;
 	self.discussionURI = '/api/discussions/' + id;
@@ -18,14 +20,14 @@ function PostsViewModel(id) {
 					});
 				});
 	}
-	
+
 	// Get discussion from server
 	nsfAjax(self.discussionURI, 'GET').done(function(discussion) {
 		if (discussion) {
 			self.discussionTitle(discussion.title);
 		}
 	});
-	
+
 	// Get posts for discussion from server
 	nsfAjax(self.postsURI, 'GET').done(function(posts) {
 		if (posts) {
@@ -41,7 +43,7 @@ function PostsViewModel(id) {
 function CreatePostViewModel() {
 	var self = this;
 	self.content = ko.observable();
-	
+
 	self.createPost = function() {
 		postsViewModel.addPost({
 			'Post': {

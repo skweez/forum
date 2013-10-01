@@ -27,6 +27,7 @@ nsfGetQueryString = function()
     }
     return queryString;
 }
+
 nsfGetIdFromQueryString = function() {
 	var regexPattern = /(?:id=)(\d+)/;
 	var match = window.location.href.match(regexPattern);
