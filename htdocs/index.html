@@ -15,10 +15,14 @@
 		<div id="discussions">
 			<table class="table table-striped">
 				<tbody>
-					<td><b>Discussions</b></td>
+					<tr>
+						<td></td>
+						<td><b>Discussions</b></td>
 					</tr>
 					<!-- ko foreach: discussions -->
 					<tr>
+						<td style="width: 6em; text-align: right;"><span
+							style="font-size: 0.8em;" data-bind="text: nsfDateString(date())"></span></td>
 						<td><p>
 								<!-- id() needed for correct concatination of strings -->
 								<a

@@ -19,7 +19,8 @@ function DiscussionsViewModel() {
 							discussion) {
 						self.discussions.push({
 							id : ko.observable(discussion.id),
-							title : ko.observable(discussion.title)
+							title : ko.observable(discussion.title),
+							date : ko.observable(discussion.date)
 						});
 					});
 				});
@@ -31,7 +32,8 @@ function DiscussionsViewModel() {
 			for (var i = 0; i < discussions.length; i++) {
 				self.discussions.push({
 					id : ko.observable(discussions[i].id),
-					title : ko.observable(discussions[i].title)
+					title : ko.observable(discussions[i].title),
+					date : ko.observable(discussions[i].date)
 				});
 			}
 		}
@@ -48,6 +50,7 @@ function CreateDiscussionsViewModel() {
 		discussionsViewModel.addDiscussion({
 			'Discussion' : {
 				title : self.title(),
+				date : new Date(),
 				posts : [ {
 					'Post' : {
 						content : self.content(),

@@ -1,6 +1,7 @@
 package net.skweez.forum.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +21,11 @@ public class Discussion {
 	 * the title
 	 */
 	private String title;
+
+	/**
+	 * the date
+	 */
+	private Date date;
 
 	/**
 	 * the posts in this discussion
@@ -91,5 +97,20 @@ public class Discussion {
 	 */
 	public Category getCategory() {
 		return category;
+	}
+
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date
+	 *            the date to set
+	 */
+	public void setDate(Date date) {
+		this.date = date;
 	}
 }
