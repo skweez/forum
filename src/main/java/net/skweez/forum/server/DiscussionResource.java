@@ -134,21 +134,23 @@ public class DiscussionResource {
 	 * @return the post. Returns 404 if the discussion or the post is not found
 	 */
 	@GET
-	@Path("{discussoionId}/posts/{postId}")
+	@Path("{discussionId}/posts/{postId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getPost(@PathParam("discussionId") int discussionId,
 			@PathParam("postId") int postId) {
+		Post post;
 		Discussion discussion = datastore.findDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null)
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 
-		Post post = discussion.getPosts().get(postId);
-
-		// Return 404 if post is not found
-		if (post == null)
+		try {
+			post = discussion.getPosts().get(postId);
+		} catch (IndexOutOfBoundsException e) {
+			// Return 404 if post is not found
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 
 		return jsonOutStream.toXML(post);
 	}
