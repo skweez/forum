@@ -9,7 +9,7 @@ import org.apache.commons.lang3.Validate;
 
 public class ForumLogic {
 
-	private final DatastoreFactory factory = DatastoreFactory.getDefault();
+	private final DatastoreFactory factory = DatastoreFactory.createConfigured();
 
 	private final DiscussionDatastore discussionDatastore = factory
 			.getDiscussionDatastore();

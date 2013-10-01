@@ -48,7 +48,7 @@ public class DiscussionResource {
 	/**
 	 * Initialize datastore.
 	 */
-	final DiscussionDatastore datastore = DatastoreFactory.getDefault()
+	final DiscussionDatastore datastore = DatastoreFactory.createConfigured()
 			.getDiscussionDatastore();
 
 	/** The XStream object used for serialization. */

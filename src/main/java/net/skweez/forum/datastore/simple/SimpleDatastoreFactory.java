@@ -10,25 +10,19 @@ import net.skweez.forum.datastore.PostDatastore;
  */
 public class SimpleDatastoreFactory extends DatastoreFactory {
 
-	/** Lazily initialized datastore singleton. */
-	private static DiscussionDatastore discussionDatastore;
+	/** Discussions datastore. */
+	private static DiscussionDatastore discussionDatastore = new SimpleDiscussionDatastore();
 
-	private static PostDatastore postDatastore;
+	/** Posts datastore. */
+	private static PostDatastore postDatastore = new SimplePostDatastore();
 
-	/** {@inheritDoc} */
 	@Override
 	public DiscussionDatastore getDiscussionDatastore() {
-		if (discussionDatastore == null) {
-			discussionDatastore = new SimpleDiscussionDatastore();
-		}
 		return discussionDatastore;
 	}
 
 	@Override
 	public PostDatastore getPostDatastore() {
-		if (postDatastore == null) {
-			postDatastore = new SimplePostDatastore();
-		}
 		return postDatastore;
 	}
 
