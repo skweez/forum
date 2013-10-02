@@ -1,10 +1,18 @@
 goog.require('skweez.forum.Utils')
 
+// TODO (mks) Move DiscussionsViewModel and CreateDiscussionsViewModel to their own files?
+
 // The discussions view model
 function DiscussionsViewModel() {
 	var self = this;
 	self.discussionsURI = '/api/discussions';
 	self.discussions = ko.observableArray();
+
+	/*
+	 * TODO (mks) I think beginCreateNewDiscussion is a function specific to the
+	 * page, not to the view-model. Move to HTML? Or should we have a .js for
+	 * each .html with page-specific code? Like an index.js for index.html, etc.
+	 */
 
 	// Show new discussion dialog
 	self.beginCreateNewDiscussion = function() {
@@ -29,7 +37,7 @@ function DiscussionsViewModel() {
 	// Get all discussions from the server
 	nsfAjax(self.discussionsURI, 'GET').done(function(discussions) {
 		if (discussions) {
-			for (var i = 0; i < discussions.length; i++) {
+			for ( var i = 0; i < discussions.length; i++) {
 				self.discussions.push({
 					id : ko.observable(discussions[i].id),
 					title : ko.observable(discussions[i].title),
