@@ -8,7 +8,10 @@ package net.skweez.forum.config;
 public enum Setting {
 
 	/** For datastore factory class to use. */
-	DATASTORE_FACTORY("datastore.factory");
+	DATASTORE_FACTORY("datastore.factory"),
+
+	/** For the authentication service implementation to use. */
+	AUTHENTICATION_SERVICE("authentication.service");
 
 	/** The key. */
 	private String key;
