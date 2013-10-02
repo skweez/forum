@@ -7,6 +7,7 @@ function UserViewModel() {
 	self.login = function() {
 		var request = {
 			url : self.loginAPI,
+			contentType : 'application/x-www-form-urlencoded',
 			type : 'POST',
 			cache : false,
 			data : {
