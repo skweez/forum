@@ -68,7 +68,7 @@
 					<tbody>
 						<tr>
 							<th>Topic</th>
-							<th>Created</th>
+							<th style="width: 15%;">Created</th>
 						</tr>
 						<!-- ko foreach: discussions -->
 						<tr>
@@ -77,7 +77,7 @@
 									<a
 										data-bind="attr: { href: '/discussion.html?id=' + id(), title: title }, text: title"></a>
 								</p></td>
-							<td style="width: 15%; text-align: right;"><span
+							<td style="text-align: right;"><span
 								style="font-size: 0.8em;"
 								data-bind="text: nsfDateString(date())"></span></td>
 						</tr>
