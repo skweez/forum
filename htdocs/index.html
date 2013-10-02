@@ -33,31 +33,31 @@
 		<h1>Latest Discussions</h1>
 
 		<div class="row" id="discussions">
+			<div class="col-md-2">
+				<button data-bind="click: beginCreateNewDiscussion"
+					class="btn btn-primary">New Discussion</button>
+			</div>
 			<div class="col-md-10">
 				<table class="table table-striped">
 					<tbody>
 						<tr>
-							<th></th>
-							<th><b>Discussions</b></th>
+							<th>Topic</th>
+							<th>Created</th>
 						</tr>
 						<!-- ko foreach: discussions -->
 						<tr>
-							<td style="width: 6em; text-align: right;"><span
-								style="font-size: 0.8em;"
-								data-bind="text: nsfDateString(date())"></span></td>
 							<td><p>
 									<!-- id() needed for correct concatination of strings -->
 									<a
 										data-bind="attr: { href: '/discussion.html?id=' + id(), title: title }, text: title"></a>
 								</p></td>
+							<td style="width: 15%; text-align: right;"><span
+								style="font-size: 0.8em;"
+								data-bind="text: nsfDateString(date())"></span></td>
 						</tr>
 						<!-- /ko -->
 					</tbody>
 				</table>
-			</div>
-			<div class="col-md-2">
-				<button data-bind="click: beginCreateNewDiscussion"
-					class="btn btn-primary">New Discussion</button>
 			</div>
 		</div>
 	</div>
