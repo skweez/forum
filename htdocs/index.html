@@ -10,7 +10,7 @@
 </head>
 
 <body style="padding-top: 60px;">
-	<div class="navbar navbar-inverse navbar-fixed-top">
+	<div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -23,6 +23,32 @@
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">Discussions</a></li>
+				</ul>
+				<ul class="nav navbar-nav pull-right">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#"> Login <span class="caret"></span>
+					</a>
+						<div class="dropdown-menu panel panel-default">
+							<div class="panel-body">
+								<form role="form">
+									<div class="form-group">
+										<input type="text" class="form-control" id="inputUsername"
+											placeholder="Username" data-bind="value: name">
+									</div>
+									<div class="form-group">
+										<input type="password" class="form-control"
+											id="exampleInputPassword1" placeholder="Password"
+											data-bind="value: password">
+									</div>
+									<div class="checkbox">
+										<label> <input type="checkbox"> Stay logged in
+										</label>
+									</div>
+									<button data-bind="click: login" type="submit"
+										class="btn btn-default">Login</button>
+								</form>
+							</div>
+						</div></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
