@@ -6,34 +6,59 @@
 	rel="stylesheet" media="screen">
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
 </head>
 
-<body>
+<body style="padding-top: 60px;">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Forum</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#">Discussions</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+
 	<div class="container">
 		<h1>Latest Discussions</h1>
 
-		<div id="discussions">
-			<table class="table table-striped">
-				<tbody>
-					<tr>
-						<td></td>
-						<td><b>Discussions</b></td>
-					</tr>
-					<!-- ko foreach: discussions -->
-					<tr>
-						<td style="width: 6em; text-align: right;"><span
-							style="font-size: 0.8em;" data-bind="text: nsfDateString(date())"></span></td>
-						<td><p>
-								<!-- id() needed for correct concatination of strings -->
-								<a
-									data-bind="attr: { href: '/discussion.html?id=' + id(), title: title }, text: title"></a>
-							</p></td>
-					</tr>
-					<!-- /ko -->
-				</tbody>
-			</table>
-			<button data-bind="click: beginCreateNewDiscussion"
-				class="btn btn-primary">New Discussion</button>
+		<div class="row" id="discussions">
+			<div class="col-md-10">
+				<table class="table table-striped">
+					<tbody>
+						<tr>
+							<th></th>
+							<th><b>Discussions</b></th>
+						</tr>
+						<!-- ko foreach: discussions -->
+						<tr>
+							<td style="width: 6em; text-align: right;"><span
+								style="font-size: 0.8em;"
+								data-bind="text: nsfDateString(date())"></span></td>
+							<td><p>
+									<!-- id() needed for correct concatination of strings -->
+									<a
+										data-bind="attr: { href: '/discussion.html?id=' + id(), title: title }, text: title"></a>
+								</p></td>
+						</tr>
+						<!-- /ko -->
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-2">
+				<button data-bind="click: beginCreateNewDiscussion"
+					class="btn btn-primary">New Discussion</button>
+			</div>
 		</div>
 	</div>
 
@@ -61,7 +86,8 @@
 				<div class="modal-footer">
 					<button data-bind="click: createDiscussion" class="btn btn-primary">Create
 						new Discussion</button>
-					<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+					<button class="btn btn-danger" data-dismiss="modal"
+						aria-hidden="true">Cancel</button>
 				</div>
 			</div>
 		</div>
