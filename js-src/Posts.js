@@ -49,7 +49,7 @@ function CreatePostViewModel() {
 	self.createPost = function() {
 		postsViewModel.addPost({
 			'Post' : {
-				content : self.content(),
+				content : self.content().replace(/\n/g, '<br/>'),
 				date : new Date()
 			}
 		});

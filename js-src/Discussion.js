@@ -61,7 +61,7 @@ function CreateDiscussionsViewModel() {
 				date : new Date(),
 				posts : [ {
 					'Post' : {
-						content : self.content(),
+						content : self.content().replace(/\n/g, '<br/>'),
 						date : new Date()
 					}
 				} ]
