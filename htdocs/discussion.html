@@ -12,25 +12,31 @@
 	<div class="container">
 		<div id="posts">
 			<h1 data-bind="text: discussionTitle"></h1>
-			<table class="table table-striped">
-				<tbody>
-					<!-- ko foreach: posts -->
-					<tr>
-						<td style="width:6em; text-align:right;"><span data-bind="text: nsfDateString(date())" style="font-size:0.8em;"></span></td><td><p data-bind="text: content"></p></td>
-					</tr>
-					<!-- /ko -->
-				</tbody>
-			</table>
+			<!-- ko foreach: posts -->
+			<hr />
+			<div class="row">
+				<div class="col-xs-12" data-bind="text: nsfDateString(date())"
+					style="font-size: 0.8em;"></div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12" data-bind="text: content"></div>
+			</div>
+			<!-- /ko -->
 		</div>
-		<div id="createPost">
-			<form role="form">
-				<div class="form-group">
-					<label for="inputPostContent">New Post</label>
-					<textarea class="form-control" data-bind="value: content"
-						id="inputPostContent" rows="3"></textarea>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">New Post</div>
+			<div class="panel-body">
+				<div id="createPost">
+					<form role="form">
+						<div class="form-group">
+							<textarea class="form-control" data-bind="value: content"
+								id="inputPostContent" rows="3"></textarea>
+						</div>
+					</form>
+					<button data-bind="click: createPost" class="btn btn-primary">Post!</button>
 				</div>
-			</form>
-			<button data-bind="click: createPost" class="btn btn-primary">Post!</button>
+			</div>
 		</div>
 	</div>
 
@@ -42,14 +48,14 @@
 		src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="skweez.js"></script>
 	<script type="text/javascript">
-		var id = nsfGetIdFromQueryString();
+			var id = nsfGetIdFromQueryString();
 
-		if (id != -1) {
-			var postsViewModel = new PostsViewModel(id);
-			var createPostViewModel = new CreatePostViewModel();
-			ko.applyBindings(postsViewModel, $('#posts')[0]);
-			ko.applyBindings(createPostViewModel, $('#createPost')[0]);
-		}
-	</script>
+			if (id != -1) {
+				var postsViewModel = new PostsViewModel(id);
+				var createPostViewModel = new CreatePostViewModel();
+				ko.applyBindings(postsViewModel, $('#posts')[0]);
+				ko.applyBindings(createPostViewModel, $('#createPost')[0]);
+			}
+		</script>
 </body>
 </html>
