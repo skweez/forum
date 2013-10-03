@@ -1,5 +1,3 @@
-goog.require('skweez.forum.Utils')
-
 // TODO (mks) Move DiscussionsViewModel and CreateDiscussionsViewModel to their own files?
 
 // The discussions view model
