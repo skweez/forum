@@ -116,24 +116,6 @@
 					<scanIntervalSeconds>1</scanIntervalSeconds>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>ro.isdc.wro4j</groupId>
-				<artifactId>wro4j-maven-plugin</artifactId>
-				<version>${wro4j.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<cssDestinationFolder>${basedir}/src/main/webapp/css/</cssDestinationFolder>
-					<jsDestinationFolder>${basedir}/src/main/webapp/js/</jsDestinationFolder>
-					<wroManagerFactory>ro.isdc.wro.extensions.manager.standalone.GoogleStandaloneManagerFactory</wroManagerFactory>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -141,6 +123,5 @@
 		<jersey.version>2.3.1</jersey.version>
 		<jetty.version>9.0.5.v20130815</jetty.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<wro4j.version>1.7.1</wro4j.version>
 	</properties>
 </project>
