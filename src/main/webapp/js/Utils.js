@@ -26,8 +26,17 @@ nsfAjax = function(uri, method, data) {
 					+ errorThrown);
 		}
 	};
+	
+	var authCode = localStorage.getItem("AuthCode");
+	if (authCode) {
+		request.beforeSend = function (xhr) {
+                xhr.setRequestHeader("Authorization", 
+                    "Basic " + authCode);
+            };
+	}
+	
 	return $.ajax(request);
-}
+};
 
 nsfGetQueryString = function() {
 	var queryString = [];
@@ -40,7 +49,7 @@ nsfGetQueryString = function() {
 		vars[hash[0]] = hash[1];
 	}
 	return queryString;
-}
+};
 
 nsfGetIdFromQueryString = function() {
 	var regexPattern = /(?:id=)(\d+)/;
@@ -49,14 +58,14 @@ nsfGetIdFromQueryString = function() {
 		return -1;
 	}
 	return match[1];
-}
+};
 
 nsfDateString = function(dateInMilliseconds) {
 	var date = new Date(dateInMilliseconds);
 	function pad(n) {
-		return n < 10 ? '0' + n : n
+		return n < 10 ? '0' + n : n;
 	}
 	return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-'
 			+ pad(date.getDate()) + ' ' + pad(date.getHours()) + ':'
-			+ pad(date.getMinutes())
-}
+			+ pad(date.getMinutes());
+};

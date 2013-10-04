@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
@@ -170,7 +171,12 @@ public class DiscussionResource {
 	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createDiscussion(InputStream inputStream) {
+	public Response createDiscussion(@Context SecurityContext sec,
+			InputStream inputStream) {
+		if (!sec.isUserInRole("user")) {
+			throw new WebApplicationException(Status.UNAUTHORIZED);
+		}
+
 		Discussion newDiscussion;
 		ResponseBuilder builder;
 		try {
