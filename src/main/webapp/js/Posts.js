@@ -1,5 +1,3 @@
-goog.require('skweez.forum.Utils')
-
 function PostsViewModel(id) {
 	var self = this;
 	self.discussionURI = '/api/discussions/' + id;

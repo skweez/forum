@@ -1,5 +1,3 @@
-goog.provide('skweez.forum.Utils')
-
 /*
  * TODO (mks) I don't really like the nsf prefix. That's of course due to the
  * fact that JS doesn't support namespaces. How about we add an empty function
