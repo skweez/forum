@@ -11,12 +11,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author elm
  * 
  */
 @Path("user")
 public class UserResource {
+
+	private final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
 	/**
 	 * 
@@ -31,7 +36,9 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		// TODO: Create user object if the user signes in for the first time
+		logger.info("User login: " + sec.getUserPrincipal().getName());
+
+		// TODO: Create user object if the user signs in for the first time
 
 		return Response.ok().build();
 	}
