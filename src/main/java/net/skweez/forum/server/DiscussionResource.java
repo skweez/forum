@@ -20,6 +20,8 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import net.skweez.forum.config.Config;
+import net.skweez.forum.config.Setting;
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.model.Category;
@@ -173,7 +175,7 @@ public class DiscussionResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createDiscussion(@Context SecurityContext sec,
 			InputStream inputStream) {
-		if (!sec.isUserInRole("user")) {
+		if (!sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
