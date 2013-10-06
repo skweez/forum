@@ -101,7 +101,10 @@ public class UserResource {
 
 	/**
 	 * 
-	 * @return 200 Ok, revoke auth token and delete cookies from browser.
+	 * Revokes the auth token and deletes all cookies from browser.
+	 * 
+	 * @return 401 Unauthorized so that browsers delete their authentication
+	 *         data
 	 */
 	@GET
 	@Path("logout")
@@ -116,7 +119,7 @@ public class UserResource {
 		// delete the cookies from the browser by setting the max age to 0
 		// seconds
 		return Response
-				.ok()
+				.status(Status.UNAUTHORIZED)
 				.cookie(new NewCookie("uid", "", "/api", uriInfo.getBaseUri()
 						.getHost(), NewCookie.DEFAULT_VERSION, null, 0, null,
 						false, true))
