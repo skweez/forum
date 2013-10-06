@@ -17,13 +17,17 @@ public abstract class DatastoreFactory {
 	/** @return The posts datastore. */
 	public abstract PostDatastore getPostDatastore();
 
+	/** @return The users datastore. */
+	public abstract UserDatastore getUserDatastore();
+
 	/**
 	 * @return The configured datastore factory or the default one if none was
 	 *         configured.
 	 */
 	public static DatastoreFactory createConfigured() {
 		try {
-			return createForClassName(Config.getValue(Setting.DATASTORE_FACTORY));
+			return createForClassName(Config
+					.getValue(Setting.DATASTORE_FACTORY));
 		} catch (InstantiationException | IllegalAccessException
 				| ClassNotFoundException e) {
 			e.printStackTrace();

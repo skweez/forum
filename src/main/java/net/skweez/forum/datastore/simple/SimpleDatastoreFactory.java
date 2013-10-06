@@ -3,6 +3,7 @@ package net.skweez.forum.datastore.simple;
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.datastore.PostDatastore;
+import net.skweez.forum.datastore.UserDatastore;
 
 /**
  * Factory that creates simple datastore objects with in-memory storage. This
@@ -16,6 +17,9 @@ public class SimpleDatastoreFactory extends DatastoreFactory {
 	/** Posts datastore. */
 	private static PostDatastore postDatastore = new SimplePostDatastore();
 
+	/** Users datastore. */
+	private static UserDatastore userDatastore = new SimpleUserDatastore();
+
 	@Override
 	public DiscussionDatastore getDiscussionDatastore() {
 		return discussionDatastore;
@@ -24,6 +28,11 @@ public class SimpleDatastoreFactory extends DatastoreFactory {
 	@Override
 	public PostDatastore getPostDatastore() {
 		return postDatastore;
+	}
+
+	@Override
+	public UserDatastore getUserDatastore() {
+		return userDatastore;
 	}
 
 }
