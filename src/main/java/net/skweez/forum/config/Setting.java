@@ -10,8 +10,10 @@ public enum Setting {
 	/** For datastore factory class to use. */
 	DATASTORE_FACTORY("datastore.factory"),
 
-	/** For the authentication service implementation to use. */
-	AUTHENTICATION_SERVICE("authentication.service");
+	/** the admins role name */
+	ROLE_NAME_ADMIN("rolename.admin"),
+	/** the users role name */
+	ROLE_NAME_USER("rolename.user");
 
 	/** The key. */
 	private String key;
