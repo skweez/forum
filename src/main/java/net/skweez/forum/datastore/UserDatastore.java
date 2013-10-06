@@ -16,29 +16,29 @@ public interface UserDatastore {
 	 *            the new user
 	 * @return the new user id. Return -1 if an error occured.
 	 */
-	int createUser(User user);
+	boolean createUser(User user);
 
 	/**
-	 * @param id
-	 *            the id
+	 * @param uid
+	 *            the uid
 	 * @return the user. null if the user was not found
 	 */
-	User findUser(int id);
+	User findUser(String uid);
 
 	/**
-	 * @param id
-	 *            the id
+	 * @param uid
+	 *            the uid
 	 * @param user
 	 *            the updated user
 	 * @return true if update was successful
 	 */
-	boolean updateUser(int id, User user);
+	boolean updateUser(User user);
 
 	/**
-	 * @param id
-	 *            the is
+	 * @param uid
+	 *            the uid
 	 * @return true if delete was successful
 	 */
-	boolean deleteUser(int id);
+	boolean deleteUser(String uid);
 
 }

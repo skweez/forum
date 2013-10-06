@@ -16,32 +16,26 @@ import net.skweez.forum.model.User;
 public class SimpleUserDatastore implements UserDatastore {
 
 	/**
-	 * the next id to use when a new user is created
-	 */
-	private int nextId = 0;
-
-	/**
 	 * all the users
 	 */
-	private final Map<Integer, User> users = new HashMap<>();
+	private final Map<String, User> users = new HashMap<>();
 
 	/**
 	 * @see net.skweez.forum.datastore.UserDatastore#createUser(net.skweez.forum.
 	 *      model.User)
 	 */
 	@Override
-	public int createUser(User user) {
-		user.setId(nextId++);
-		this.users.put(user.getId(), user);
-		return user.getId();
+	public boolean createUser(User user) {
+		this.users.put(user.getUid(), user);
+		return true;
 	}
 
 	/**
 	 * @see net.skweez.forum.datastore.UserDatastore#findUser(int)
 	 */
 	@Override
-	public User findUser(int id) {
-		return this.users.get(id);
+	public User findUser(String uid) {
+		return this.users.get(uid);
 	}
 
 	/**
@@ -49,8 +43,8 @@ public class SimpleUserDatastore implements UserDatastore {
 	 *      net.skweez.forum.model.User)
 	 */
 	@Override
-	public boolean updateUser(int id, User user) {
-		this.users.put(id, user);
+	public boolean updateUser(User user) {
+		this.users.put(user.getUid(), user);
 		return true;
 	}
 
@@ -58,8 +52,8 @@ public class SimpleUserDatastore implements UserDatastore {
 	 * @see net.skweez.forum.datastore.UserDatastore#deleteUser(int)
 	 */
 	@Override
-	public boolean deleteUser(int id) {
-		if (this.users.remove(id) == null) {
+	public boolean deleteUser(String uid) {
+		if (this.users.remove(uid) == null) {
 			return false;
 		}
 		return true;

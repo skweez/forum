@@ -1,5 +1,7 @@
 package net.skweez.forum.model;
 
+import java.util.LinkedList;
+
 /**
  * User class.
  * 
@@ -7,44 +9,75 @@ package net.skweez.forum.model;
  * 
  */
 public class User {
-	/**
-	 * the id
-	 */
-	private int id;
 
 	/**
-	 * the name
+	 * the auth token
 	 */
-	private String name;
+	private String authToken;
 
 	/**
-	 * @return the id
+	 * the uid
 	 */
-	public int getId() {
-		return id;
+	private String uid;
+
+	/**
+	 * the roles
+	 */
+	private LinkedList<String> roles;
+
+	/**
+	 * constructor
+	 * 
+	 * @param uid
+	 *            the uid
+	 */
+	public User(String uid) {
+		this.setUid(uid);
+		this.roles = new LinkedList<>();
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @return the authToken
 	 */
-	public void setId(int id) {
-		this.id = id;
+	public String getAuthToken() {
+		return authToken;
 	}
 
 	/**
-	 * @return the name
+	 * @param authToken
+	 *            the authToken to set
 	 */
-	public String getName() {
-		return name;
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @return the uid
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public String getUid() {
+		return uid;
 	}
 
+	/**
+	 * @param uid
+	 *            the uid to set
+	 */
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	/**
+	 * @return the roles
+	 */
+	public LinkedList<String> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * @param role
+	 *            the role to add
+	 */
+	public void addRole(String role) {
+		this.roles.add(role);
+	}
 }
