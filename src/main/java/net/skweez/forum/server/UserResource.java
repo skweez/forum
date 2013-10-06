@@ -109,6 +109,11 @@ public class UserResource {
 	@GET
 	@Path("logout")
 	public Response logout(@Context SecurityContext sec) {
+		if (sec.getUserPrincipal() == null) {
+			throw new WebApplicationException(Response.status(
+					Status.UNAUTHORIZED).build());
+		}
+
 		String uid = sec.getUserPrincipal().getName();
 
 		User user = userDatastore.findUser(uid);
