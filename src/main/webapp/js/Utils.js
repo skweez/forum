@@ -26,15 +26,6 @@ nsfAjax = function(uri, method, data) {
 					+ errorThrown);
 		}
 	};
-	
-	var authCode = localStorage.getItem("AuthCode");
-	if (authCode) {
-		request.beforeSend = function (xhr) {
-                xhr.setRequestHeader("Authorization", 
-                    "Basic " + authCode);
-            };
-	}
-	
 	return $.ajax(request);
 };
 
