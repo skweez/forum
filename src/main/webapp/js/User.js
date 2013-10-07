@@ -25,6 +25,7 @@ function UserViewModel() {
 		};
 		$.ajax(request).done(function(data, textStatus, jqXHR) {
 			alert("You are logged in");
+			$('#login-dropdown-toggle').dropdown('toggle');
 		});
 	};
 
