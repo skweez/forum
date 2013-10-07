@@ -66,11 +66,10 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		// If the user is authenticated by our AuthCookieFilter we don't allow
-		// another authentication.
+		// If the user is authenticated by our AuthCookieFilter we send 200 OK
+		// to let the client know the cookie credentials are correct
 		if (sec.getAuthenticationScheme() == AuthCookieFilter.AuthenticationScheme) {
-			throw new WebApplicationException(Response.status(Status.FORBIDDEN)
-					.build());
+			return Response.ok().build();
 		}
 
 		// generate secure authentication token
