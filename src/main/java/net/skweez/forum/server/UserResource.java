@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -80,10 +81,12 @@ public class UserResource {
 
 		// TODO: Do not test each role but iterate over them. Maybe use a sub
 		// enum or something.
-		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER)))
+		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
 			user.addRole(Config.getValue(Setting.ROLE_NAME_USER));
-		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_ADMIN)))
+		}
+		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_ADMIN))) {
 			user.addRole(Config.getValue(Setting.ROLE_NAME_ADMIN));
+		}
 
 		userDatastore.createUser(user);
 
@@ -93,7 +96,7 @@ public class UserResource {
 						user.getUid(), // content
 						"/api", // path
 						uriInfo.getBaseUri().getHost(), // host
-						NewCookie.DEFAULT_VERSION, // version
+						Cookie.DEFAULT_VERSION, // version
 						null, // comment
 						NewCookie.DEFAULT_MAX_AGE, // max_age
 						null, // expire date
@@ -101,7 +104,7 @@ public class UserResource {
 						true // httpOnly (no js access allowed)
 				))
 				.cookie(new NewCookie("authToken", authToken, "/api", uriInfo
-						.getBaseUri().getHost(), NewCookie.DEFAULT_VERSION,
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION,
 						null, NewCookie.DEFAULT_MAX_AGE, null, false, true))
 				.build();
 	}
@@ -133,10 +136,10 @@ public class UserResource {
 		return Response
 				.status(Status.UNAUTHORIZED)
 				.cookie(new NewCookie("uid", "", "/api", uriInfo.getBaseUri()
-						.getHost(), NewCookie.DEFAULT_VERSION, null, 0, null,
+						.getHost(), Cookie.DEFAULT_VERSION, null, 0, null,
 						false, true))
 				.cookie(new NewCookie("authToken", "", "/api", uriInfo
-						.getBaseUri().getHost(), NewCookie.DEFAULT_VERSION,
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION,
 						null, 0, null, false, true)).build();
 
 	}

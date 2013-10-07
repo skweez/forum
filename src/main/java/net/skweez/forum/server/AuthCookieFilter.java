@@ -42,8 +42,9 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 		Map<String, Cookie> cookies = requestContext.getCookies();
 
 		// return without security context if one cookie is missing
-		if (!cookies.containsKey("uid") || !cookies.containsKey("authToken"))
+		if (!cookies.containsKey("uid") || !cookies.containsKey("authToken")) {
 			return;
+		}
 
 		final String uid = cookies.get("uid").getValue();
 		String authToken = cookies.get("authToken").getValue();
@@ -51,8 +52,9 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 
 		// return without security context if no such user is found or if the
 		// auth token is invalid
-		if (user == null || !authToken.equals(user.getAuthToken()))
+		if (user == null || !authToken.equals(user.getAuthToken())) {
 			return;
+		}
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
 		requestContext.setSecurityContext(sec);

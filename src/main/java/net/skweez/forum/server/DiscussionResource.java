@@ -33,6 +33,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.json.AbstractJsonWriter;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import com.thoughtworks.xstream.io.json.JsonWriter;
@@ -60,7 +61,7 @@ public class DiscussionResource {
 			new JsonHierarchicalStreamDriver() {
 				@Override
 				public HierarchicalStreamWriter createWriter(Writer writer) {
-					return new JsonWriter(writer, JsonWriter.DROP_ROOT_MODE);
+					return new JsonWriter(writer, AbstractJsonWriter.DROP_ROOT_MODE);
 				}
 			});
 
@@ -111,8 +112,9 @@ public class DiscussionResource {
 		Discussion discussion = datastore.findDiscussion(id);
 
 		// Return 404 if discussion is not found
-		if (discussion == null)
+		if (discussion == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 
 		return jsonOutStream.toXML(discussion);
 	}
@@ -129,8 +131,9 @@ public class DiscussionResource {
 		Discussion discussion = datastore.findDiscussion(id);
 
 		// Return 404 if discussion is not found
-		if (discussion == null)
+		if (discussion == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 
 		return jsonOutStream.toXML(discussion.getPosts());
 	}
@@ -151,8 +154,9 @@ public class DiscussionResource {
 		Discussion discussion = datastore.findDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
-		if (discussion == null)
+		if (discussion == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 
 		try {
 			post = discussion.getPosts().get(postId);
@@ -213,8 +217,9 @@ public class DiscussionResource {
 		Discussion discussion = datastore.findDiscussion(id);
 
 		// Return 404 if discussion is not found
-		if (discussion == null)
+		if (discussion == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 
 		try {
 			newPost = (Post) jsonInStream.fromXML(inputStream);
