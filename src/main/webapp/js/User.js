@@ -15,7 +15,7 @@ function UserViewModel() {
 			},
 			statusCode : {
 				401 : function() {
-					alert("Wrong username or password supplied");
+					nsfShowAlert("Wrong username or password supplied", "alert-warning");
 				},
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
@@ -24,8 +24,8 @@ function UserViewModel() {
 			}
 		};
 		$.ajax(request).done(function(data, textStatus, jqXHR) {
-			alert("You are logged in");
 			$('#login-dropdown-toggle').dropdown('toggle');
+			nsfShowAlert("You are logged in", "alert-success");
 		});
 	};
 

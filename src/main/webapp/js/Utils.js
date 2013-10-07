@@ -34,7 +34,7 @@ nsfGetQueryString = function() {
 	var hash;
 	var hashes = window.location.href.slice(
 			window.location.href.indexOf('?') + 1).split('&');
-	for ( var i = 0; i < hashes.length; i++) {
+	for (var i = 0; i < hashes.length; i++) {
 		hash = hashes[i].split('=');
 		queryString.push(hash[0]);
 		vars[hash[0]] = hash[1];
@@ -59,4 +59,20 @@ nsfDateString = function(dateInMilliseconds) {
 	return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-'
 			+ pad(date.getDate()) + ' ' + pad(date.getHours()) + ':'
 			+ pad(date.getMinutes());
+};
+
+nsfShowAlert = function(text, alertClass) {
+	var newAlert = $('<div/>', {
+		"class" : "alert " + alertClass + " fade in",
+		"data-alert" : "alert",
+		text : text
+	});
+	newAlert.appendTo($("#net-skweez-forum-alert"));
+
+	window.setTimeout(function() {
+		newAlert.removeClass('in');
+		window.setTimeout(function() {
+			newAlert.remove();
+		}, 150); // same time is used in bootstrap.css for fade in and out
+	}, 2500);
 };
