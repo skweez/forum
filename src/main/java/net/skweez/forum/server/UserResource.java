@@ -60,7 +60,7 @@ public class UserResource {
 	@Path("login")
 	public Response login(@Context SecurityContext sec) {
 		// If the user is not authenticated by the servlet container (Jetty with
-		// JAAS or something) we return 401 Unauthorized
+		// JAAS or something) or by cookie we return 401 Unauthorized
 		if (sec.getUserPrincipal() == null) {
 			throw new WebApplicationException(Response.status(
 					Status.UNAUTHORIZED).build());

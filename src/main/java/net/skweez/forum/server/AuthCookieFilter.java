@@ -25,7 +25,10 @@ import net.skweez.forum.model.User;
 @Provider
 public class AuthCookieFilter implements ContainerRequestFilter {
 
-	static String AuthenticationScheme = "Cookie";
+	/**
+	 * the authentication scheme name
+	 */
+	static String AuthenticationScheme = "net.skweez.forum.cookie";
 
 	/**
 	 * the user datastore
@@ -33,14 +36,12 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 	final UserDatastore userDatastore = DatastoreFactory.createConfigured()
 			.getUserDatastore();
 
-	/**
-	 * @see javax.ws.rs.container.ContainerRequestFilter#filter(javax.ws.rs.container.ContainerRequestContext)
-	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext)
 			throws IOException {
 		Map<String, Cookie> cookies = requestContext.getCookies();
 
+		// return without security context if one cookie is missing
 		if (!cookies.containsKey("uid") || !cookies.containsKey("authToken"))
 			return;
 
@@ -48,13 +49,13 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 		String authToken = cookies.get("authToken").getValue();
 		User user = userDatastore.findUser(uid);
 
+		// return without security context if no such user is found or if the
+		// auth token is invalid
 		if (user == null || !authToken.equals(user.getAuthToken()))
 			return;
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
-
 		requestContext.setSecurityContext(sec);
-
 	}
 
 	/**
