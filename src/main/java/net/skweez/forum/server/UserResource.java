@@ -94,19 +94,20 @@ public class UserResource {
 				.ok()
 				.cookie(new NewCookie("uid", // name
 						user.getUid(), // content
-						"/api", // path
+						"/", // path, we need the uid cookie in the js so it
+								// needs to be accessible from everywhere
 						uriInfo.getBaseUri().getHost(), // host
 						Cookie.DEFAULT_VERSION, // version
 						null, // comment
 						NewCookie.DEFAULT_MAX_AGE, // max_age
 						null, // expire date
 						false, // secure (https only)
-						true // httpOnly (no js access allowed)
+						false // httpOnly (no js access allowed. This is set to
+								// true for the authToken)
 				))
 				.cookie(new NewCookie("authToken", authToken, "/api", uriInfo
-						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION,
-						null, NewCookie.DEFAULT_MAX_AGE, null, false, true))
-				.build();
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
+						NewCookie.DEFAULT_MAX_AGE, null, false, true)).build();
 	}
 
 	/**
@@ -135,12 +136,12 @@ public class UserResource {
 		// seconds
 		return Response
 				.status(Status.UNAUTHORIZED)
-				.cookie(new NewCookie("uid", "", "/api", uriInfo.getBaseUri()
+				.cookie(new NewCookie("uid", "", "/", uriInfo.getBaseUri()
 						.getHost(), Cookie.DEFAULT_VERSION, null, 0, null,
 						false, true))
 				.cookie(new NewCookie("authToken", "", "/api", uriInfo
-						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION,
-						null, 0, null, false, true)).build();
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
+						0, null, false, true)).build();
 
 	}
 }
