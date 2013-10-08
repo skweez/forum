@@ -2,8 +2,7 @@
 
 /* Services */
 
-
-// Demonstrate how to register services
-// In this case it is a simple value service.
-angular.module('net.skweez.forum.services', []).
-  value('version', '0.1');
+angular.module('net.skweez.forum.services', [ 'ngResource' ])
+  .factory('Discussions', ['$resource', function($resource) {// The discussions service. Can be injected as "Discussions".
+	  return $resource('/api/discussions/:discussionId');
+  }]);
