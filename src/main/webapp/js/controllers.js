@@ -4,40 +4,63 @@
 
 angular
 		.module('net.skweez.forum.controllers', [ 'ngResource', 'ngCookies' ])
+		.controller('DiscussionsContoller',
+				[ '$scope', '$http', '$resource', 'Discussions', // This is
+				// our own Discussion service defined in services.js
+				function($scope, $http, $resource, Discussions) {
+					$scope.discussions = Discussions.query();
+
+					$scope.showNewDiscussionDialog = function() {
+						$('#newDiscussion').modal('show');
+					};
+
+					// Listen for 'discussionAdded' broadcast and update view
+					$scope.$on('discussionAdded', function(event, args) {
+						$http.get(args.location).success(function(discussion) {
+							$scope.discussions.push(discussion);
+						});
+					});
+				} ])
 		.controller(
-				'DiscussionsContoller',
+				'NewDiscussionsContoller',
 				[
 						'$scope',
-						'$resource',
-						function($scope, $resource) {
-							var Discussion = $resource('/api/discussions/:discussionId');
+						'$http',
+						'$rootScope',
+						'Discussions',
+						function($scope, $http, $rootScope, Discussions) {
+							$scope.title = null;
+							$scope.content = null;
 
-							$scope.discussions = Discussion.query();
-
-							$scope.showNewDiscussionDialog = function() {
-								$('#newDiscussion').modal('show');
+							$scope.createDiscussion = function() {
+								var newDiscussion = new Object({
+									'Discussion' : {
+										title : $scope.title,
+										date : new Date(),
+										posts : {
+											'Post' : {
+												content : $scope.content,
+												date : new Date()
+											}
+										}
+									}
+								});
+								Discussions
+										.save(
+												newDiscussion,
+												function(data,
+														getResponseHeaders) {
+													$('#newDiscussion').modal(
+															'hide');
+													$rootScope
+															.$broadcast(
+																	'discussionAdded',
+																	{
+																		'location' : getResponseHeaders('location')
+																	});
+												});
 							};
 						} ])
-		.controller('NewDiscussionsContoller',
-				[ '$scope', '$http', function($scope, $http) {
-					$scope.title = null;
-					$scope.content = null;
-
-					$scope.createDiscussion = function() {
-						$http.post('/api/discussions', {
-							'Discussion' : {
-								title : $scope.title,
-								date : new Date(),
-								posts : {
-									'Post' : {
-										content : $scope.content,
-										date : new Date()
-									}
-								}
-							}
-						});
-					};
-				} ])
 		.controller(
 				'LoginController',
 				[
