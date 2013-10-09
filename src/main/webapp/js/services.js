@@ -2,12 +2,12 @@
 
 /* Services */
 
-var factories = angular.module('net.skweez.forum.services', [ 'ngResource' ]);
+var services = angular.module('net.skweez.forum.services', [ 'ngResource' ]);
 
 /*
  * The Discussions resource as a service. Can be injected as "Discussions".
  */
-factories.factory('Discussions', [ '$resource', function($resource) {
+services.factory('Discussions', [ '$resource', function($resource) {
 	return $resource('/api/discussions/:discussionId', {
 		discussionId : '@id'
 	});
@@ -16,8 +16,29 @@ factories.factory('Discussions', [ '$resource', function($resource) {
 /*
  * The Posts resource as a service.
  */
-factories.factory('Posts', [ '$resource', function($resource) {
+services.factory('Posts', [ '$resource', function($resource) {
 	return $resource('/api/discussions/:discussionId/posts/:postId', {
 		postId : '@id'
 	});
 } ]);
+
+/*
+ * The AlertService. Can be injected to show alerts.
+ * 
+ * Usage: pass an object to addAlert with the following attributes:
+ * 	type: the bootstrap alert type. Available values: info, success, warning, danger
+ * 	title: the title of the alert (will be displayed in bold)
+ * 	content: the content of the alert
+ */
+services.service('AlertService', [function() {
+	var self = this;
+	self.alerts = [];
+	
+	self.addAlert = function(alert) {
+		alert.closeAfter = 3000;
+		self.alerts.unshift(alert);
+		window.setTimeout(function() {
+			self.alerts.pop();
+		}, 3000);
+	};
+}]);

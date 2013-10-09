@@ -104,7 +104,8 @@ controllersModule.controller('LoginController', [
 		'$scope',
 		'$http',
 		'$cookies',
-		function($scope, $http, $cookies) {
+		'AlertService',
+		function($scope, $http, $cookies, AlertService) {
 			$scope.uid = $cookies.uid;
 			$scope.password = null;
 			$scope.loggedIn = false;
@@ -128,6 +129,11 @@ controllersModule.controller('LoginController', [
 					$('#login-dropdown-toggle').dropdown('toggle');
 					$scope.loggedIn = true;
 				}).error(function() {
+					AlertService.addAlert({
+						"type" : "danger",
+						"title" : "Login failure:",
+						"content" : "Wrong username or passowrd supplied."
+					});
 					console.log("wrong username or password");
 				});
 			};
@@ -137,4 +143,12 @@ controllersModule.controller('LoginController', [
 				$scope.loggedIn = false;
 			};
 
+		} ]);
+
+/*
+ * Alert controller. Used to display alerts.
+ */
+controllersModule.controller('AlertController', [ '$scope', 'AlertService',
+		function($scope, AlertService) {
+			$scope.alertService = AlertService;
 		} ]);

@@ -8,6 +8,10 @@
 <link rel="stylesheet" href="css/app.css" />
 </head>
 <body style="padding-top: 60px;">
+	<div class="alerts" ng-controller="AlertController">
+		<div class="alert fade" ng-repeat="alert in alertService.alerts"
+			bs-alert="alert"></div>
+	</div>
 	<div class="navbar navbar-inverse navbar-fixed-top" bs-navbar>
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -34,7 +38,7 @@
 							<div ng-switch-when="false">
 								<form role="form">
 									<div class="form-group">
-									<!-- $parent is needed because ng-switch creates a sub scope -->
+										<!-- $parent is needed because ng-switch creates a sub scope -->
 										<input type="text" class="form-control" id="inputUid"
 											placeholder="Username" ng-model="$parent.uid">
 									</div>
@@ -47,7 +51,8 @@
 										<label> <input type="checkbox"> Stay logged in
 										</label>
 									</div>
-									<button ng-click="$parent.login()" type="submit" class="btn btn-primary">Login</button>
+									<button ng-click="$parent.login()" type="submit"
+										class="btn btn-primary">Login</button>
 								</form>
 							</div>
 							<div ng-switch-when="true">
