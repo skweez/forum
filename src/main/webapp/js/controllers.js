@@ -5,6 +5,9 @@
 var controllersModule = angular.module('net.skweez.forum.controllers', [
 		'ngResource', 'ngCookies' ]);
 
+/*
+ * The DiscussionsController. Used to display a list of discussions.
+ */
 controllersModule.controller('DiscussionsContoller', [ '$scope', '$http',
 		'$resource', 'Discussions', // This is
 		// our own Discussion service defined in services.js
@@ -23,6 +26,10 @@ controllersModule.controller('DiscussionsContoller', [ '$scope', '$http',
 			});
 		} ]);
 
+/*
+ * The NewDiscussionsController. Used to create a new discussion with on initial
+ * post.
+ */
 controllersModule.controller('NewDiscussionsContoller', [
 		'$scope',
 		'$http',
@@ -55,14 +62,22 @@ controllersModule.controller('NewDiscussionsContoller', [
 			};
 		} ]);
 
+/*
+ * The DiscussionController. Used to control single discussions.
+ */
 controllersModule.controller('DiscussionController', [ '$scope',
 		'$routeParams', 'Discussions',
 		function($scope, $routeParams, Discussions) {
+			// Get current discussion
 			$scope.discussion = Discussions.get({
 				discussionId : $routeParams.discussionId
 			});
 		} ]);
 
+/*
+ * The LoginController. Logs a user in and out and displays the name of the
+ * logged in user.
+ */
 controllersModule.controller('LoginController', [
 		'$scope',
 		'$http',
