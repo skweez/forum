@@ -42,3 +42,13 @@ services.service('AlertService', [function() {
 		}, 3000);
 	};
 }]);
+
+/*
+ * UserService. Holds the current logged in user infos
+ */
+services.factory('UserService', [function() {
+	return {
+		uid : null,
+		isLoggedIn : false
+	};
+}]);

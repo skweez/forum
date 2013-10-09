@@ -34,13 +34,13 @@
 				</a>
 					<div class="dropdown-menu panel panel-default"
 						ng-controller="LoginController">
-						<div class="panel-body" ng-switch on="loggedIn">
+						<div class="panel-body" ng-switch on="userService.isLoggedIn">
 							<div ng-switch-when="false">
 								<form role="form">
 									<div class="form-group">
 										<!-- $parent is needed because ng-switch creates a sub scope -->
 										<input type="text" class="form-control" id="inputUid"
-											placeholder="Username" ng-model="$parent.uid">
+											placeholder="Username" ng-model="$parent.userService.uid">
 									</div>
 									<div class="form-group">
 										<input type="password" class="form-control"
@@ -56,7 +56,7 @@
 								</form>
 							</div>
 							<div ng-switch-when="true">
-								You are logged in as <b>{{$parent.uid}}</b>.
+								You are logged in as <b>{{$parent.userService.uid}}</b>.
 								<button ng-click="$parent.logout()" class="btn btn-danger">Logout</button>
 							</div>
 						</div>

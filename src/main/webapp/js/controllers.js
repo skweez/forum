@@ -8,23 +8,44 @@ var controllersModule = angular.module('net.skweez.forum.controllers', [
 /*
  * The DiscussionsController. Used to display a list of discussions.
  */
-controllersModule.controller('DiscussionsContoller', [ '$scope', '$http',
-		'$resource', 'Discussions', // This is
-		// our own Discussion service defined in services.js
-		function($scope, $http, $resource, Discussions) {
-			$scope.discussions = Discussions.query();
+controllersModule
+		.controller(
+				'DiscussionsContoller',
+				[
+						'$scope',
+						'$http',
+						'$resource',
+						'Discussions',
+						'AlertService',
+						'UserService',
+						function($scope, $http, $resource, Discussions,
+								AlertService, UserService) {
+							$scope.discussions = Discussions.query();
 
-			$scope.showNewDiscussionDialog = function() {
-				$('#newDiscussion').modal('show');
-			};
+							$scope.showNewDiscussionDialog = function() {
+								if (!UserService.isLoggedIn) {
+									AlertService
+											.addAlert({
+												type : "warning",
+												title : "",
+												content : "You need to be logged in to create a new Discussion."
+											});
+								} else {
+									$('#newDiscussion').modal('show');
+								}
+							};
 
-			// Listen for 'discussionAdded' broadcast and update view
-			$scope.$on('discussionAdded', function(event, args) {
-				$http.get(args.location).success(function(discussion) {
-					$scope.discussions.push(discussion);
-				});
-			});
-		} ]);
+							// Listen for 'discussionAdded' broadcast and update
+							// view
+							$scope.$on('discussionAdded',
+									function(event, args) {
+										$http.get(args.location).success(
+												function(discussion) {
+													$scope.discussions
+															.push(discussion);
+												});
+									});
+						} ]);
 
 /*
  * The NewDiscussionsController. Used to create a new discussion with on initial
@@ -105,14 +126,16 @@ controllersModule.controller('LoginController', [
 		'$http',
 		'$cookies',
 		'AlertService',
-		function($scope, $http, $cookies, AlertService) {
-			$scope.uid = $cookies.uid;
+		'UserService',
+		function($scope, $http, $cookies, AlertService, UserService) {
+			$scope.userService = UserService;
 			$scope.password = null;
-			$scope.loggedIn = false;
 
-			if ($scope.uid != null) {
+			// If we have a uid cookie we check if we are still logged in
+			if ($cookies.uid != null) {
 				$http.get('/api/user/login').success(function() {
-					$scope.loggedIn = true;
+					UserService.uid = $cookies.uid;
+					UserService.isLoggedIn = true;
 				});
 			}
 
@@ -122,12 +145,12 @@ controllersModule.controller('LoginController', [
 						{
 							headers : {
 								'Authorization' : "Basic "
-										+ btoa($scope.uid + ":"
+										+ btoa(UserService.uid + ":"
 												+ $scope.password)
 							}
 						}).success(function() {
 					$('#login-dropdown-toggle').dropdown('toggle');
-					$scope.loggedIn = true;
+					UserService.isLoggedIn = true;
 				}).error(function() {
 					AlertService.addAlert({
 						"type" : "danger",
@@ -140,7 +163,8 @@ controllersModule.controller('LoginController', [
 
 			$scope.logout = function() {
 				$http.get('/api/user/logout');
-				$scope.loggedIn = false;
+				UserService.uid = null;
+				UserService.isLoggedIn = false;
 			};
 
 		} ]);
