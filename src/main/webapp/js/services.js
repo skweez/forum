@@ -12,3 +12,12 @@ factories.factory('Discussions', [ '$resource', function($resource) {
 		discussionId : '@id'
 	});
 } ]);
+
+/*
+ * The Posts resource as a service.
+ */
+factories.factory('Posts', [ '$resource', function($resource) {
+	return $resource('/api/discussions/:discussionId/posts/:postId', {
+		postId : '@id'
+	});
+} ]);
