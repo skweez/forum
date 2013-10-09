@@ -55,6 +55,14 @@ controllersModule.controller('NewDiscussionsContoller', [
 			};
 		} ]);
 
+controllersModule.controller('DiscussionController', [ '$scope',
+		'$routeParams', 'Discussions',
+		function($scope, $routeParams, Discussions) {
+			$scope.discussion = Discussions.get({
+				discussionId : $routeParams.discussionId
+			});
+		} ]);
+
 controllersModule.controller('LoginController', [
 		'$scope',
 		'$http',

@@ -1,0 +1,12 @@
+<h1>{{discussion.title}}</h1>
+
+<div ng-repeat="post in discussion.posts">
+	<div class="row">
+		<div class="col-xs-12" style="font-size: 0.8em;">{{post.date |
+			date:'short'}}</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">{{post.content}}</div>
+	</div>
+	<hr />
+</div>
