@@ -66,12 +66,34 @@ controllersModule.controller('NewDiscussionsContoller', [
  * The DiscussionController. Used to control single discussions.
  */
 controllersModule.controller('DiscussionController', [ '$scope',
-		'$routeParams', 'Discussions',
-		function($scope, $routeParams, Discussions) {
+		'$routeParams', 'Discussions', 'Posts',
+		function($scope, $routeParams, Discussions, Posts) {
+			$scope.newPost = {};
+
 			// Get current discussion
 			$scope.discussion = Discussions.get({
 				discussionId : $routeParams.discussionId
 			});
+
+			// Get all the posts for this discussion
+			$scope.posts = Posts.query({
+				discussionId : $routeParams.discussionId
+			});
+
+			// Create a new post
+			$scope.createPost = function() {
+				$scope.newPost.date = new Date();
+				Posts.save({
+					discussionId : $routeParams.discussionId
+				}, {
+					'Post' : $scope.newPost
+				}, function() {
+					// save success function: add new post to displayed posts
+					$scope.posts.push(angular.copy($scope.newPost));
+					// empty the new post box
+					$scope.newPost.content = "";
+				});
+			};
 		} ]);
 
 /*
