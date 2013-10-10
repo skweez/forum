@@ -2,10 +2,13 @@ package net.skweez.forum.model;
 
 import java.util.Date;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * @author elm
  * 
  */
+@XStreamAlias("Post")
 public class Post {
 	/**
 	 * The id of the post
@@ -80,7 +83,8 @@ public class Post {
 	}
 
 	/**
-	 * @param user the user to set
+	 * @param user
+	 *            the user to set
 	 */
 	public void setUser(User user) {
 		this.user = user;

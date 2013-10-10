@@ -3,6 +3,7 @@ package net.skweez.forum.server;
 import java.io.InputStream;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -61,7 +62,8 @@ public class DiscussionResource {
 			new JsonHierarchicalStreamDriver() {
 				@Override
 				public HierarchicalStreamWriter createWriter(Writer writer) {
-					return new JsonWriter(writer, AbstractJsonWriter.DROP_ROOT_MODE);
+					return new JsonWriter(writer,
+							AbstractJsonWriter.DROP_ROOT_MODE);
 				}
 			});
 
@@ -76,11 +78,13 @@ public class DiscussionResource {
 	 * Constructor
 	 */
 	public DiscussionResource() {
-		// Map json object names to java objects.
-		jsonInStream.alias("Discussion", Discussion.class);
-		jsonInStream.alias("Post", Post.class);
-		jsonInStream.alias("User", User.class);
-		jsonInStream.alias("Category", Category.class);
+		// Autodetect @XStream annotations in classes
+		jsonOutStream.autodetectAnnotations(true);
+
+		// Autodetect does not work for incomming classes so read the
+		// annotations for all the classes by hand
+		jsonInStream.processAnnotations(new Class[] { Discussion.class,
+				Post.class, User.class, Category.class });
 
 		// Use joda-time to be able to parse and generate ISO8601 date formats
 		// that are used by js 'Date()'

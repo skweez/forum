@@ -2,17 +2,22 @@ package net.skweez.forum.model;
 
 import java.util.LinkedList;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 /**
  * User class.
  * 
  * @author elm
  * 
  */
+@XStreamAlias("User")
 public class User {
 
 	/**
 	 * the auth token
 	 */
+	@XStreamOmitField
 	private String authToken;
 
 	/**
@@ -32,8 +37,8 @@ public class User {
 	 *            the uid
 	 */
 	public User(String uid) {
-		this.setUid(uid);
-		this.roles = new LinkedList<>();
+		setUid(uid);
+		roles = new LinkedList<>();
 	}
 
 	/**
@@ -78,6 +83,6 @@ public class User {
 	 *            the role to add
 	 */
 	public void addRole(String role) {
-		this.roles.add(role);
+		roles.add(role);
 	}
 }

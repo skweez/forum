@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 /**
  * A discussion with a title, a date, an id, a category and posts
  * 
  * @author mks
  * 
  */
+@XStreamAlias("Discussion")
 public class Discussion {
 
 	/**
@@ -28,8 +32,14 @@ public class Discussion {
 	private Date date;
 
 	/**
+	 * the user
+	 */
+	private User user;
+
+	/**
 	 * the posts in this discussion
 	 */
+	@XStreamOmitField
 	private final List<Post> posts;
 
 	/**
@@ -88,8 +98,8 @@ public class Discussion {
 	 * @return the id of the post
 	 */
 	public int addPost(Post post) {
-		this.posts.add(post);
-		return this.posts.indexOf(post);
+		posts.add(post);
+		return posts.indexOf(post);
 	}
 
 	/**
@@ -112,5 +122,20 @@ public class Discussion {
 	 */
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user
+	 *            the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
