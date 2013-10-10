@@ -23,6 +23,11 @@ public class Post {
 	private Date date;
 
 	/**
+	 * The User that created this post
+	 */
+	private User user;
+
+	/**
 	 * @return the post id
 	 */
 	public Integer getId() {
@@ -65,5 +70,19 @@ public class Post {
 	 */
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
