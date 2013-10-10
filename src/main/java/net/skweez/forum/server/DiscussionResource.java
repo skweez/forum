@@ -25,6 +25,7 @@ import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
+import net.skweez.forum.datastore.UserDatastore;
 import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
@@ -54,8 +55,14 @@ public class DiscussionResource {
 	/**
 	 * Initialize datastore.
 	 */
-	final DiscussionDatastore datastore = DatastoreFactory.createConfigured()
-			.getDiscussionDatastore();
+	final DiscussionDatastore discussionDatastore = DatastoreFactory
+			.createConfigured().getDiscussionDatastore();
+
+	/**
+	 * the user datastore
+	 */
+	final UserDatastore userDatastore = DatastoreFactory.createConfigured()
+			.getUserDatastore();
 
 	/** The XStream object used for serialization. */
 	private final XStream jsonOutStream = new XStream(
@@ -98,7 +105,7 @@ public class DiscussionResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllDiscussions() {
-		Collection<Discussion> allDiscussions = datastore
+		Collection<Discussion> allDiscussions = discussionDatastore
 				.selectAllDiscussions();
 
 		return jsonOutStream.toXML(allDiscussions);
@@ -113,7 +120,7 @@ public class DiscussionResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getDiscussion(@PathParam("id") int id) {
-		Discussion discussion = datastore.findDiscussion(id);
+		Discussion discussion = discussionDatastore.findDiscussion(id);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -132,7 +139,7 @@ public class DiscussionResource {
 	@Path("{id}/posts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getPostsForDiscussion(@PathParam("id") int id) {
-		Discussion discussion = datastore.findDiscussion(id);
+		Discussion discussion = discussionDatastore.findDiscussion(id);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -155,7 +162,8 @@ public class DiscussionResource {
 	public String getPost(@PathParam("discussionId") int discussionId,
 			@PathParam("postId") int postId) {
 		Post post;
-		Discussion discussion = datastore.findDiscussion(discussionId);
+		Discussion discussion = discussionDatastore
+				.findDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -199,7 +207,10 @@ public class DiscussionResource {
 		// arbitrary date
 		newDiscussion.setDate(new Date());
 
-		int newId = datastore.createDiscussion(newDiscussion);
+		User user = userDatastore.findUser(sec.getUserPrincipal().getName());
+		newDiscussion.setUser(user);
+
+		int newId = discussionDatastore.createDiscussion(newDiscussion);
 
 		builder = Response.ok();
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
@@ -219,10 +230,15 @@ public class DiscussionResource {
 	@POST
 	@Path("{id}/posts")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createPost(@PathParam("id") int id, InputStream inputStream) {
+	public Response createPost(@Context SecurityContext sec,
+			@PathParam("id") int id, InputStream inputStream) {
+		if (!sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
+			throw new WebApplicationException(Status.UNAUTHORIZED);
+		}
+
 		ResponseBuilder builder;
 		Post newPost;
-		Discussion discussion = datastore.findDiscussion(id);
+		Discussion discussion = discussionDatastore.findDiscussion(id);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -237,8 +253,14 @@ public class DiscussionResource {
 			return builder.build();
 		}
 
+		// Set date
+		newPost.setDate(new Date());
+		// Set user
+		newPost.setUser(userDatastore
+				.findUser(sec.getUserPrincipal().getName()));
+
 		int postIndex = discussion.addPost(newPost);
-		datastore.updateDiscussion(id, discussion);
+		discussionDatastore.updateDiscussion(id, discussion);
 
 		builder = Response.ok();
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
