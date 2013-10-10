@@ -195,6 +195,10 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
+		// Set date of discussion. The client should not be allowed to set an
+		// arbitrary date
+		newDiscussion.setDate(new Date());
+
 		int newId = datastore.createDiscussion(newDiscussion);
 
 		builder = Response.ok();
