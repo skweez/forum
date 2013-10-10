@@ -3,9 +3,6 @@
  */
 package net.skweez.forum.server;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
@@ -21,6 +18,7 @@ import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.UserDatastore;
+import net.skweez.forum.logic.SessionLogic;
 import net.skweez.forum.model.User;
 
 import org.slf4j.Logger;
@@ -38,11 +36,6 @@ public class UserResource {
 	 */
 	@Context
 	UriInfo uriInfo;
-
-	/**
-	 * initialize secure random rng
-	 */
-	private SecureRandom random = new SecureRandom();
 
 	private final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
@@ -73,11 +66,16 @@ public class UserResource {
 			return Response.ok().build();
 		}
 
-		// generate secure authentication token
-		String authToken = new BigInteger(130, random).toString(32);
+		String uid = sec.getUserPrincipal().getName();
 
-		User user = new User(sec.getUserPrincipal().getName());
-		user.setAuthToken(authToken);
+		// get authentication token
+		String authToken = SessionLogic.getInstance()
+				.createAuthTokenForUID(uid);
+
+		// create new user
+		// TODO: check if such a user already exists and better move all this to
+		// the logic
+		User user = new User(uid);
 
 		// TODO: Do not test each role but iterate over them. Maybe use a sub
 		// enum or something.
@@ -125,12 +123,9 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		String uid = sec.getUserPrincipal().getName();
-
-		User user = userDatastore.findUser(uid);
-		// TODO: find a better way to revoke auth token
-		user.setAuthToken(new BigInteger(130, random).toString(32));
-		userDatastore.updateUser(user);
+		// invalidate auth token
+		SessionLogic.getInstance().invalidateAuthTokenForUID(
+				sec.getUserPrincipal().getName());
 
 		// delete the cookies from the browser by setting the max age to 0
 		// seconds
@@ -138,7 +133,7 @@ public class UserResource {
 				.status(Status.UNAUTHORIZED)
 				.cookie(new NewCookie("uid", "", "/", uriInfo.getBaseUri()
 						.getHost(), Cookie.DEFAULT_VERSION, null, 0, null,
-						false, true))
+						false, false))
 				.cookie(new NewCookie("authToken", "", "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						0, null, false, true)).build();
