@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * A discussion with a title, a date, an id, a category and posts
@@ -39,7 +38,6 @@ public class Discussion {
 	/**
 	 * the posts in this discussion
 	 */
-	@XStreamOmitField
 	private final List<Post> posts;
 
 	/**

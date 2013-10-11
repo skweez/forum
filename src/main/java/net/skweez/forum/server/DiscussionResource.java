@@ -2,8 +2,6 @@ package net.skweez.forum.server;
 
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.Collection;
-import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -24,8 +22,8 @@ import javax.ws.rs.core.UriInfo;
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.datastore.UserDatastore;
+import net.skweez.forum.logic.ForumLogic;
 import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
@@ -51,12 +49,6 @@ public class DiscussionResource {
 	 */
 	@Context
 	UriInfo uriInfo;
-
-	/**
-	 * Initialize datastore.
-	 */
-	final DiscussionDatastore discussionDatastore = DatastoreFactory
-			.createConfigured().getDiscussionDatastore();
 
 	/**
 	 * the user datastore
@@ -88,6 +80,9 @@ public class DiscussionResource {
 		// Autodetect @XStream annotations in classes
 		jsonOutStream.autodetectAnnotations(true);
 
+		// Do never send posts with a discussion.
+		jsonOutStream.omitField(Discussion.class, "posts");
+
 		// Autodetect does not work for incomming classes so read the
 		// annotations for all the classes by hand
 		jsonInStream.processAnnotations(new Class[] { Discussion.class,
@@ -105,10 +100,7 @@ public class DiscussionResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllDiscussions() {
-		Collection<Discussion> allDiscussions = discussionDatastore
-				.selectAllDiscussions();
-
-		return jsonOutStream.toXML(allDiscussions);
+		return jsonOutStream.toXML(ForumLogic.getDiscussions());
 	}
 
 	/**
@@ -119,8 +111,8 @@ public class DiscussionResource {
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getDiscussion(@PathParam("id") int id) {
-		Discussion discussion = discussionDatastore.findDiscussion(id);
+	public String getDiscussion(@PathParam("id") int discussionId) {
+		Discussion discussion = ForumLogic.getDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -138,8 +130,8 @@ public class DiscussionResource {
 	@GET
 	@Path("{id}/posts")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getPostsForDiscussion(@PathParam("id") int id) {
-		Discussion discussion = discussionDatastore.findDiscussion(id);
+	public String getPostsForDiscussion(@PathParam("id") int discussionId) {
+		Discussion discussion = ForumLogic.getDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -162,8 +154,7 @@ public class DiscussionResource {
 	public String getPost(@PathParam("discussionId") int discussionId,
 			@PathParam("postId") int postId) {
 		Post post;
-		Discussion discussion = discussionDatastore
-				.findDiscussion(discussionId);
+		Discussion discussion = ForumLogic.getDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -195,26 +186,28 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
-		Discussion newDiscussion;
+		Discussion discussion;
 		ResponseBuilder builder;
 		try {
-			newDiscussion = (Discussion) jsonInStream.fromXML(inputStream);
+			discussion = (Discussion) jsonInStream.fromXML(inputStream);
 		} catch (XStreamException e) {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
-		// Set date of discussion. The client should not be allowed to set an
-		// arbitrary date
-		newDiscussion.setDate(new Date());
-
 		User user = userDatastore.findUser(sec.getUserPrincipal().getName());
-		newDiscussion.setUser(user);
+		discussion.setUser(user);
 
-		int newId = discussionDatastore.createDiscussion(newDiscussion);
+		int discussionId;
+
+		try {
+			discussionId = ForumLogic.createDiscussion(discussion);
+		} catch (IllegalArgumentException e) {
+			throw new WebApplicationException(Status.BAD_REQUEST);
+		}
 
 		builder = Response.ok();
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
-				String.valueOf(newId));
+				String.valueOf(discussionId));
 		builder.location(newResourceUri.build());
 
 		return builder.build();
@@ -231,36 +224,31 @@ public class DiscussionResource {
 	@Path("{id}/posts")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPost(@Context SecurityContext sec,
-			@PathParam("id") int id, InputStream inputStream) {
+			@PathParam("id") int discussionId, InputStream inputStream) {
 		if (!sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
 		ResponseBuilder builder;
-		Post newPost;
-		Discussion discussion = discussionDatastore.findDiscussion(id);
-
-		// Return 404 if discussion is not found
-		if (discussion == null) {
-			throw new WebApplicationException(Response.Status.NOT_FOUND);
-		}
+		Post post;
+		int postIndex;
 
 		try {
-			newPost = (Post) jsonInStream.fromXML(inputStream);
+			post = (Post) jsonInStream.fromXML(inputStream);
 		} catch (XStreamException e) {
 			System.err.println(e.getMessage());
 			builder = Response.status(Status.BAD_REQUEST);
 			return builder.build();
 		}
 
-		// Set date
-		newPost.setDate(new Date());
 		// Set user
-		newPost.setUser(userDatastore
-				.findUser(sec.getUserPrincipal().getName()));
+		post.setUser(userDatastore.findUser(sec.getUserPrincipal().getName()));
 
-		int postIndex = discussion.addPost(newPost);
-		discussionDatastore.updateDiscussion(id, discussion);
+		try {
+			postIndex = ForumLogic.addPostToDiscussion(post, discussionId);
+		} catch (IllegalArgumentException e) {
+			throw new WebApplicationException(Response.Status.NOT_FOUND);
+		}
 
 		builder = Response.ok();
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
