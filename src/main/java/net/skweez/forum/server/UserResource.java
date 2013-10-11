@@ -14,11 +14,8 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import net.skweez.forum.config.Config;
-import net.skweez.forum.config.Setting;
-import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.UserDatastore;
 import net.skweez.forum.logic.SessionLogic;
+import net.skweez.forum.logic.UserLogic;
 import net.skweez.forum.model.User;
 
 import org.slf4j.Logger;
@@ -38,12 +35,6 @@ public class UserResource {
 	UriInfo uriInfo;
 
 	private final Logger logger = LoggerFactory.getLogger(UserResource.class);
-
-	/**
-	 * the user datastore
-	 */
-	final UserDatastore userDatastore = DatastoreFactory.createConfigured()
-			.getUserDatastore();
 
 	/**
 	 * 
@@ -72,21 +63,7 @@ public class UserResource {
 		String authToken = SessionLogic.getInstance()
 				.createAuthTokenForUID(uid);
 
-		// create new user
-		// TODO: check if such a user already exists and better move all this to
-		// the logic
-		User user = new User(uid);
-
-		// TODO: Do not test each role but iterate over them. Maybe use a sub
-		// enum or something.
-		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
-			user.addRole(Config.getValue(Setting.ROLE_NAME_USER));
-		}
-		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_ADMIN))) {
-			user.addRole(Config.getValue(Setting.ROLE_NAME_ADMIN));
-		}
-
-		userDatastore.createUser(user);
+		User user = UserLogic.createUser(uid, sec);
 
 		return Response
 				.ok()

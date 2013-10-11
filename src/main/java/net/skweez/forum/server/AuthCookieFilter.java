@@ -14,9 +14,8 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.UserDatastore;
 import net.skweez.forum.logic.SessionLogic;
+import net.skweez.forum.logic.UserLogic;
 import net.skweez.forum.model.User;
 
 /**
@@ -30,12 +29,6 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 	 * the authentication scheme name
 	 */
 	static String AuthenticationScheme = "net.skweez.forum.cookie";
-
-	/**
-	 * the user datastore
-	 */
-	final UserDatastore userDatastore = DatastoreFactory.createConfigured()
-			.getUserDatastore();
 
 	@Override
 	public void filter(ContainerRequestContext requestContext)
@@ -55,7 +48,7 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		User user = userDatastore.findUser(uid);
+		User user = UserLogic.getUser(uid);
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
 		requestContext.setSecurityContext(sec);

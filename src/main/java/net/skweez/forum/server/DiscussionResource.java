@@ -21,9 +21,8 @@ import javax.ws.rs.core.UriInfo;
 
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
-import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.UserDatastore;
 import net.skweez.forum.logic.ForumLogic;
+import net.skweez.forum.logic.UserLogic;
 import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
@@ -49,12 +48,6 @@ public class DiscussionResource {
 	 */
 	@Context
 	UriInfo uriInfo;
-
-	/**
-	 * the user datastore
-	 */
-	final UserDatastore userDatastore = DatastoreFactory.createConfigured()
-			.getUserDatastore();
 
 	/** The XStream object used for serialization. */
 	private final XStream jsonOutStream = new XStream(
@@ -194,7 +187,7 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
-		User user = userDatastore.findUser(sec.getUserPrincipal().getName());
+		User user = UserLogic.getUser(sec.getUserPrincipal().getName());
 		discussion.setUser(user);
 
 		int discussionId;
@@ -242,7 +235,7 @@ public class DiscussionResource {
 		}
 
 		// Set user
-		post.setUser(userDatastore.findUser(sec.getUserPrincipal().getName()));
+		post.setUser(UserLogic.getUser(sec.getUserPrincipal().getName()));
 
 		try {
 			postIndex = ForumLogic.addPostToDiscussion(post, discussionId);
