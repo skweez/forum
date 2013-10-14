@@ -10,12 +10,17 @@ import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
 
 import org.apache.commons.lang3.Validate;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 /**
  * The forum logic. Static for now.
  * 
  */
 public class ForumLogic {
+	private static final PolicyFactory htmlSanitizer = Sanitizers.BLOCKS
+			.and(Sanitizers.IMAGES).and(Sanitizers.LINKS)
+			.and(Sanitizers.FORMATTING);
 
 	/** the datastore factory */
 	private static final DatastoreFactory factory = DatastoreFactory
@@ -84,9 +89,11 @@ public class ForumLogic {
 		}
 
 		post.setDate(new Date());
+
+		post.setContent(htmlSanitizer.sanitize(post.getContent()));
+
 		int postId = discussion.addPost(post);
 		discussionDatastore.updateDiscussion(discussionId, discussion);
 		return postId;
 	}
-
 }
