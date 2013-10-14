@@ -3,8 +3,7 @@
  */
 package net.skweez.forum.logic;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.util.Calendar;
 
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.SessionDatastore;
@@ -15,14 +14,17 @@ import net.skweez.forum.model.Session;
  * 
  */
 public class SessionLogic {
+	/** The lifetime for temporary sessions in days */
+	private static final int SHORT_SESSION_LIFETIME = 2;
+
+	/** The lifetime for permanent sessions in days */
+	public static final int LONG_SESSION_LIFETIME = 365;
+
 	/** singelton instance */
 	private static SessionLogic INSTANCE = new SessionLogic();
 
 	/** the session datastore */
 	private SessionDatastore sessionDatastore;
-
-	/** A secure rng */
-	private SecureRandom random;
 
 	/**
 	 * hidden constructor
@@ -30,7 +32,6 @@ public class SessionLogic {
 	private SessionLogic() {
 		sessionDatastore = DatastoreFactory.createConfigured()
 				.getSessionDatastore();
-		random = new SecureRandom();
 	}
 
 	/**
@@ -41,23 +42,40 @@ public class SessionLogic {
 	}
 
 	/**
+	 * Creates a new session. If shouldLast is set to true the session will last
+	 * for LONG_SESSION_LIFETIME days.
+	 * 
 	 * @param uid
-	 *            the uid for which to create the authToken
-	 * @return the newly created authToken
+	 *            the uid
+	 * @param shouldLast
+	 *            indicates if the session should last for LONG_SESSION_LIFETIME
+	 *            days
+	 * @return the new session
 	 */
-	public String createAuthTokenForUID(final String uid) {
-		Session session = sessionDatastore.findSession(uid);
+	public Session createSession(final String uid, final boolean shouldLast) {
+		// delete old session
+		sessionDatastore.destroySession(uid);
 
-		if (session == null) {
-			session = sessionDatastore.createSession(uid);
+		Calendar cal = Calendar.getInstance();
+		if (shouldLast) {
+			cal.add(Calendar.DATE, LONG_SESSION_LIFETIME);
+		} else {
+			cal.add(Calendar.DATE, SHORT_SESSION_LIFETIME);
 		}
 
-		String authToken = new BigInteger(130, random).toString(32);
-		session.setAuthToken(authToken);
+		Session session = sessionDatastore.createSession(uid, cal.getTime());
 
-		sessionDatastore.updateSession(uid, session);
+		return session;
+	}
 
-		return authToken;
+	/**
+	 * Destroys a session for a given uid.
+	 * 
+	 * @param uid
+	 *            the uid
+	 */
+	public void destroySession(String uid) {
+		sessionDatastore.destroySession(uid);
 	}
 
 	/**
@@ -79,18 +97,5 @@ public class SessionLogic {
 		}
 
 		return false;
-	}
-
-	/**
-	 * @param uid
-	 *            the uid for which the auth token should be invalidated.
-	 */
-	public void invalidateAuthTokenForUID(final String uid) {
-		Session session = sessionDatastore.findSession(uid);
-
-		if (session != null) {
-			session.setAuthToken(null);
-			sessionDatastore.updateSession(uid, session);
-		}
 	}
 }

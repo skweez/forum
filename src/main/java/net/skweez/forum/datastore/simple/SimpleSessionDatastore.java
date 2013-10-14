@@ -3,6 +3,7 @@
  */
 package net.skweez.forum.datastore.simple;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +19,8 @@ public class SimpleSessionDatastore implements SessionDatastore {
 	private Map<String, Session> sessions = new HashMap<>();
 
 	@Override
-	public Session createSession(String uid) {
-		Session session = new Session(uid);
+	public Session createSession(String uid, Date expireDate) {
+		Session session = new Session(uid, expireDate);
 		sessions.put(uid, session);
 		return session;
 	}

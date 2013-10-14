@@ -3,6 +3,8 @@
  */
 package net.skweez.forum.datastore;
 
+import java.util.Date;
+
 import net.skweez.forum.model.Session;
 
 /**
@@ -17,7 +19,7 @@ public interface SessionDatastore {
 	 *            the uid
 	 * @return a new session
 	 */
-	public Session createSession(String uid);
+	public Session createSession(String uid, Date expireDate);
 
 	/**
 	 * @param uid

@@ -61,7 +61,7 @@ public class UserResource {
 
 		// get authentication token
 		String authToken = SessionLogic.getInstance()
-				.createAuthTokenForUID(uid);
+				.createSession(uid, stayloggedin).getAuthToken();
 
 		User user = UserLogic.createUser(uid, sec);
 
@@ -100,8 +100,8 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		// invalidate auth token
-		SessionLogic.getInstance().invalidateAuthTokenForUID(
+		// destroy user session
+		SessionLogic.getInstance().destroySession(
 				sec.getUserPrincipal().getName());
 
 		// delete the cookies from the browser by setting the max age to 0
