@@ -6,7 +6,7 @@
 			date:'short'}}</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-12">{{post.content}}</div>
+		<div class="col-xs-12" ng-bind-html="post.content | linebreakFilter"></div>
 	</div>
 	<hr />
 </div>

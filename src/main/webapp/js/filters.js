@@ -2,9 +2,10 @@
 
 /* Filters */
 
-angular.module('net.skweez.forum.filters', []).
-  filter('interpolate', ['version', function(version) {
-    return function(text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
+var filters = angular.module('net.skweez.forum.filters', []);
+
+filters.filter('linebreakFilter', function () {
+    return function (text) {
+        if (text !== undefined) return text.replace(/\n/g, '<br />');
     };
-  }]);
+});
