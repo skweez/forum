@@ -12,7 +12,7 @@
 		<div class="alert fade" ng-repeat="alert in alertService.alerts"
 			bs-alert="alert"></div>
 	</div>
-	<div class="navbar navbar-inverse navbar-fixed-top" bs-navbar>
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" bs-navbar>
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
 				data-target=".navbar-collapse">
@@ -64,7 +64,7 @@
 			</ul>
 		</div>
 		<!-- /nacbar-collapse -->
-	</div>
+	</nav>
 
 	<div class="container" ng-view></div>
 
