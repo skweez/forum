@@ -5,6 +5,7 @@ package net.skweez.forum.server;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Cookie;
@@ -43,7 +44,8 @@ public class UserResource {
 	 */
 	@GET
 	@Path("login")
-	public Response login(@Context SecurityContext sec) {
+	public Response login(@Context SecurityContext sec,
+			@QueryParam("stayloggedin") boolean stayloggedin) {
 		// If the user is not authenticated by the servlet container (Jetty with
 		// JAAS or something) or by cookie we return 401 Unauthorized
 		if (sec.getUserPrincipal() == null) {
@@ -65,6 +67,11 @@ public class UserResource {
 
 		User user = UserLogic.createUser(uid, sec);
 
+		int max_age = NewCookie.DEFAULT_MAX_AGE;
+		if (stayloggedin) {
+			max_age = SessionLogic.LONG_SESSION_LIFETIME * 24 * 60 * 60;
+		}
+
 		return Response
 				.ok()
 				.cookie(new NewCookie("uid", // name
@@ -74,7 +81,7 @@ public class UserResource {
 						uriInfo.getBaseUri().getHost(), // host
 						Cookie.DEFAULT_VERSION, // version
 						null, // comment
-						NewCookie.DEFAULT_MAX_AGE, // max_age
+						max_age, // max_age in seconds
 						null, // expire date
 						false, // secure (https only)
 						false // httpOnly (no js access allowed. This is set to
@@ -82,7 +89,7 @@ public class UserResource {
 				))
 				.cookie(new NewCookie("authToken", authToken, "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
-						NewCookie.DEFAULT_MAX_AGE, null, false, true)).build();
+						max_age, null, false, true)).build();
 	}
 
 	/**

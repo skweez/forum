@@ -130,6 +130,7 @@ controllersModule.controller('LoginController', [
 		function($scope, $http, $cookies, AlertService, UserService) {
 			$scope.userService = UserService;
 			$scope.password = null;
+			$scope.stayloggedin = false;
 
 			// If we have a uid cookie we check if we are still logged in
 			if ($cookies.uid != null) {
@@ -147,6 +148,9 @@ controllersModule.controller('LoginController', [
 								'Authorization' : "Basic "
 										+ btoa(UserService.uid + ":"
 												+ $scope.password)
+							},
+							params : {
+								'stayloggedin' : $scope.stayloggedin
 							}
 						}).success(function() {
 					$('#login-dropdown-toggle').dropdown('toggle');
