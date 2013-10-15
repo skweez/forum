@@ -11,6 +11,14 @@
 	margin: 5px auto;
 }
 
+.post {
+	overflow: auto;
+}
+
+.post img {
+	max-width: 100%;
+}
+
 @media ( max-width : 767px) {
 	/* fix color for login dropdown when navbar is collapsed */
 	.navbar-nav .dropdown-menu label {
