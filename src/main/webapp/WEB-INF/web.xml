@@ -30,9 +30,13 @@
 		<realm-name>net.skweez.forum</realm-name>
 	</login-config>
 	<security-role>
-		<role-name>user</role-name>
+		<role-name>users</role-name>
 	</security-role>
 	<security-role>
-		<role-name>admin</role-name>
+		<role-name>admins</role-name>
 	</security-role>
+
+	<listener>
+		<listener-class>net.skweez.forum.server.SecurityListener</listener-class>
+	</listener>
 </web-app>
