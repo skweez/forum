@@ -19,6 +19,7 @@ import org.owasp.html.Sanitizers;
  */
 public class ForumLogic {
 	private static final PolicyFactory htmlSanitizer = Sanitizers.BLOCKS
+	/** the html sanitizer */
 			.and(Sanitizers.IMAGES).and(Sanitizers.LINKS)
 			.and(Sanitizers.FORMATTING);
 

@@ -15,6 +15,8 @@ import net.skweez.forum.model.Session;
  */
 public interface SessionDatastore {
 	/**
+	 * Create a new session.
+	 * 
 	 * @param uid
 	 *            the uid
 	 * @return a new session
@@ -22,6 +24,8 @@ public interface SessionDatastore {
 	public Session createSession(String uid, Date expireDate);
 
 	/**
+	 * Finds a session by uid
+	 * 
 	 * @param uid
 	 *            the uid
 	 * @return the existing session. null if none exists.
@@ -29,7 +33,7 @@ public interface SessionDatastore {
 	public Session findSession(String uid);
 
 	/**
-	 * sets the new session for the uid
+	 * Update an existing session with a new session for a given uid.
 	 * 
 	 * @param uid
 	 *            the uid
@@ -40,6 +44,8 @@ public interface SessionDatastore {
 	public boolean updateSession(String uid, Session session);
 
 	/**
+	 * Deletes a session for a given uid.
+	 * 
 	 * @param uid
 	 *            the uid
 	 */

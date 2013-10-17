@@ -72,7 +72,7 @@ public class SessionLogic {
 	}
 
 	/**
-	 * Destroys a session for a given uid.
+	 * Deletes a session for a given uid.
 	 * 
 	 * @param uid
 	 *            the uid
@@ -82,6 +82,8 @@ public class SessionLogic {
 	}
 
 	/**
+	 * Validate an authToken for a given uid.
+	 * 
 	 * @param authToken
 	 *            the authToken to check
 	 * @param uid
