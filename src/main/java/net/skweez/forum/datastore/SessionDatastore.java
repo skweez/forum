@@ -43,6 +43,5 @@ public interface SessionDatastore {
 	 * @param uid
 	 *            the uid
 	 */
-	// TODO (mks) Rename to deleteSession to be consistent with other DAOs?
-	public void destroySession(String uid);
+	public void deleteSession(String uid);
 }

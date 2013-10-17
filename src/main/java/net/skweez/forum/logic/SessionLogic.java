@@ -77,8 +77,8 @@ public class SessionLogic {
 	 * @param uid
 	 *            the uid
 	 */
-	public void destroySession(String uid) {
-		sessionDatastore.destroySession(uid);
+	public void deleteSession(String uid) {
+		sessionDatastore.deleteSession(uid);
 	}
 
 	/**

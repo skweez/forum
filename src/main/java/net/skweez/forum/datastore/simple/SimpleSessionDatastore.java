@@ -41,7 +41,7 @@ public class SimpleSessionDatastore implements SessionDatastore {
 	}
 
 	@Override
-	public void destroySession(String uid) {
+	public void deleteSession(String uid) {
 		sessions.remove(uid);
 	}
 

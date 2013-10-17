@@ -114,8 +114,9 @@ public class UserResource {
 
 		// TODO (mks) Trivial comment?
 		// destroy user session
-		SessionLogic.getInstance().destroySession(
-				sec.getUserPrincipal().getName());
+		String uid = sec.getUserPrincipal().getName();
+		sessionLogic.deleteSession(uid);
+		logger.debug("Logout: " + uid);
 
 		// delete the cookies from the browser by setting the max age to 0
 		// seconds
