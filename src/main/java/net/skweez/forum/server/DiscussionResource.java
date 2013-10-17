@@ -70,9 +70,11 @@ public class DiscussionResource {
 	 * Constructor
 	 */
 	public DiscussionResource() {
+		// TODO (mks) Trivial comment?
 		// Autodetect @XStream annotations in classes
 		jsonOutStream.autodetectAnnotations(true);
 
+		// TODO (mks) Trivial comment?
 		// Do never send posts with a discussion.
 		jsonOutStream.omitField(Discussion.class, "posts");
 
@@ -195,6 +197,9 @@ public class DiscussionResource {
 		try {
 			discussionId = ForumLogic.createDiscussion(discussion);
 		} catch (IllegalArgumentException e) {
+			// TODO (mks) Please do not use IllegalArgumentException if it is intended to be catched.
+			// IAE is an unchecked exception and intended to signal an irrecoverable programming error.
+			// We should probably have a LogicException in the logic package. (For separation of tiers) for this kind of errors.
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
@@ -234,6 +239,7 @@ public class DiscussionResource {
 			return builder.build();
 		}
 
+		// TODO (mks) Trivial comment?
 		// Set user
 		post.setUser(UserLogic.getUser(sec.getUserPrincipal().getName()));
 

@@ -41,9 +41,10 @@ public class SessionLogic {
 		return INSTANCE;
 	}
 
+	// TODO (mks) Rename shouldLast to longSession?
 	/**
 	 * Creates a new session. If shouldLast is set to true the session will last
-	 * for LONG_SESSION_LIFETIME days.
+	 * for {@value #LONG_SESSION_LIFETIME} days.
 	 * 
 	 * @param uid
 	 *            the uid
@@ -53,6 +54,7 @@ public class SessionLogic {
 	 * @return the new session
 	 */
 	public Session createSession(final String uid, final boolean shouldLast) {
+		// TODO (mks) Trivial comment?
 		// delete old session
 		sessionDatastore.destroySession(uid);
 
@@ -63,6 +65,7 @@ public class SessionLogic {
 			cal.add(Calendar.DATE, SHORT_SESSION_LIFETIME);
 		}
 
+		// TODO (mks) Inline variable (return directly)
 		Session session = sessionDatastore.createSession(uid, cal.getTime());
 
 		return session;
@@ -92,6 +95,7 @@ public class SessionLogic {
 			return false;
 		}
 
+		// TODO (mks) Merge with above condition (… != null && …equals)
 		if (authToken.equals(session.getAuthToken())) {
 			return true;
 		}

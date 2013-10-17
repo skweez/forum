@@ -59,6 +59,7 @@ public class ForumLogic {
 	 * @return the discussion. null if no discussion is found
 	 */
 	public static Discussion getDiscussion(int discussionId) {
+		// TODO (mks) Inline variable
 		Discussion discussion = discussionDatastore
 				.findDiscussion(discussionId);
 
@@ -89,7 +90,6 @@ public class ForumLogic {
 		}
 
 		post.setDate(new Date());
-
 		post.setContent(htmlSanitizer.sanitize(post.getContent()));
 
 		int postId = discussion.addPost(post);

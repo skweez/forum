@@ -35,6 +35,7 @@ public class UserResource {
 	@Context
 	UriInfo uriInfo;
 
+	// TODO (mks) logger is not used. Log logins/logouts?
 	private final Logger logger = LoggerFactory.getLogger(UserResource.class);
 
 	/**
@@ -72,6 +73,10 @@ public class UserResource {
 			max_age = SessionLogic.LONG_SESSION_LIFETIME * 24 * 60 * 60;
 		}
 
+		// TODO (mks) I think the following inline comments are not very useful.
+		// If you think the parameters need explanation, maybe extract them to
+		// variables with descriptive name. But I think thanks to the Javadoc
+		// integration in Eclipse this is not really necessary
 		return Response
 				.ok()
 				.cookie(new NewCookie("uid", // name
@@ -107,6 +112,7 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
+		// TODO (mks) Trivial comment?
 		// destroy user session
 		SessionLogic.getInstance().destroySession(
 				sec.getUserPrincipal().getName());

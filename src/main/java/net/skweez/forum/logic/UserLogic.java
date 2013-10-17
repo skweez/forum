@@ -16,13 +16,19 @@ import net.skweez.forum.model.User;
  * 
  */
 public class UserLogic {
-	/** the datastore factory */
+
+	// TODO (mks) Not used anywhere but in the line below. Inline?
+	/** The datastore factory. */
 	private static final DatastoreFactory CONFIGURED_DATASTORE_FACTORY = DatastoreFactory
 			.createConfigured();
-	/** the user datastore */
+
+	// TODO (mks) I think this should probably not be static.
+	/** The user datastore. */
 	private static final UserDatastore userDatastore = CONFIGURED_DATASTORE_FACTORY
 			.getUserDatastore();
 
+	// TODO (mks) I think the doc is missing the fact, that the user is only
+	// created if it doesn't exist already.
 	/**
 	 * Creates a new user. Role informations for the new user are extracted from
 	 * the security context.
@@ -34,6 +40,7 @@ public class UserLogic {
 	 * @return the new user. If a user with that uid already exists this user is
 	 *         returned
 	 */
+	// TODO (mks) Rename to findOrCreateUser?
 	public static User createUser(String uid, SecurityContext sec) {
 		User user = userDatastore.findUser(uid);
 
@@ -41,6 +48,7 @@ public class UserLogic {
 			return user;
 		}
 
+		// TODO (mks) Trivial comment?
 		// create new user
 		user = new User(uid);
 

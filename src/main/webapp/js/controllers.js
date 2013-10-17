@@ -1,5 +1,18 @@
 'use strict';
 
+/* TODO (mks) Is there any way we can split this up? The file is not too long
+ * just yet but it already contains different concerns like discussions and log-in.
+ * I have the impression that this might get very large and confusing over time.
+ * Maybe have a file for each of the controller function objects and only
+ * instantiate them here?
+ * 
+ * Like a
+ * DiscussionController.js with a function object named DiscussionController and using it with:
+ * controllersModule.controller('DiscussionContoller', […, new DiscussionController(…)]);
+ */
+
+// TODO (mks) Could we reduce nesting depth further by extracting functions?
+
 /* Controllers */
 
 var controllersModule = angular.module('net.skweez.forum.controllers', [
@@ -10,6 +23,7 @@ var controllersModule = angular.module('net.skweez.forum.controllers', [
  */
 controllersModule
 		.controller(
+// TODO (mks) Missing 'r' in Controller. Maybe call it DiscussionOverviewController?
 				'DiscussionsContoller',
 				[
 						'$scope',
@@ -18,6 +32,7 @@ controllersModule
 						'Discussions',
 						'AlertService',
 						'UserService',
+						// TODO (mks) Are these some kind of "magic" names? Would it be possible that they use the standard naming, i.e. scope, http, alertService, etc.?
 						function($scope, $http, $resource, Discussions,
 								AlertService, UserService) {
 							$scope.discussions = Discussions.query();
@@ -51,6 +66,7 @@ controllersModule
  * The NewDiscussionsController. Used to create a new discussion with on initial
  * post.
  */
+// TODO (mks) Missing 'r'.
 controllersModule.controller('NewDiscussionsContoller', [
 		'$scope',
 		'$http',
