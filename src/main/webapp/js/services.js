@@ -31,7 +31,7 @@ services.factory('Posts', [ '$resource', function($resource) {
  * 	content: the content of the alert
  */
 services.service('AlertService', [function() {
-	// TODO (mks) self is never read. Maybe just use this?
+	// store a reference to this for the window.setTimeout function
 	var self = this;
 	self.alerts = [];
 	
