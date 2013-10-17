@@ -25,10 +25,13 @@ import net.skweez.forum.model.User;
 @Provider
 public class AuthCookieFilter implements ContainerRequestFilter {
 
-	/**
-	 * the authentication scheme name
-	 */
-	static String AuthenticationScheme = "net.skweez.forum.cookie";
+	/** the authentication scheme name */
+	public static final String AuthenticationScheme = "net.skweez.forum.cookie";
+
+	/** userLogic */
+	private final UserLogic userLogic = new UserLogic();
+	/** sessionLogic */
+	private final SessionLogic sessionLogic = new SessionLogic();
 
 	@Override
 	public void filter(ContainerRequestContext requestContext)
@@ -44,11 +47,11 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 		String authToken = cookies.get("authToken").getValue();
 
 		// return without security context if the auth token is invalid
-		if (!SessionLogic.getInstance().validateAuthTokenForUID(authToken, uid)) {
+		if (!sessionLogic.validateAuthTokenForUID(authToken, uid)) {
 			return;
 		}
 
-		User user = UserLogic.getUser(uid);
+		User user = userLogic.getUser(uid);
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
 		requestContext.setSecurityContext(sec);
@@ -96,7 +99,6 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 
 		@Override
 		public boolean isSecure() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 

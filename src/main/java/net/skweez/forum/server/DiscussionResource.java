@@ -22,6 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 import net.skweez.forum.logic.ForumLogic;
+import net.skweez.forum.logic.LogicException;
 import net.skweez.forum.logic.UserLogic;
 import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
@@ -49,6 +50,11 @@ public class DiscussionResource {
 	@Context
 	UriInfo uriInfo;
 
+	/** userLogic */
+	private final UserLogic userLogic = new UserLogic();
+	/** forumLogic */
+	private final ForumLogic forumLogic = new ForumLogic();
+
 	/** The XStream object used for serialization. */
 	private final XStream jsonOutStream = new XStream(
 			new JsonHierarchicalStreamDriver() {
@@ -70,12 +76,8 @@ public class DiscussionResource {
 	 * Constructor
 	 */
 	public DiscussionResource() {
-		// TODO (mks) Trivial comment?
-		// Autodetect @XStream annotations in classes
 		jsonOutStream.autodetectAnnotations(true);
 
-		// TODO (mks) Trivial comment?
-		// Do never send posts with a discussion.
 		jsonOutStream.omitField(Discussion.class, "posts");
 
 		// Autodetect does not work for incomming classes so read the
@@ -95,7 +97,7 @@ public class DiscussionResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllDiscussions() {
-		return jsonOutStream.toXML(ForumLogic.getDiscussions());
+		return jsonOutStream.toXML(forumLogic.getDiscussions());
 	}
 
 	/**
@@ -107,7 +109,7 @@ public class DiscussionResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getDiscussion(@PathParam("id") int discussionId) {
-		Discussion discussion = ForumLogic.getDiscussion(discussionId);
+		Discussion discussion = forumLogic.getDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -126,7 +128,7 @@ public class DiscussionResource {
 	@Path("{id}/posts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getPostsForDiscussion(@PathParam("id") int discussionId) {
-		Discussion discussion = ForumLogic.getDiscussion(discussionId);
+		Discussion discussion = forumLogic.getDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -149,7 +151,7 @@ public class DiscussionResource {
 	public String getPost(@PathParam("discussionId") int discussionId,
 			@PathParam("postId") int postId) {
 		Post post;
-		Discussion discussion = ForumLogic.getDiscussion(discussionId);
+		Discussion discussion = forumLogic.getDiscussion(discussionId);
 
 		// Return 404 if discussion is not found
 		if (discussion == null) {
@@ -189,17 +191,14 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
-		User user = UserLogic.getUser(sec.getUserPrincipal().getName());
+		User user = userLogic.getUser(sec.getUserPrincipal().getName());
 		discussion.setUser(user);
 
 		int discussionId;
 
 		try {
-			discussionId = ForumLogic.createDiscussion(discussion);
-		} catch (IllegalArgumentException e) {
-			// TODO (mks) Please do not use IllegalArgumentException if it is intended to be catched.
-			// IAE is an unchecked exception and intended to signal an irrecoverable programming error.
-			// We should probably have a LogicException in the logic package. (For separation of tiers) for this kind of errors.
+			discussionId = forumLogic.createDiscussion(discussion);
+		} catch (LogicException e) {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
@@ -239,13 +238,11 @@ public class DiscussionResource {
 			return builder.build();
 		}
 
-		// TODO (mks) Trivial comment?
-		// Set user
-		post.setUser(UserLogic.getUser(sec.getUserPrincipal().getName()));
+		post.setUser(userLogic.getUser(sec.getUserPrincipal().getName()));
 
 		try {
-			postIndex = ForumLogic.addPostToDiscussion(post, discussionId);
-		} catch (IllegalArgumentException e) {
+			postIndex = forumLogic.addPostToDiscussion(post, discussionId);
+		} catch (LogicException e) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 

@@ -35,8 +35,13 @@ public class UserResource {
 	@Context
 	UriInfo uriInfo;
 
-	// TODO (mks) logger is not used. Log logins/logouts?
+	/** logger */
 	private final Logger logger = LoggerFactory.getLogger(UserResource.class);
+
+	/** userLogic */
+	private final UserLogic userLogic = new UserLogic();
+	/** sessionLogic */
+	private final SessionLogic sessionLogic = new SessionLogic();
 
 	/**
 	 * 
@@ -62,36 +67,26 @@ public class UserResource {
 
 		String uid = sec.getUserPrincipal().getName();
 
-		// get authentication token
-		String authToken = SessionLogic.getInstance()
-				.createSession(uid, stayloggedin).getAuthToken();
+		logger.debug("Login successful: " + uid);
 
-		User user = UserLogic.createUser(uid, sec);
+		// get authentication token
+		String authToken = sessionLogic.createSession(uid, stayloggedin)
+				.getAuthToken();
+
+		User user = userLogic.findOrCreateUser(uid, sec);
 
 		int max_age = NewCookie.DEFAULT_MAX_AGE;
 		if (stayloggedin) {
 			max_age = SessionLogic.LONG_SESSION_LIFETIME * 24 * 60 * 60;
 		}
 
-		// TODO (mks) I think the following inline comments are not very useful.
-		// If you think the parameters need explanation, maybe extract them to
-		// variables with descriptive name. But I think thanks to the Javadoc
-		// integration in Eclipse this is not really necessary
 		return Response
 				.ok()
-				.cookie(new NewCookie("uid", // name
-						user.getUid(), // content
-						"/", // path, we need the uid cookie in the js so it
-								// needs to be accessible from everywhere
-						uriInfo.getBaseUri().getHost(), // host
-						Cookie.DEFAULT_VERSION, // version
-						null, // comment
-						max_age, // max_age in seconds
-						null, // expire date
-						false, // secure (https only)
-						false // httpOnly (no js access allowed. This is set to
-								// true for the authToken)
-				))
+				// The uid cookie has to be readable from javascript. Therefore
+				// the path is / and httpOnly is false.
+				.cookie(new NewCookie("uid", user.getUid(), "/", uriInfo
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
+						max_age, null, false, false))
 				.cookie(new NewCookie("authToken", authToken, "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						max_age, null, false, true)).build();
@@ -99,7 +94,8 @@ public class UserResource {
 
 	/**
 	 * 
-	 * Revokes the auth token and deletes all cookies from browser.
+	 * Revokes the auth token and deletes all cookies from browser by setting
+	 * their max_age to 0.
 	 * 
 	 * @return 401 Unauthorized so that browsers delete their authentication
 	 *         data
@@ -112,14 +108,10 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		// TODO (mks) Trivial comment?
-		// destroy user session
 		String uid = sec.getUserPrincipal().getName();
 		sessionLogic.deleteSession(uid);
 		logger.debug("Logout: " + uid);
 
-		// delete the cookies from the browser by setting the max age to 0
-		// seconds
 		return Response
 				.status(Status.UNAUTHORIZED)
 				.cookie(new NewCookie("uid", "", "/", uriInfo.getBaseUri()

@@ -18,31 +18,31 @@ import org.owasp.html.Sanitizers;
  * 
  */
 public class ForumLogic {
-	private static final PolicyFactory htmlSanitizer = Sanitizers.BLOCKS
 	/** the html sanitizer */
+	private final PolicyFactory htmlSanitizer = Sanitizers.BLOCKS
 			.and(Sanitizers.IMAGES).and(Sanitizers.LINKS)
 			.and(Sanitizers.FORMATTING);
 
 	/** the datastore factory */
-	private static final DatastoreFactory factory = DatastoreFactory
+	private final DatastoreFactory factory = DatastoreFactory
 			.createConfigured();
 
 	/** the discussion datastore */
-	private static final DiscussionDatastore discussionDatastore = factory
+	private final DiscussionDatastore discussionDatastore = factory
 			.getDiscussionDatastore();
 
 	/** the post datastore */
-	private static final PostDatastore postDatastore = factory
-			.getPostDatastore();
+	private final PostDatastore postDatastore = factory.getPostDatastore();
 
 	/**
 	 * @param discussion
 	 *            the new discussion
 	 * @return the discussion id
+	 * @throws LogicException
 	 * @throws IllegalArgumentException
 	 *             if the discussion has no post attached
 	 */
-	public static int createDiscussion(Discussion discussion) {
+	public int createDiscussion(Discussion discussion) throws LogicException {
 		int discussionId;
 
 		Validate.isTrue(discussion.getPosts().size() == 1);
@@ -59,18 +59,14 @@ public class ForumLogic {
 	 * @param discussionId
 	 * @return the discussion. null if no discussion is found
 	 */
-	public static Discussion getDiscussion(int discussionId) {
-		// TODO (mks) Inline variable
-		Discussion discussion = discussionDatastore
-				.findDiscussion(discussionId);
-
-		return discussion;
+	public Discussion getDiscussion(int discussionId) {
+		return discussionDatastore.findDiscussion(discussionId);
 	}
 
 	/**
 	 * @return all discussions
 	 */
-	public static Collection<Discussion> getDiscussions() {
+	public Collection<Discussion> getDiscussions() {
 		return discussionDatastore.selectAllDiscussions();
 	}
 
@@ -80,18 +76,23 @@ public class ForumLogic {
 	 * @param discussionId
 	 *            the id of the discussion to add the post to
 	 * @return the id of the new post
+	 * @throws LogicException
+	 *             Exception is thrown if no discussion with discusionId exists.
 	 */
-	public static int addPostToDiscussion(Post post, int discussionId) {
+	public int addPostToDiscussion(Post post, int discussionId)
+			throws LogicException {
 		Discussion discussion = discussionDatastore
 				.findDiscussion(discussionId);
 
 		if (discussion == null) {
-			throw new IllegalArgumentException("No such discussion with id"
+			throw new LogicException("No such discussion with id"
 					+ discussionId);
 		}
 
 		post.setDate(new Date());
 		post.setContent(htmlSanitizer.sanitize(post.getContent()));
+
+		postDatastore.createPost(post);
 
 		int postId = discussion.addPost(post);
 		discussionDatastore.updateDiscussion(discussionId, discussion);

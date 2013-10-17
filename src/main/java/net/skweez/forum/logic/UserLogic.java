@@ -16,22 +16,13 @@ import net.skweez.forum.model.User;
  * 
  */
 public class UserLogic {
-
-	// TODO (mks) Not used anywhere but in the line below. Inline?
-	/** The datastore factory. */
-	private static final DatastoreFactory CONFIGURED_DATASTORE_FACTORY = DatastoreFactory
-			.createConfigured();
-
-	// TODO (mks) I think this should probably not be static.
 	/** The user datastore. */
-	private static final UserDatastore userDatastore = CONFIGURED_DATASTORE_FACTORY
-			.getUserDatastore();
+	private final UserDatastore userDatastore = DatastoreFactory
+			.createConfigured().getUserDatastore();
 
-	// TODO (mks) I think the doc is missing the fact, that the user is only
-	// created if it doesn't exist already.
 	/**
-	 * Creates a new user. Role informations for the new user are extracted from
-	 * the security context.
+	 * Find a user by its uid. If non is found create a new user. Role
+	 * informations for the new user are extracted from the security context.
 	 * 
 	 * @param uid
 	 *            the uid of the new user
@@ -40,20 +31,17 @@ public class UserLogic {
 	 * @return the new user. If a user with that uid already exists this user is
 	 *         returned
 	 */
-	// TODO (mks) Rename to findOrCreateUser?
-	public static User createUser(String uid, SecurityContext sec) {
+	public User findOrCreateUser(String uid, SecurityContext sec) {
 		User user = userDatastore.findUser(uid);
 
 		if (user != null) {
 			return user;
 		}
 
-		// TODO (mks) Trivial comment?
-		// create new user
 		user = new User(uid);
 
-		// TODO: Do not test each role but iterate over them. Maybe use a sub
-		// enum or something.
+		// TODO (elm): Do not test each role but iterate over them. Maybe use a
+		// subenum or something.
 		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
 			user.addRole(Config.getValue(Setting.ROLE_NAME_USER));
 		}
@@ -71,7 +59,7 @@ public class UserLogic {
 	 *            the uid
 	 * @return the user for the uid. Returns null if no such user exists.
 	 */
-	public static User getUser(String uid) {
+	public User getUser(String uid) {
 		return userDatastore.findUser(uid);
 	}
 }
