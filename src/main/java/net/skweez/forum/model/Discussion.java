@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 /**
  * A discussion with a title, a date, an id, a category and posts
  * 
  * @author mks
  * 
  */
-@XStreamAlias("Discussion")
 public class Discussion {
 
 	/**

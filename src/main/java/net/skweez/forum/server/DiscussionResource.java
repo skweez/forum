@@ -26,12 +26,14 @@ import net.skweez.forum.logic.LogicException;
 import net.skweez.forum.logic.UserLogic;
 import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
+import net.skweez.forum.model.DiscussionProxy;
 import net.skweez.forum.model.Post;
 import net.skweez.forum.model.User;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.XStreamException;
 import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
+import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.json.AbstractJsonWriter;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
@@ -78,11 +80,14 @@ public class DiscussionResource {
 	public DiscussionResource() {
 		jsonOutStream.autodetectAnnotations(true);
 
-		jsonOutStream.omitField(Discussion.class, "posts");
+		jsonOutStream.registerConverter(
+				new JavaBeanConverter(jsonOutStream.getMapper()), -10);
+		jsonInStream.registerConverter(
+				new JavaBeanConverter(jsonOutStream.getMapper()), -10);
 
 		// Autodetect does not work for incomming classes so read the
 		// annotations for all the classes by hand
-		jsonInStream.processAnnotations(new Class[] { Discussion.class,
+		jsonInStream.processAnnotations(new Class[] { DiscussionProxy.class,
 				Post.class, User.class, Category.class });
 
 		// Use joda-time to be able to parse and generate ISO8601 date formats
@@ -183,13 +188,17 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.UNAUTHORIZED);
 		}
 
+		DiscussionProxy discussionProxy;
 		Discussion discussion;
 		ResponseBuilder builder;
 		try {
-			discussion = (Discussion) jsonInStream.fromXML(inputStream);
+			discussionProxy = (DiscussionProxy) jsonInStream
+					.fromXML(inputStream);
 		} catch (XStreamException e) {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
+
+		discussion = discussionProxy.getDiscussion();
 
 		User user = userLogic.getUser(sec.getUserPrincipal().getName());
 		discussion.setUser(user);
@@ -203,6 +212,7 @@ public class DiscussionResource {
 		}
 
 		builder = Response.ok();
+
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
 				String.valueOf(discussionId));
 		builder.location(newResourceUri.build());
