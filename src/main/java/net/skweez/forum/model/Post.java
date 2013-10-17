@@ -10,24 +10,16 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @XStreamAlias("Post")
 public class Post {
-	/**
-	 * The id of the post
-	 */
+	/** The id of the post */
 	private Integer id;
 
-	/**
-	 * The content of the post
-	 */
+	/** The content of the post */
 	private String content;
 
-	/**
-	 * The date of the post
-	 */
+	/** The date of the post */
 	private Date date;
 
-	/**
-	 * The User that created this post
-	 */
+	/** The User that created this post */
 	private User user;
 
 	/**
