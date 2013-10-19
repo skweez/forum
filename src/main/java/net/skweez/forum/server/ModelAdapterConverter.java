@@ -12,6 +12,7 @@ import net.skweez.forum.model.AdaptableModel;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
+import com.thoughtworks.xstream.converters.javabean.JavaBeanProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -26,9 +27,22 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 	 * @see JavaBeanConverter#JavaBeanConverter(Mapper)
 	 * 
 	 * @param mapper
+	 *            a mapper
 	 */
 	public ModelAdapterConverter(Mapper mapper) {
 		super(mapper);
+	}
+
+	/**
+	 * @see JavaBeanConverter#JavaBeanConverter(Mapper, JavaBeanProvider)
+	 * 
+	 * @param mapper
+	 *            a mapper
+	 * @param beanProvider
+	 *            a bean provider
+	 */
+	public ModelAdapterConverter(Mapper mapper, JavaBeanProvider beanProvider) {
+		super(mapper, beanProvider);
 	}
 
 	/**
@@ -77,7 +91,7 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 		Object object = super.unmarshal(reader, context);
 
 		if (object instanceof ModelAdapter<?>) {
-			object = ((ModelAdapter<?>) object).getModel();
+			object = ((ModelAdapter<?>) object).model();
 		}
 
 		return object;

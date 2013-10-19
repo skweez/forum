@@ -7,7 +7,6 @@ import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * Adapter for Discussions. Provides all the members of discussions that are
@@ -17,16 +16,12 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * 
  */
 @XStreamAlias("Discussion")
-public class DiscussionAdapter implements ModelAdapter<Discussion> {
-	/** the actual discussion */
-	@XStreamOmitField
-	private Discussion discussion;
-
+public class DiscussionAdapter extends ModelAdapter<Discussion> {
 	/**
 	 * Creates a new DiscussionAdapter for a new discussion.
 	 */
 	public DiscussionAdapter() {
-		discussion = new Discussion();
+		model = new Discussion();
 	}
 
 	/**
@@ -36,19 +31,7 @@ public class DiscussionAdapter implements ModelAdapter<Discussion> {
 	 *            the discussion
 	 */
 	public DiscussionAdapter(Discussion discussion) {
-		this.discussion = discussion;
-	}
-
-	@Override
-	public Discussion getModel() {
-		return discussion;
-	}
-
-	/**
-	 * @return the actual discussion
-	 */
-	public Discussion getDiscussion() {
-		return discussion;
+		model = discussion;
 	}
 
 	/**
@@ -58,8 +41,11 @@ public class DiscussionAdapter implements ModelAdapter<Discussion> {
 	 * @param post
 	 */
 	public void setPost(Post post) {
-		assert (discussion.getPosts().size() == 0);
-		discussion.addPost(post);
+		assert (model.getPosts().size() == 0);
+		if (post.getId() == null) {
+			post.setId(0);
+		}
+		model.addPost(post);
 	}
 
 	/**
@@ -67,34 +53,27 @@ public class DiscussionAdapter implements ModelAdapter<Discussion> {
 	 *            the title
 	 */
 	public void setTitle(String title) {
-		discussion.setTitle(title);
+		model.setTitle(title);
 	}
 
 	/**
 	 * @return the title
 	 */
 	public String getTitle() {
-		return discussion.getTitle();
+		return model.getTitle();
 	}
 
 	/**
 	 * @return the uid
 	 */
 	public String getUser() {
-		return discussion.getUser().getUid();
-	}
-
-	/**
-	 * do nothing
-	 */
-	public void setId(int id) {
-		// empty
+		return model.getUser().getUid();
 	}
 
 	/**
 	 * @return the discussion id
 	 */
 	public int getId() {
-		return discussion.getId();
+		return model.getId();
 	}
 }
