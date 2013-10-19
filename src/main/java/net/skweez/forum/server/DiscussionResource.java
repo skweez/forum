@@ -2,6 +2,7 @@ package net.skweez.forum.server;
 
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -134,14 +135,14 @@ public class DiscussionResource {
 	@Path("{id}/posts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getPostsForDiscussion(@PathParam("id") int discussionId) {
-		Discussion discussion = forumLogic.getDiscussion(discussionId);
+		List<Post> posts = forumLogic.getPostsAsListForDiscussion(discussionId);
 
-		// Return 404 if discussion is not found
-		if (discussion == null) {
+		// Return 404 if no posts are found
+		if (posts == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 
-		return jsonOutStream.toXML(discussion.getPosts());
+		return jsonOutStream.toXML(posts);
 	}
 
 	/**
@@ -199,12 +200,11 @@ public class DiscussionResource {
 
 		User user = userLogic.findOrCreateUser(
 				sec.getUserPrincipal().getName(), sec);
-		discussion.setUser(user);
 
 		int discussionId;
 
 		try {
-			discussionId = forumLogic.createDiscussion(discussion);
+			discussionId = forumLogic.createDiscussion(discussion, user);
 		} catch (LogicException e) {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
@@ -246,11 +246,12 @@ public class DiscussionResource {
 			return builder.build();
 		}
 
-		post.setUser(userLogic.findOrCreateUser(sec.getUserPrincipal()
-				.getName(), sec));
+		User user = userLogic.findOrCreateUser(
+				sec.getUserPrincipal().getName(), sec);
 
 		try {
-			postIndex = forumLogic.addPostToDiscussion(post, discussionId);
+			postIndex = forumLogic
+					.addPostToDiscussion(post, discussionId, user);
 		} catch (LogicException e) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
