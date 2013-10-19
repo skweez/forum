@@ -81,7 +81,8 @@ public class DiscussionResource {
 		jsonOutStream.autodetectAnnotations(true);
 
 		jsonOutStream.registerConverter(
-				new ModelAdapterConverter(jsonOutStream.getMapper()), -10);
+				new ModelAdapterConverter(jsonOutStream.getMapper(),
+						new AllowReadOnlyPropertiesBeanProvider()), -10);
 		jsonInStream.registerConverter(
 				new ModelAdapterConverter(jsonOutStream.getMapper()), -10);
 
