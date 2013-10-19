@@ -1,16 +1,29 @@
 package net.skweez.forum.datastore.simple;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.skweez.forum.datastore.PostDatastore;
 import net.skweez.forum.model.Post;
 
 public class SimplePostDatastore implements PostDatastore {
+	/** The next id to be used. */
+	private int nextId = 0;
+
+	/** Internal "storage" for the discussions. */
+	private final Map<Integer, Post> posts = new HashMap<>();
+
+	/** Hidden constructor. Use SimpleDatastoreFactory for object creation. */
+	/* package */SimplePostDatastore() {
+		// Just hiding constructor
+	}
 
 	@Override
 	public int createPost(Post post) {
-		// TODO Auto-generated method stub
-		return 0;
+		post.setId(nextId++);
+		posts.put(post.getId(), post);
+		return post.getId();
 	}
 
 	@Override

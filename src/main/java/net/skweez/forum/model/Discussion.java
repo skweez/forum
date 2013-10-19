@@ -1,8 +1,8 @@
 package net.skweez.forum.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.skweez.forum.adapters.DiscussionAdapter;
 
@@ -37,7 +37,7 @@ public class Discussion implements AdaptableModel {
 	/**
 	 * the posts in this discussion
 	 */
-	private final List<Post> posts;
+	private final Map<Integer, Post> posts;
 
 	/**
 	 * the category this discussion belongs to
@@ -48,7 +48,7 @@ public class Discussion implements AdaptableModel {
 	 * constructor
 	 */
 	public Discussion() {
-		posts = new ArrayList<>();
+		posts = new HashMap<>();
 		category = new Category("general");
 	}
 
@@ -85,7 +85,7 @@ public class Discussion implements AdaptableModel {
 	/**
 	 * @return all posts
 	 */
-	public List<Post> getPosts() {
+	public Map<Integer, Post> getPosts() {
 		return posts;
 	}
 
@@ -94,9 +94,16 @@ public class Discussion implements AdaptableModel {
 	 *            the post to add
 	 * @return the id of the post
 	 */
-	public int addPost(Post post) {
-		posts.add(post);
-		return posts.indexOf(post);
+	public void addPost(Post post) {
+		posts.put(post.getId(), post);
+	}
+
+	/**
+	 * @param postId
+	 *            the index of the post to remove
+	 */
+	public void deletePost(int postId) {
+		posts.remove(postId);
 	}
 
 	/**
