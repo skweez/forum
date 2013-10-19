@@ -118,15 +118,16 @@ controllersModule.controller('DiscussionController', [ '$scope',
 
 			// Create a new post
 			$scope.createPost = function() {
-				// TODO (elm): Can we assume now() is close enough to the date the servers sets?
-				$scope.newPost.date = new Date();
 				Posts.save({
 					discussionId : $routeParams.discussionId
 				}, {
 					'Post' : $scope.newPost
 				}, function() {
 					// save success function: add new post to displayed posts
-					$scope.posts.push(angular.copy($scope.newPost));
+					var post = angular.copy($scope.newPost);
+					// TODO (elm): Can we assume now() is close enough to the date the servers sets?
+					post.date = new Date();
+					$scope.posts.push(post);
 					// empty the new post box
 					$scope.newPost.content = "";
 				});
