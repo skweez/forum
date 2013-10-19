@@ -121,7 +121,7 @@ public class DiscussionResource {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 
-		return jsonOutStream.toXML(discussion);
+		return jsonOutStream.toXML(new DiscussionProxy(discussion));
 	}
 
 	/**
