@@ -1,15 +1,12 @@
 package net.skweez.forum.logic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.datastore.PostDatastore;
 import net.skweez.forum.model.Discussion;
-import net.skweez.forum.model.DiscussionProxy;
 import net.skweez.forum.model.Post;
 
 import org.apache.commons.lang3.Validate;
@@ -64,18 +61,6 @@ public class ForumLogic {
 	 */
 	public Discussion getDiscussion(int discussionId) {
 		return discussionDatastore.findDiscussion(discussionId);
-	}
-
-	public Collection<DiscussionProxy> getDiscussionProxies() {
-		Collection<Discussion> discussions = getDiscussions();
-		Collection<DiscussionProxy> proxies = new ArrayList<>(
-				discussions.size());
-
-		Iterator<Discussion> iter = discussions.iterator();
-		while (iter.hasNext()) {
-			proxies.add(new DiscussionProxy(iter.next()));
-		}
-		return proxies;
 	}
 
 	/**
