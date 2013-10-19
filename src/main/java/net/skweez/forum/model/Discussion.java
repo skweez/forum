@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import net.skweez.forum.adapters.DiscussionAdapter;
+
 /**
  * A discussion with a title, a date, an id, a category and posts
  * 
  * @author mks
  * 
  */
-public class Discussion {
+public class Discussion implements AdaptableModel {
 
 	/**
 	 * the id
@@ -132,5 +134,15 @@ public class Discussion {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public boolean adapterExists() {
+		return true;
+	}
+
+	@Override
+	public Class<?> adapterClass() {
+		return DiscussionAdapter.class;
 	}
 }
