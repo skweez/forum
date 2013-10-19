@@ -20,10 +20,8 @@ function NewDiscussionController() {
 					var newDiscussion = new Object({
 						'Discussion' : {
 							title : $scope.title,
-							posts : {
-								'Post' : {
-									content : $scope.content
-								}
+							post : {
+								content : $scope.content
 							}
 						}
 					});
