@@ -3,6 +3,8 @@
  */
 package net.skweez.forum.adapters;
 
+import java.util.Date;
+
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
 
@@ -75,5 +77,12 @@ public class DiscussionAdapter extends ModelAdapter<Discussion> {
 	 */
 	public int getId() {
 		return model.getId();
+	}
+
+	/**
+	 * @return the date
+	 */
+	public Date getDate() {
+		return model.getDate();
 	}
 }

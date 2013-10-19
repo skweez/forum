@@ -35,13 +35,6 @@ public class PostAdapter extends ModelAdapter<Post> {
 	}
 
 	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return model.getContent();
-	}
-
-	/**
 	 * Set the content of the post.
 	 * 
 	 * @param content
@@ -49,6 +42,13 @@ public class PostAdapter extends ModelAdapter<Post> {
 	 */
 	public void setContent(String content) {
 		model.setContent(content);
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return model.getContent();
 	}
 
 	/**
