@@ -196,7 +196,8 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
-		User user = userLogic.getUser(sec.getUserPrincipal().getName());
+		User user = userLogic.findOrCreateUser(
+				sec.getUserPrincipal().getName(), sec);
 		discussion.setUser(user);
 
 		int discussionId;
@@ -244,7 +245,8 @@ public class DiscussionResource {
 			return builder.build();
 		}
 
-		post.setUser(userLogic.getUser(sec.getUserPrincipal().getName()));
+		post.setUser(userLogic.findOrCreateUser(sec.getUserPrincipal()
+				.getName(), sec));
 
 		try {
 			postIndex = forumLogic.addPostToDiscussion(post, discussionId);
