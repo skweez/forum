@@ -81,11 +81,9 @@ controllersModule.controller('NewDiscussionController', [
 				var newDiscussion = new Object({
 					'Discussion' : {
 						title : $scope.title,
-						date : new Date(),
 						posts : {
 							'Post' : {
-								content : $scope.content,
-								date : new Date()
+								content : $scope.content
 							}
 						}
 					}
@@ -120,6 +118,7 @@ controllersModule.controller('DiscussionController', [ '$scope',
 
 			// Create a new post
 			$scope.createPost = function() {
+				// TODO (elm): Can we assume now() is close enough to the date the servers sets?
 				$scope.newPost.date = new Date();
 				Posts.save({
 					discussionId : $routeParams.discussionId
