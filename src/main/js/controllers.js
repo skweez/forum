@@ -1,11 +1,11 @@
 goog.provide('net.skweez.forum.controllers');
 
 goog.require('net.skweez.forum.app');
-goog.require('net.skweez.forum.DiscussionOverviewController');
-goog.require('net.skweez.forum.NewDiscussionController');
-goog.require('net.skweez.forum.DiscussionController');
-goog.require('net.skweez.forum.LoginController');
-goog.require('net.skweez.forum.AlertController');
+goog.require('net.skweez.forum.controller.DiscussionOverviewController');
+goog.require('net.skweez.forum.controller.NewDiscussionController');
+goog.require('net.skweez.forum.controller.DiscussionController');
+goog.require('net.skweez.forum.controller.LoginController');
+goog.require('net.skweez.forum.controller.AlertController');
 
 // TODO(elm): Move required modules (e.g. ngResource) to the controller that
 // needs it.

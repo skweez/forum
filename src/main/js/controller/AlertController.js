@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.AlertController');
+goog.provide('net.skweez.forum.controller.AlertController');
 
 goog.require('net.skweez.forum.services');
 

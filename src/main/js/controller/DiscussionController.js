@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.DiscussionController');
+goog.provide('net.skweez.forum.controller.DiscussionController');
 
 goog.require('net.skweez.forum.services');
 

@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.UserService');
+goog.provide('net.skweez.forum.service.UserService');
 
 /**
  * UserService. Holds the current logged in users informations.

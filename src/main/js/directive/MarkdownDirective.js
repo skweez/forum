@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.MarkdownDirective');
+goog.provide('net.skweez.forum.directive.MarkdownDirective');
 
 /**
  * Defines a "markdown" attribute with a "content" attribute. The "content" will

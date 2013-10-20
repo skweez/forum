@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.AlertService');
+goog.provide('net.skweez.forum.service.AlertService');
 
 /**
  * The AlertService. Can be injected to show alerts.

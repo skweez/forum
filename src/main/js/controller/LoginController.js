@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.LoginController');
+goog.provide('net.skweez.forum.controller.LoginController');
 
 goog.require('net.skweez.forum.services');
 

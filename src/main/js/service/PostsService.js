@@ -1,4 +1,4 @@
-goog.provide('net.skweez.forum.PostsService');
+goog.provide('net.skweez.forum.service.PostsService');
 
 /**
  * The Posts resource as a service.

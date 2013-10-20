@@ -1,10 +1,10 @@
 goog.provide('net.skweez.forum.services');
 
 goog.require('net.skweez.forum.app');
-goog.require('net.skweez.forum.DiscussionsService');
-goog.require('net.skweez.forum.PostsService');
-goog.require('net.skweez.forum.AlertService');
-goog.require('net.skweez.forum.UserService');
+goog.require('net.skweez.forum.service.DiscussionsService');
+goog.require('net.skweez.forum.service.PostsService');
+goog.require('net.skweez.forum.service.AlertService');
+goog.require('net.skweez.forum.service.UserService');
 
 var services = angular.module('net.skweez.forum.services', [ 'ngResource' ]);
 
