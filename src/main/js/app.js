@@ -1,6 +1,5 @@
-'use strict';
+goog.provide('net.skweez.forum.app');
 
-// Declare app level module which depends on filters, and services
 angular.module(
 		'net.skweez.forum',
 		[ 'net.skweez.forum.filters', 'net.skweez.forum.services',
