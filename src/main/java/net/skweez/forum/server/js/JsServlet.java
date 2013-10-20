@@ -2,11 +2,16 @@ package net.skweez.forum.server.js;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import com.google.javascript.jscomp.CompilationLevel;
 import com.google.javascript.jscomp.Compiler;
@@ -49,7 +54,13 @@ public class JsServlet {
 
 		File jsSourceDirectory = new File("src/main/js");
 		List<SourceFile> modules = new ArrayList<SourceFile>();
-		for (File file : jsSourceDirectory.listFiles()) {
+
+		Collection<File> files = FileUtils
+				.listFiles(jsSourceDirectory,
+						FileFilterUtils.suffixFileFilter("js"),
+						TrueFileFilter.INSTANCE);
+
+		for (File file : files) {
 			modules.add(SourceFile.fromFile(file));
 		}
 
