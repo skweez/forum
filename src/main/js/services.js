@@ -8,7 +8,7 @@ goog.require('net.skweez.forum.service.UserService');
 
 var services = angular.module('net.skweez.forum.services', [ 'ngResource' ]);
 
-services.factory('Discussions', DiscussionsService());
-services.factory('Posts', PostsService());
-services.service('AlertService', AlertService());
-services.factory('UserService', UserService());
+services.factory('discussions', DiscussionsService());
+services.factory('posts', PostsService());
+services.service('alertService', AlertService());
+services.factory('userService', UserService());

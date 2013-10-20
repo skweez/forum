@@ -11,8 +11,8 @@ function NewDiscussionController() {
 			'$scope',
 			'$http',
 			'$rootScope',
-			'Discussions',
-			function($scope, $http, $rootScope, Discussions) {
+			'discussions',
+			function($scope, $http, $rootScope, discussions) {
 				$scope.title = null;
 				$scope.content = null;
 
@@ -27,7 +27,7 @@ function NewDiscussionController() {
 							}
 						}
 					});
-					Discussions.save(newDiscussion, function(data,
+					discussions.save(newDiscussion, function(data,
 							getResponseHeaders) {
 						$('#newDiscussion').modal('hide');
 						$rootScope.$broadcast('discussionAdded', {

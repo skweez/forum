@@ -10,19 +10,16 @@ function DiscussionOverviewController() {
 			'$scope',
 			'$http',
 			'$resource',
-			'Discussions',
-			'AlertService',
-			'UserService',
-			// TODO (mks) Are these some kind of "magic" names?
-			// Would it be possible that they use the standard
-			// naming, i.e. scope, http, alertService, etc.?
-			function($scope, $http, $resource, Discussions, AlertService,
-					UserService) {
-				$scope.discussions = Discussions.query();
+			'discussions',
+			'alertService',
+			'userService',
+			function($scope, $http, $resource, discussions, alertService,
+					userService) {
+				$scope.discussions = discussions.query();
 
 				$scope.showNewDiscussionDialog = function() {
-					if (!UserService.isLoggedIn) {
-						AlertService
+					if (!userService.isLoggedIn) {
+						alertService
 								.addAlert({
 									type : "warning",
 									title : "",

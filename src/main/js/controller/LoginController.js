@@ -11,18 +11,18 @@ function LoginController() {
 			'$scope',
 			'$http',
 			'$cookies',
-			'AlertService',
-			'UserService',
-			function($scope, $http, $cookies, AlertService, UserService) {
-				$scope.userService = UserService;
+			'alertService',
+			'userService',
+			function($scope, $http, $cookies, alertService, userService) {
+				$scope.userService = userService;
 				$scope.password = null;
 				$scope.stayloggedin = false;
 
 				// If we have a uid cookie we check if we are still logged in
 				if ($cookies.uid != null) {
 					$http.get('/api/user/login').success(function() {
-						UserService.uid = $cookies.uid;
-						UserService.isLoggedIn = true;
+						userService.uid = $cookies.uid;
+						userService.isLoggedIn = true;
 					});
 				}
 
@@ -32,7 +32,7 @@ function LoginController() {
 							{
 								headers : {
 									'Authorization' : "Basic "
-											+ btoa(UserService.uid + ":"
+											+ btoa(userService.uid + ":"
 													+ $scope.password)
 								},
 								params : {
@@ -40,9 +40,9 @@ function LoginController() {
 								}
 							}).success(function() {
 						$('#login-dropdown-toggle').dropdown('toggle');
-						UserService.isLoggedIn = true;
+						userService.isLoggedIn = true;
 					}).error(function() {
-						AlertService.addAlert({
+						alertService.addAlert({
 							"type" : "danger",
 							"title" : "Login failure:",
 							"content" : "Wrong username or passowrd supplied."
@@ -53,8 +53,8 @@ function LoginController() {
 
 				$scope.logout = function() {
 					$http.get('/api/user/logout');
-					UserService.uid = null;
-					UserService.isLoggedIn = false;
+					userService.uid = null;
+					userService.isLoggedIn = false;
 				};
 
 			} ];
