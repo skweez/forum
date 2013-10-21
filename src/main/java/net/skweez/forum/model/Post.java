@@ -2,6 +2,7 @@ package net.skweez.forum.model;
 
 import java.util.Date;
 
+import net.skweez.forum.adapters.AdaptableModel;
 import net.skweez.forum.adapters.PostAdapter;
 
 /**

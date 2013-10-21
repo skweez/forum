@@ -10,8 +10,7 @@ import net.skweez.forum.model.Post;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Adapter for Posts. Provides all the members of post that are needed by
- * XStream to serialize and deserialize a post.
+ * Adapter for Posts.
  * 
  * @author elm
  * 

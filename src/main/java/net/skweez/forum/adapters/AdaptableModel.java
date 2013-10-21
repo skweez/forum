@@ -1,9 +1,12 @@
 /**
  * 
  */
-package net.skweez.forum.model;
+package net.skweez.forum.adapters;
 
 /**
+ * Interface that all models must implement if there should be an adapter for
+ * it.
+ * 
  * @author elm
  * 
  */

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.skweez.forum.adapters.AdaptableModel;
 import net.skweez.forum.adapters.DiscussionAdapter;
 
 /**

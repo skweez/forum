@@ -1,13 +1,10 @@
 /**
  * 
  */
-package net.skweez.forum.server;
+package net.skweez.forum.adapters;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import net.skweez.forum.adapters.ModelAdapter;
-import net.skweez.forum.model.AdaptableModel;
 
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -18,6 +15,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
+ * A converter that transforms models to model adapters and vice versa
+ * 
  * @author elm
  * 
  */
@@ -57,7 +56,6 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer,
 			MarshallingContext context) {
-
 		if (source instanceof AdaptableModel
 				&& ((AdaptableModel) source).adapterExists()) {
 			try {

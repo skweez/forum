@@ -20,7 +20,9 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import net.skweez.forum.adapters.AllowReadOnlyPropertiesBeanProvider;
 import net.skweez.forum.adapters.DiscussionAdapter;
+import net.skweez.forum.adapters.ModelAdapterConverter;
 import net.skweez.forum.adapters.PostAdapter;
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
