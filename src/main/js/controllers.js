@@ -7,8 +7,6 @@ goog.require('net.skweez.forum.controller.DiscussionController');
 goog.require('net.skweez.forum.controller.LoginController');
 goog.require('net.skweez.forum.controller.AlertController');
 
-// TODO(elm): Move required modules (e.g. ngResource) to the controller that
-// needs it.
 var controllersModule = angular.module('net.skweez.forum.controllers', [
 		'ngResource', 'ngCookies' ]);
 

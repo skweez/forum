@@ -72,10 +72,6 @@ public class SessionLogic {
 	public boolean validateAuthTokenForUID(final String authToken,
 			final String uid) {
 		Session session = sessionDatastore.findSession(uid);
-		if (session != null && authToken.equals(session.getAuthToken())) {
-			return true;
-		}
-
-		return false;
+		return (session != null && authToken.equals(session.getAuthToken()));
 	}
 }

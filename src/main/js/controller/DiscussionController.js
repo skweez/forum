@@ -30,9 +30,6 @@ function DiscussionController() {
 						// save success function: add new post to displayed
 						// posts
 						var post = angular.copy($scope.newPost);
-						// TODO (elm): Can we assume now() is close enough to
-						// the
-						// date the servers sets?
 						post.date = new Date();
 						$scope.posts.push(post);
 						// empty the new post box

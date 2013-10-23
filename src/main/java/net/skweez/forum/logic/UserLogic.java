@@ -42,8 +42,6 @@ public class UserLogic {
 
 		user = new User(uid);
 
-		// TODO (elm): Do not test each role but iterate over them. Maybe use a
-		// subenum or something.
 		if (sec.isUserInRole(Config.getValue(Setting.ROLE_NAME_USER))) {
 			user.addRole(Config.getValue(Setting.ROLE_NAME_USER));
 		}
