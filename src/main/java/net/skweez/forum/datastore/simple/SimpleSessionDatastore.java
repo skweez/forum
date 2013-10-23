@@ -11,6 +11,8 @@ import net.skweez.forum.datastore.SessionDatastore;
 import net.skweez.forum.model.Session;
 
 /**
+ * A simple session datastore that holds the sessions in memory.
+ * 
  * @author elm
  * 
  */

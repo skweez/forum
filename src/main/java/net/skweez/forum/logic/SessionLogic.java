@@ -10,6 +10,8 @@ import net.skweez.forum.datastore.SessionDatastore;
 import net.skweez.forum.model.Session;
 
 /**
+ * The session logic. Handles all session related tasks.
+ * 
  * @author elm
  * 
  */
@@ -25,8 +27,8 @@ public class SessionLogic {
 			.createConfigured().getSessionDatastore();
 
 	/**
-	 * Creates a new session. If shouldLast is set to true the session will last
-	 * for {@value #LONG_SESSION_LIFETIME} days.
+	 * Creates a new session. If longSession is set to true the session will
+	 * last for {@value #LONG_SESSION_LIFETIME} days.
 	 * 
 	 * @param uid
 	 *            the uid

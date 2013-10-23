@@ -8,6 +8,9 @@ import java.security.SecureRandom;
 import java.util.Date;
 
 /**
+ * A session that holds the uid, the expire date and the auth token for a logged
+ * in user.
+ * 
  * @author elm
  * 
  */

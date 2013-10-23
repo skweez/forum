@@ -12,6 +12,8 @@ import net.skweez.forum.datastore.UserDatastore;
 import net.skweez.forum.model.User;
 
 /**
+ * The user logic handles all user related tasks
+ * 
  * @author elm
  * 
  */
