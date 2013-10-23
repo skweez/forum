@@ -1,7 +1,14 @@
-#Simple Forum software with REST API
+#Simple forum software with REST API
+
+##Features
+ * REST API
+ * LDAP authentication and user management (feature-jaas-authentication branch)
+ * markdown in posts (angular.js branch)
+ * single page app design (angular.js branch)
+ * clean-code
 
 ##Development
-We use Eclipse 4.2 for development.
+We use Eclipse 4.2 for development and Maven vor dependency management.
 
 ###Style
 We use the Eclipse auto formatter and organize imports features configured as
@@ -11,4 +18,6 @@ anything to apply them after importing the project into your workspace.
 
 ###Architecture
 The forum is a REST-like application communicating via JSON. For a starting
-point have a look at the ForumServer class.
+point have a look at the Main class.
+
+The forum can be run as a Java Application or a servlet can be generated.
