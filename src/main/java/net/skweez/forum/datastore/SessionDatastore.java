@@ -8,7 +8,7 @@ import java.util.Date;
 import net.skweez.forum.model.Session;
 
 /**
- * Holds all the session informations about the users.
+ * The session datastore.
  * 
  * @author elm
  * 
