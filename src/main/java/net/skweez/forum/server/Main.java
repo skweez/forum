@@ -5,7 +5,11 @@ package net.skweez.forum.server;
 
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.server.ForwardedRequestCustomizer;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -19,7 +23,15 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Server server = new Server(Integer.valueOf(System.getenv("PORT")));
+		Server server = new Server();
+		HttpConfiguration http_config = new HttpConfiguration();
+		
+		http_config.addCustomizer(new ForwardedRequestCustomizer());
+
+		HttpConnectionFactory http = new HttpConnectionFactory(http_config);
+		ServerConnector httpConnector = new ServerConnector(server, http);
+		httpConnector.setPort(Integer.valueOf(System.getenv("PORT")));
+		server.addConnector(httpConnector);
 
 		WebAppContext context = new WebAppContext();
 		context.setDescriptor("../WEB-INF/web.xml");
