@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div class="col-md-2">
-		<button ng-click="showNewDiscussionDialog()" class="btn btn-primary">New
+		<button x-ng-click="showNewDiscussionDialog()" class="btn btn-primary">New
 			Discussion</button>
 	</div>
 	<div class="col-md-10">
@@ -12,9 +12,9 @@
 					<th>Topic</th>
 					<th style="width: 15%;">Created</th>
 				</tr>
-				<tr ng-repeat="discussion in discussions">
+				<tr x-ng-repeat="discussion in discussions">
 					<td><p>
-							<a ng-href="/#/discussions/{{discussion.id}}">{{discussion.title}}</a>
+							<a x-ng-href="/#/discussions/{{discussion.id}}">{{discussion.title}}</a>
 						</p></td>
 					<td style="text-align: right;"><span style="font-size: 0.8em;">{{discussion.date
 							| date:'shortDate'}}</span></td>
@@ -25,29 +25,29 @@
 </div>
 
 <div id="newDiscussion" class="modal" tabindex="=1" role="dialog"
-	aria-labelledby="addDialogLabel" aria-hidden="true"
-	ng-controller="NewDiscussionController">
+	aria-labelledby="newDiscussionLabel" aria-hidden="true"
+	x-ng-controller="NewDiscussionController">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">x</button>
-				<h3 id="addDialogLabel">Create new discussion</h3>
+				<h3 id="newDiscussionLabel">Create new discussion</h3>
 			</div>
 			<div class="modal-body">
 				<form role="form">
 					<div class="form-group">
-						<input class="form-control" ng-model="title" type="text"
+						<input class="form-control" x-ng-model="title" type="text"
 							id="inputDiscussionTitle" placeholder="Discussion title">
 					</div>
 					<div class="form-group">
-						<textarea class="form-control" ng-model="content"
+						<textarea class="form-control" x-ng-model="content"
 							id="inputPostContent" rows="3"></textarea>
 					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button ng-click="createDiscussion()" class="btn btn-primary">Create
+				<button x-ng-click="createDiscussion()" class="btn btn-primary">Create
 					new Discussion</button>
 				<button class="btn btn-danger" data-dismiss="modal"
 					aria-hidden="true">Cancel</button>

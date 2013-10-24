@@ -1,5 +1,5 @@
-<!doctype html>
-<html lang="en" ng-app="net.skweez.forum">
+<!DOCTYPE html>
+<html lang="en" x-ng-app="net.skweez.forum">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +8,12 @@
 <link rel="stylesheet" href="css/app.css" />
 </head>
 <body style="padding-top: 60px;">
-	<div class="alerts" ng-controller="AlertController">
-		<div class="alert fade" ng-repeat="alert in alertService.alerts"
-			bs-alert="alert"></div>
+	<div class="alerts" x-ng-controller="AlertController">
+		<div class="alert fade" x-ng-repeat="alert in alertService.alerts"
+			x-bs-alert="alert"></div>
 	</div>
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation"
-		bs-navbar>
+		x-bs-navbar>
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse"
 				data-target=".navbar-collapse">
@@ -34,32 +34,32 @@
 						<span class="caret"></span>
 				</a>
 					<div class="dropdown-menu panel panel-default"
-						ng-controller="LoginController">
-						<div class="panel-body" ng-switch on="userService.isLoggedIn">
-							<div ng-switch-when="false">
+						x-ng-controller="LoginController">
+						<div class="panel-body" x-ng-switch x-on="userService.isLoggedIn">
+							<div x-ng-switch-when="false">
 								<form role="form">
 									<div class="form-group">
 										<!-- $parent is needed because ng-switch creates a sub scope -->
 										<input type="text" class="form-control" id="inputUid"
-											placeholder="Username" ng-model="$parent.userService.uid">
+											placeholder="Username" x-ng-model="$parent.userService.uid">
 									</div>
 									<div class="form-group">
 										<input type="password" class="form-control"
 											id="exampleInputPassword1" placeholder="Password"
-											ng-model="$parent.password">
+											x-ng-model="$parent.password">
 									</div>
 									<div class="checkbox">
 										<label> <input type="checkbox"
-											ng-model="$parent.stayloggedin"> Stay logged in
+											x-ng-model="$parent.stayloggedin"> Stay logged in
 										</label>
 									</div>
-									<button ng-click="$parent.login()" type="submit"
+									<button x-ng-click="$parent.login()" type="submit"
 										class="btn btn-primary">Login</button>
 								</form>
 							</div>
-							<div ng-switch-when="true">
+							<div x-ng-switch-when="true">
 								You are logged in as <b>{{$parent.userService.uid}}</b>.
-								<button ng-click="$parent.logout()" class="btn btn-danger">Logout</button>
+								<button x-ng-click="$parent.logout()" class="btn btn-danger">Logout</button>
 							</div>
 						</div>
 					</div></li>
@@ -68,7 +68,7 @@
 		<!-- /nacbar-collapse -->
 	</nav>
 
-	<div class="container" ng-view></div>
+	<div class="container" x-ng-view></div>
 
 	<script type="text/javascript"
 		src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

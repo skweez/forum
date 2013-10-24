@@ -1,12 +1,12 @@
 <h1>{{discussion.title}}</h1>
 
-<div ng-repeat="post in posts">
+<div x-ng-repeat="post in posts">
 	<div class="row">
 		<div class="col-xs-12" style="font-size: 0.8em;">{{post.date |
 			date:'short'}}</div>
 	</div>
 	<div class="row">
-		<div markdown class="col-xs-12 post" content="{{post.content}}"></div>
+		<div x-markdown class="col-xs-12 post" x-content="{{post.content}}"></div>
 	</div>
 	<hr />
 </div>
@@ -16,17 +16,17 @@
 	<div class="panel-body">
 		<form role="form">
 			<div class="form-group">
-				<textarea class="form-control" ng-model="newPost.content"
+				<textarea class="form-control" x-ng-model="newPost.content"
 					id="inputPostContent" rows="3"></textarea>
 			</div>
 		</form>
-		<button ng-click="createPost()" class="btn btn-primary">Post!</button>
+		<button x-ng-click="createPost()" class="btn btn-primary">Post!</button>
 		<hr />
 		<div class="row">
 			<div class="col-xs-12" style="font-size: 0.8em;">Preview</div>
 		</div>
-		<div markdown class="col-xs-12 post"
-			content="{{newPost.content}}"></div>
+		<div x-markdown class="col-xs-12 post"
+			x-content="{{newPost.content}}"></div>
 	</div>
 </div>
 
