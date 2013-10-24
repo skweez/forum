@@ -45,7 +45,7 @@ public class Main {
 			HashLoginService hashLoginService = new HashLoginService();
 			hashLoginService.putUser("testUser1",
 					Credential.getCredential("testPassword1"),
-					new String[] { "user" }); // Role of this user
+					new String[] { "users" }); // Role of this user
 			hashLoginService.setName("net.skweez.forum");
 			loginService = hashLoginService;
 		}
