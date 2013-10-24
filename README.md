@@ -3,8 +3,8 @@
 ##Features
  * REST API
  * LDAP authentication and user management (feature-jaas-authentication branch)
- * markdown in posts (angular.js branch)
- * single page app design (angular.js branch)
+ * markdown in posts
+ * single page app design
  * clean-code
 
 ##Development
