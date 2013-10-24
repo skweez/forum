@@ -34,7 +34,6 @@ function MarkdownDirective() {
 					}
 					return markdownObject;
 				}
-				;
 
 				/**
 				 * Search for hyper links in a markdown tree and convert them to
