@@ -19,7 +19,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Server server = new Server(8080);
+		Server server = new Server(Integer.valueOf(System.getenv("PORT")));
 
 		WebAppContext context = new WebAppContext();
 		context.setDescriptor("../WEB-INF/web.xml");
