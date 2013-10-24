@@ -203,7 +203,7 @@ public class DiscussionResource {
 		}
 
 		builder = Response.ok();
-		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
+		UriBuilder newResourceUri = uriInfo.getAbsolutePathBuilder().path(
 				String.valueOf(discussionId));
 		builder.location(newResourceUri.build());
 
