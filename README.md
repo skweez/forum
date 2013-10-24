@@ -8,7 +8,7 @@
  * clean-code
 
 ##Development
-We use Eclipse 4.2 for development and Maven vor dependency management.
+We use Eclipse 4.2 for development and Maven for dependency management.
 
 ###Style
 We use the Eclipse auto formatter and organize imports features configured as
