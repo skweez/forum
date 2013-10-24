@@ -1,10 +1,11 @@
 package net.skweez.forum.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import net.skweez.forum.adapters.AdaptableModel;
+import net.skweez.forum.adapters.DiscussionAdapter;
 
 /**
  * A discussion with a title, a date, an id, a category and posts
@@ -12,8 +13,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * @author mks
  * 
  */
-@XStreamAlias("Discussion")
-public class Discussion {
+public class Discussion implements AdaptableModel {
 
 	/**
 	 * the id
@@ -38,7 +38,7 @@ public class Discussion {
 	/**
 	 * the posts in this discussion
 	 */
-	private final List<Post> posts;
+	private final Map<Integer, Post> posts;
 
 	/**
 	 * the category this discussion belongs to
@@ -49,7 +49,7 @@ public class Discussion {
 	 * constructor
 	 */
 	public Discussion() {
-		posts = new ArrayList<>();
+		posts = new HashMap<>();
 		category = new Category("general");
 	}
 
@@ -86,7 +86,7 @@ public class Discussion {
 	/**
 	 * @return all posts
 	 */
-	public List<Post> getPosts() {
+	public Map<Integer, Post> getPosts() {
 		return posts;
 	}
 
@@ -95,9 +95,16 @@ public class Discussion {
 	 *            the post to add
 	 * @return the id of the post
 	 */
-	public int addPost(Post post) {
-		posts.add(post);
-		return posts.indexOf(post);
+	public void addPost(Post post) {
+		posts.put(post.getId(), post);
+	}
+
+	/**
+	 * @param postId
+	 *            the index of the post to remove
+	 */
+	public void deletePost(int postId) {
+		posts.remove(postId);
 	}
 
 	/**
@@ -135,5 +142,15 @@ public class Discussion {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public boolean adapterExists() {
+		return true;
+	}
+
+	@Override
+	public Class<?> adapterClass() {
+		return DiscussionAdapter.class;
 	}
 }

@@ -2,6 +2,7 @@ package net.skweez.forum.server;
 
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -19,6 +20,10 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import net.skweez.forum.adapters.AllowReadOnlyPropertiesBeanProvider;
+import net.skweez.forum.adapters.DiscussionAdapter;
+import net.skweez.forum.adapters.ModelAdapterConverter;
+import net.skweez.forum.adapters.PostAdapter;
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 import net.skweez.forum.logic.ForumLogic;
@@ -78,12 +83,16 @@ public class DiscussionResource {
 	public DiscussionResource() {
 		jsonOutStream.autodetectAnnotations(true);
 
-		jsonOutStream.omitField(Discussion.class, "posts");
+		jsonOutStream.registerConverter(
+				new ModelAdapterConverter(jsonOutStream.getMapper(),
+						new AllowReadOnlyPropertiesBeanProvider()), -10);
+		jsonInStream.registerConverter(
+				new ModelAdapterConverter(jsonOutStream.getMapper()), -10);
 
 		// Autodetect does not work for incomming classes so read the
 		// annotations for all the classes by hand
-		jsonInStream.processAnnotations(new Class[] { Discussion.class,
-				Post.class, User.class, Category.class });
+		jsonInStream.processAnnotations(new Class[] { DiscussionAdapter.class,
+				PostAdapter.class, User.class, Category.class });
 
 		// Use joda-time to be able to parse and generate ISO8601 date formats
 		// that are used by js 'Date()'
@@ -128,14 +137,14 @@ public class DiscussionResource {
 	@Path("{id}/posts")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getPostsForDiscussion(@PathParam("id") int discussionId) {
-		Discussion discussion = forumLogic.getDiscussion(discussionId);
+		List<Post> posts = forumLogic.getPostsAsListForDiscussion(discussionId);
 
-		// Return 404 if discussion is not found
-		if (discussion == null) {
+		// Return 404 if no posts are found
+		if (posts == null) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 
-		return jsonOutStream.toXML(discussion.getPosts());
+		return jsonOutStream.toXML(posts);
 	}
 
 	/**
@@ -191,18 +200,19 @@ public class DiscussionResource {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
-		User user = userLogic.getUser(sec.getUserPrincipal().getName());
-		discussion.setUser(user);
+		User user = userLogic.findOrCreateUser(
+				sec.getUserPrincipal().getName(), sec);
 
 		int discussionId;
 
 		try {
-			discussionId = forumLogic.createDiscussion(discussion);
+			discussionId = forumLogic.createDiscussion(discussion, user);
 		} catch (LogicException e) {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
 		builder = Response.ok();
+
 		UriBuilder newResourceUri = uriInfo.getRequestUriBuilder().path(
 				String.valueOf(discussionId));
 		builder.location(newResourceUri.build());
@@ -238,10 +248,12 @@ public class DiscussionResource {
 			return builder.build();
 		}
 
-		post.setUser(userLogic.getUser(sec.getUserPrincipal().getName()));
+		User user = userLogic.findOrCreateUser(
+				sec.getUserPrincipal().getName(), sec);
 
 		try {
-			postIndex = forumLogic.addPostToDiscussion(post, discussionId);
+			postIndex = forumLogic
+					.addPostToDiscussion(post, discussionId, user);
 		} catch (LogicException e) {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}

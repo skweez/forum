@@ -51,7 +51,7 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 			return;
 		}
 
-		User user = userLogic.getUser(uid);
+		User user = userLogic.findOrCreateUser(uid, null);
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
 		requestContext.setSecurityContext(sec);

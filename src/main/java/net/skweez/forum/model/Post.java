@@ -2,32 +2,24 @@ package net.skweez.forum.model;
 
 import java.util.Date;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+import net.skweez.forum.adapters.AdaptableModel;
+import net.skweez.forum.adapters.PostAdapter;
 
 /**
  * @author elm
  * 
  */
-@XStreamAlias("Post")
-public class Post {
-	/**
-	 * The id of the post
-	 */
+public class Post implements AdaptableModel {
+	/** The id of the post */
 	private Integer id;
 
-	/**
-	 * The content of the post
-	 */
+	/** The content of the post */
 	private String content;
 
-	/**
-	 * The date of the post
-	 */
+	/** The date of the post */
 	private Date date;
 
-	/**
-	 * The User that created this post
-	 */
+	/** The User that created this post */
 	private User user;
 
 	/**
@@ -88,5 +80,15 @@ public class Post {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public boolean adapterExists() {
+		return true;
+	}
+
+	@Override
+	public Class<?> adapterClass() {
+		return PostAdapter.class;
 	}
 }

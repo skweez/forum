@@ -36,7 +36,7 @@ public class UserLogic {
 	public User findOrCreateUser(String uid, SecurityContext sec) {
 		User user = userDatastore.findUser(uid);
 
-		if (user != null) {
+		if (user != null || sec == null) {
 			return user;
 		}
 
@@ -52,14 +52,5 @@ public class UserLogic {
 		userDatastore.createUser(user);
 
 		return user;
-	}
-
-	/**
-	 * @param uid
-	 *            the uid
-	 * @return the user for the uid. Returns null if no such user exists.
-	 */
-	public User getUser(String uid) {
-		return userDatastore.findUser(uid);
 	}
 }
