@@ -3,6 +3,7 @@ package net.skweez.forum.datastore.simple;
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.DiscussionDatastore;
 import net.skweez.forum.datastore.PostDatastore;
+import net.skweez.forum.datastore.SessionDatastore;
 import net.skweez.forum.datastore.UserDatastore;
 
 /**
@@ -20,6 +21,9 @@ public class SimpleDatastoreFactory extends DatastoreFactory {
 	/** Users datastore. */
 	private static UserDatastore userDatastore = new SimpleUserDatastore();
 
+	/** Session datastore */
+	private static SessionDatastore sessionDatastore = new SimpleSessionDatastore();
+
 	@Override
 	public DiscussionDatastore getDiscussionDatastore() {
 		return discussionDatastore;
@@ -33,6 +37,11 @@ public class SimpleDatastoreFactory extends DatastoreFactory {
 	@Override
 	public UserDatastore getUserDatastore() {
 		return userDatastore;
+	}
+
+	@Override
+	public SessionDatastore getSessionDatastore() {
+		return sessionDatastore;
 	}
 
 }

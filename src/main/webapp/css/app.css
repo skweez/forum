@@ -1,0 +1,27 @@
+/* app css stylesheet */
+.alerts {
+	z-index: 1000;
+	width: 100%;
+	position: absolute;
+}
+
+.alerts div.alert {
+	position: relative;
+	max-width: 600px;
+	margin: 5px auto;
+}
+
+.post {
+	overflow: auto;
+}
+
+.post img {
+	max-width: 100%;
+}
+
+@media ( max-width : 767px) {
+	/* fix color for login dropdown when navbar is collapsed */
+	.navbar-nav .dropdown-menu label {
+		color: #ffffff;
+	}
+}

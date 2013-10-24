@@ -20,6 +20,9 @@ public abstract class DatastoreFactory {
 	/** @return The users datastore. */
 	public abstract UserDatastore getUserDatastore();
 
+	/** @return The session datastore */
+	public abstract SessionDatastore getSessionDatastore();
+
 	/**
 	 * @return The configured datastore factory or the default one if none was
 	 *         configured.

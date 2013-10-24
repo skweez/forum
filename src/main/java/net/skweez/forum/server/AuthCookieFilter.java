@@ -14,8 +14,8 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.UserDatastore;
+import net.skweez.forum.logic.SessionLogic;
+import net.skweez.forum.logic.UserLogic;
 import net.skweez.forum.model.User;
 
 /**
@@ -25,16 +25,13 @@ import net.skweez.forum.model.User;
 @Provider
 public class AuthCookieFilter implements ContainerRequestFilter {
 
-	/**
-	 * the authentication scheme name
-	 */
-	static String AuthenticationScheme = "net.skweez.forum.cookie";
+	/** the authentication scheme name */
+	public static final String AuthenticationScheme = "net.skweez.forum.cookie";
 
-	/**
-	 * the user datastore
-	 */
-	final UserDatastore userDatastore = DatastoreFactory.createConfigured()
-			.getUserDatastore();
+	/** userLogic */
+	private final UserLogic userLogic = new UserLogic();
+	/** sessionLogic */
+	private final SessionLogic sessionLogic = new SessionLogic();
 
 	@Override
 	public void filter(ContainerRequestContext requestContext)
@@ -48,13 +45,13 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 
 		final String uid = cookies.get("uid").getValue();
 		String authToken = cookies.get("authToken").getValue();
-		User user = userDatastore.findUser(uid);
 
-		// return without security context if no such user is found or if the
-		// auth token is invalid
-		if (user == null || !authToken.equals(user.getAuthToken())) {
+		// return without security context if the auth token is invalid
+		if (!sessionLogic.validateAuthTokenForUID(authToken, uid)) {
 			return;
 		}
+
+		User user = userLogic.getUser(uid);
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
 		requestContext.setSecurityContext(sec);
@@ -81,13 +78,13 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 		 * constructor
 		 */
 		public ForumSecurityContext(final User user) {
-			this.principal = new Principal() {
+			principal = new Principal() {
 				@Override
 				public String getName() {
 					return user.getUid();
 				}
 			};
-			this.roles = user.getRoles();
+			roles = user.getRoles();
 		}
 
 		@Override
@@ -102,13 +99,12 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 
 		@Override
 		public boolean isSecure() {
-			// TODO Auto-generated method stub
 			return false;
 		}
 
 		@Override
 		public boolean isUserInRole(String role) {
-			return this.roles.contains(role);
+			return roles.contains(role);
 		}
 
 	}
