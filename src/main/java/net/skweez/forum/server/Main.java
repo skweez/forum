@@ -25,9 +25,9 @@ public class Main {
 	public static void main(String[] args) {
 		Server server = new Server();
 		HttpConfiguration http_config = new HttpConfiguration();
-		
+		// Needed when using a proxy that supports https. Modifies the request
+		// so the servlet knows it's been called via https.
 		http_config.addCustomizer(new ForwardedRequestCustomizer());
-
 		HttpConnectionFactory http = new HttpConnectionFactory(http_config);
 		ServerConnector httpConnector = new ServerConnector(server, http);
 		httpConnector.setPort(Integer.valueOf(System.getenv("PORT")));
