@@ -81,7 +81,7 @@ function MarkdownDirective() {
 							if (typeof content === 'undefined') {
 								return;
 							}
-							var tree = markdown.parse(content);
+							var tree = markdown.parse(content.replace( /\&#61;/g, '=' ));
 
 							linkifyMarkdownTree(tree, null, null);
 
