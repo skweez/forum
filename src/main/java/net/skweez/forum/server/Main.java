@@ -31,10 +31,8 @@ public class Main {
 		HttpConnectionFactory http = new HttpConnectionFactory(http_config);
 		ServerConnector httpConnector = new ServerConnector(server, http);
 
-		Integer port = System.getenv("PORT") != null ? Integer.valueOf(System
-				.getenv("PORT")) : 8080;
-
-		httpConnector.setPort(port);
+		httpConnector.setPort(System.getenv("PORT") != null ? Integer
+				.valueOf(System.getenv("PORT")) : 8080);
 		server.addConnector(httpConnector);
 
 		WebAppContext context = new WebAppContext();
