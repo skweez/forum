@@ -116,7 +116,8 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		User user = userLogic.getUser(sec.getUserPrincipal().getName());
+		User user = userLogic.findOrCreateUser(
+				sec.getUserPrincipal().getName(), sec);
 		if (user == null) {
 			throw new WebApplicationException();
 		}
