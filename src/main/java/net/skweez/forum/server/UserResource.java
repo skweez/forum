@@ -69,13 +69,13 @@ public class UserResource {
 
 		String uid = sec.getUserPrincipal().getName();
 
-		User user = userLogic.findOrCreateUser(uid, sec);
-
 		logger.debug("Login successful: " + uid);
 
+		Session session = sessionLogic.createSession(uid, stayloggedin);
 		// get authentication token
-		Session session = sessionLogic.createSession(user, stayloggedin);
 		String authToken = session.getAuthToken();
+
+		User user = userLogic.findOrCreateUser(uid, sec);
 
 		int max_age = NewCookie.DEFAULT_MAX_AGE;
 		if (stayloggedin) {
@@ -116,15 +116,9 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		User user = userLogic.findOrCreateUser(
-				sec.getUserPrincipal().getName(), sec);
-		if (user == null) {
-			throw new WebApplicationException();
-		}
-
-		sessionLogic.deleteSession(user, sessionId);
-
-		logger.debug("Logout: " + user.getUid());
+		String uid = sec.getUserPrincipal().getName();
+		sessionLogic.deleteSession(uid, sessionId);
+		logger.debug("Logout: " + uid);
 
 		return Response
 				.status(Status.UNAUTHORIZED)

@@ -4,12 +4,10 @@
 package net.skweez.forum.logic;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.UserDatastore;
+import net.skweez.forum.datastore.SessionDatastore;
 import net.skweez.forum.model.Session;
-import net.skweez.forum.model.User;
 
 /**
  * The session logic. Handles all session related tasks.
@@ -24,22 +22,22 @@ public class SessionLogic {
 	/** The lifetime for permanent sessions in days */
 	public static final int LONG_SESSION_LIFETIME = 365;
 
-	/** the user datastore */
-	private final UserDatastore userDatastore = DatastoreFactory
-			.createConfigured().getUserDatastore();
+	/** the session datastore */
+	private final SessionDatastore sessionDatastore = DatastoreFactory
+			.createConfigured().getSessionDatastore();
 
 	/**
 	 * Creates a new session. If longSession is set to true the session will
 	 * last for {@value #LONG_SESSION_LIFETIME} days.
 	 * 
-	 * @param user
-	 *            the user
+	 * @param uid
+	 *            the uid
 	 * @param longSession
 	 *            indicates if the session should last for LONG_SESSION_LIFETIME
 	 *            days
 	 * @return the new session
 	 */
-	public Session createSession(final User user, final boolean longSession) {
+	public Session createSession(final String uid, final boolean longSession) {
 		Calendar cal = Calendar.getInstance();
 		if (longSession) {
 			cal.add(Calendar.DATE, LONG_SESSION_LIFETIME);
@@ -47,23 +45,17 @@ public class SessionLogic {
 			cal.add(Calendar.DATE, SHORT_SESSION_LIFETIME);
 		}
 
-		Session session = new Session(cal.getTime());
-
-		user.addSessions(session);
-
-		return session;
+		return sessionDatastore.createSession(uid, cal.getTime());
 	}
 
 	/**
 	 * Deletes a session for a given uid.
 	 * 
-	 * @param user
-	 *            the user
-	 * @param sessionId
-	 *            the id of the session to delete
+	 * @param uid
+	 *            the uid
 	 */
-	public void deleteSession(User user, int sessionId) {
-		user.deleteSession(sessionId);
+	public void deleteSession(String uid, int sessionId) {
+		sessionDatastore.deleteSession(uid, sessionId);
 	}
 
 	/**
@@ -73,23 +65,11 @@ public class SessionLogic {
 	 *            the authToken to check
 	 * @param uid
 	 *            the uid for the authToken
-	 * @param sessionId
-	 *            the id of the session
 	 * @return true if the authToken is valid. False else.
 	 */
 	public boolean validateAuthTokenForUID(final String authToken,
-			final String uid, final int sessionId) {
-		User user = userDatastore.findUser(uid);
-		if (user == null) {
-			return false;
-		}
-		Session session = user.getSessions().get(sessionId);
-
-		if (session != null && session.getExpireDate().before(new Date())) {
-			deleteSession(user, sessionId);
-			return false;
-		}
-
-		return (session != null && session.getAuthToken().equals(authToken));
+			final String uid, int sessionId) {
+		Session session = sessionDatastore.findSession(uid, sessionId);
+		return (session != null && authToken.equals(session.getAuthToken()));
 	}
 }

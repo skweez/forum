@@ -1,10 +1,8 @@
 package net.skweez.forum.model;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * User class.
@@ -20,13 +18,6 @@ public class User {
 	/** the roles */
 	private LinkedList<String> roles;
 
-	/** the sessions */
-	@XStreamOmitField
-	private HashMap<Integer, Session> sessions;
-
-	/** the id of the next session */
-	private int nextSessionId = 0;
-
 	/**
 	 * constructor
 	 * 
@@ -36,7 +27,6 @@ public class User {
 	public User(String uid) {
 		setUid(uid);
 		roles = new LinkedList<>();
-		sessions = new HashMap<>();
 	}
 
 	/**
@@ -67,31 +57,5 @@ public class User {
 	 */
 	public void addRole(String role) {
 		roles.add(role);
-	}
-
-	/**
-	 * @return the sessions
-	 */
-	public HashMap<Integer, Session> getSessions() {
-		return sessions;
-	}
-
-	/**
-	 * @param session
-	 *            the session to add
-	 * @return the session id
-	 */
-	public int addSessions(Session session) {
-		session.setId(nextSessionId++);
-		sessions.put(session.getId(), session);
-		return session.getId();
-	}
-
-	/**
-	 * @param sessionId
-	 *            the id of the session to remove
-	 */
-	public void deleteSession(int sessionId) {
-		sessions.remove(sessionId);
 	}
 }
