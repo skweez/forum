@@ -39,15 +39,17 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 		Map<String, Cookie> cookies = requestContext.getCookies();
 
 		// return without security context if one cookie is missing
-		if (!cookies.containsKey("uid") || !cookies.containsKey("authToken")) {
+		if (!cookies.containsKey("uid") || !cookies.containsKey("authToken")
+				|| !cookies.containsKey("sessionId")) {
 			return;
 		}
 
 		final String uid = cookies.get("uid").getValue();
 		String authToken = cookies.get("authToken").getValue();
+		int sessionId = Integer.parseInt(cookies.get("sessionId").getValue());
 
 		// return without security context if the auth token is invalid
-		if (!sessionLogic.validateAuthTokenForUID(authToken, uid)) {
+		if (!sessionLogic.validateAuthTokenForUID(authToken, uid, sessionId)) {
 			return;
 		}
 
