@@ -4,6 +4,7 @@
 package net.skweez.forum.logic;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.UserDatastore;
@@ -83,6 +84,12 @@ public class SessionLogic {
 			return false;
 		}
 		Session session = user.getSessions().get(sessionId);
+
+		if (session != null && session.getExpireDate().before(new Date())) {
+			deleteSession(user, sessionId);
+			return false;
+		}
+
 		return (session != null && session.getAuthToken().equals(authToken));
 	}
 }
