@@ -7,6 +7,11 @@
  * single page app design
  * clean-code
 
+##Demo
+ * https://skweez-forum.herokuapp.com/
+ * User: testUser1
+ * Password: testPassword1
+
 ##Development
 We use Eclipse 4.2 for development and Maven for dependency management.
 
