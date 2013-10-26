@@ -21,6 +21,13 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Main {
 
 	/**
+	 * The realm name of the LoginService. If a container-configured
+	 * LoginService is used, it has to be configured with the realm-name
+	 * <i>{@value} </i> in <code>web.xml</code>.
+	 */
+	private static final String REALM_NAME = "net.skweez.forum";
+
+	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -34,25 +41,21 @@ public class Main {
 
 		LoginService loginService;
 		if (Config.getValue(Setting.LOGIN_SERVICE).equals("ldapTest")) {
-			// JAASLoginService name and realm-name in web.xml need to be the
-			// same.
-			JAASLoginService jaasLoginService = new JAASLoginService(
-					"net.skweez.forum");
+			JAASLoginService jaasLoginService = new JAASLoginService(REALM_NAME);
 			jaasLoginService.setLoginModuleName("net.skweez.forum.ldapTest");
 			context.addBean(jaasLoginService);
 			loginService = jaasLoginService;
 		} else {
-			HashLoginService hashLoginService = new HashLoginService();
+			HashLoginService hashLoginService = new HashLoginService(REALM_NAME);
 			hashLoginService.putUser("testUser1",
 					Credential.getCredential("testPassword1"),
 					new String[] { "users" }); // Role of this user
-			hashLoginService.setName("net.skweez.forum");
 			loginService = hashLoginService;
 		}
 
 		ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 		securityHandler.setLoginService(loginService);
-		securityHandler.setRealmName("net.skweez.forum");
+		securityHandler.setRealmName(REALM_NAME);
 
 		context.setSecurityHandler(securityHandler);
 
