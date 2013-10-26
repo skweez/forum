@@ -12,6 +12,7 @@ public enum Setting {
 
 	/** The admins role name setting. */
 	ROLE_NAME_ADMIN("rolename.admin"),
+
 	/** The users role name setting. */
 	ROLE_NAME_USER("rolename.user"),
 
