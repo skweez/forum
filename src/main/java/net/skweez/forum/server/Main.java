@@ -22,7 +22,12 @@ public class Main {
 
 	/** The name of the login module. Used in login.conf. */
 	private static final String jaasLoginModuleName = "net.skweez.forum.jaas";
-	/** The realm name that is used in the web.xml configuration file. */
+
+	/**
+	 * The realm name of the LoginService. If a container-configured
+	 * LoginService is used, it has to be configured with the realm-name
+	 * <i>{@value} </i> in <code>web.xml</code>.
+	 */
 	private static final String REALM_NAME = "net.skweez.forum";
 
 	/**
