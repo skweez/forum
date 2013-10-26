@@ -21,7 +21,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Main {
 
 	/** The name of the login module. Used in login.conf. */
-	private static final String jaasLoginModuleName = "net.skweez.forum.jaas";
+	private static final String JAAS_LOGIN_MODULE_NAME = "net.skweez.forum.jaas";
 
 	/**
 	 * The realm name of the LoginService. If a container-configured
@@ -73,7 +73,7 @@ public class Main {
 		switch (loginServiceName) {
 		case "jaas":
 			JAASLoginService jaasLoginService = new JAASLoginService(REALM_NAME);
-			jaasLoginService.setLoginModuleName(jaasLoginModuleName);
+			jaasLoginService.setLoginModuleName(JAAS_LOGIN_MODULE_NAME);
 			return jaasLoginService;
 		case "test":
 			HashLoginService hashLoginService = new HashLoginService();
@@ -83,7 +83,8 @@ public class Main {
 			hashLoginService.setName(REALM_NAME);
 			return hashLoginService;
 		default:
-			return null;
+			throw new IllegalArgumentException("No such LoginService: "
+					+ loginServiceName);
 		}
 	}
 }
