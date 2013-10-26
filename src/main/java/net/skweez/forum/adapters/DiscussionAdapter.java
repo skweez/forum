@@ -11,7 +11,7 @@ import net.skweez.forum.model.Post;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Adapter for Discussions
+ * Adapter for Discussions.
  * 
  * @author elm
  * 

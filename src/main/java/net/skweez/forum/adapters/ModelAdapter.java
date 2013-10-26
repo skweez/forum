@@ -14,7 +14,7 @@ package net.skweez.forum.adapters;
  * 
  */
 public abstract class ModelAdapter<Model extends AdaptableModel> {
-	/** the model */
+	/** The model. */
 	protected Model model;
 
 	/**

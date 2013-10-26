@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
- * A converter that transforms models to model adapters and vice versa
+ * A converter that transforms models to model adapters and vice versa.
  * 
  * @author elm
  * 
