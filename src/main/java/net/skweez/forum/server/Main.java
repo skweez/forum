@@ -67,7 +67,9 @@ public class Main {
 	 * 
 	 * @param loginServiceName
 	 *            the name of the login service
-	 * @return the login service. Null if no such login service is found.
+	 * @return the login service.
+	 * @throws IllegalArgumentException
+	 *             if no such login service exists.
 	 */
 	private static LoginService createLoginService(String loginServiceName) {
 		switch (loginServiceName) {
