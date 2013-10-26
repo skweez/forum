@@ -1,17 +1,22 @@
-net.skweez.forum.ldapTest {
+/**
+ * This is a example login.config file for LDAP support. Any JAAS login module
+ * can be used here.
+ */
+
+net.skweez.forum.jaas {
     org.eclipse.jetty.jaas.spi.LdapLoginModule required
     debug="true"
     useLdaps="false"
     contextFactory="com.sun.jndi.ldap.LdapCtxFactory"
     hostname="localhost"
-    port="10389"
+    port="389"
     authenticationMethod="simple"
-    userBaseDn="ou=Users,dc=skweez,dc=net"
+    userBaseDn="ou=Users,dc=example,dc=com"
     userRdnAttribute="cn"
     userIdAttribute="uid"
     forceBindingLogin="true"
     userObjectClass="inetOrgPerson"
-    roleBaseDn="ou=forum,ou=Groups,dc=skweez,dc=net"
+    roleBaseDn="ou=forum,ou=Groups,dc=example,dc=com"
     roleNameAttribute="cn"
     roleMemberAttribute="member"
     roleObjectClass="groupOfNames";

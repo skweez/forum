@@ -20,6 +20,11 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class Main {
 
+	/** The name of the login module. Used in login.conf. */
+	private static final String jaasLoginModuleName = "net.skweez.forum.jaas";
+	/** The realm name that is used in the web.xml configuration file. */
+	private static final String REALM_NAME = "net.skweez.forum";
+
 	/**
 	 * @param args
 	 */
@@ -32,27 +37,13 @@ public class Main {
 		context.setContextPath("/");
 		context.setParentLoaderPriority(true);
 
-		LoginService loginService;
-		if (Config.getValue(Setting.LOGIN_SERVICE).equals("ldapTest")) {
-			// JAASLoginService name and realm-name in web.xml need to be the
-			// same.
-			JAASLoginService jaasLoginService = new JAASLoginService(
-					"net.skweez.forum");
-			jaasLoginService.setLoginModuleName("net.skweez.forum.ldapTest");
-			context.addBean(jaasLoginService);
-			loginService = jaasLoginService;
-		} else {
-			HashLoginService hashLoginService = new HashLoginService();
-			hashLoginService.putUser("testUser1",
-					Credential.getCredential("testPassword1"),
-					new String[] { "users" }); // Role of this user
-			hashLoginService.setName("net.skweez.forum");
-			loginService = hashLoginService;
-		}
+		LoginService loginService = createLoginService(Config
+				.getValue(Setting.LOGIN_SERVICE));
+		context.addBean(loginService);
 
 		ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
 		securityHandler.setLoginService(loginService);
-		securityHandler.setRealmName("net.skweez.forum");
+		securityHandler.setRealmName(REALM_NAME);
 
 		context.setSecurityHandler(securityHandler);
 
@@ -63,6 +54,31 @@ public class Main {
 			server.join();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Creates the login service for a given login service name.
+	 * 
+	 * @param loginServiceName
+	 *            the name of the login service
+	 * @return the login service. Null if no such login service is found.
+	 */
+	private static LoginService createLoginService(String loginServiceName) {
+		switch (loginServiceName) {
+		case "jaas":
+			JAASLoginService jaasLoginService = new JAASLoginService(REALM_NAME);
+			jaasLoginService.setLoginModuleName(jaasLoginModuleName);
+			return jaasLoginService;
+		case "test":
+			HashLoginService hashLoginService = new HashLoginService();
+			hashLoginService.putUser("testUser1",
+					Credential.getCredential("testPassword1"),
+					new String[] { "users" });
+			hashLoginService.setName(REALM_NAME);
+			return hashLoginService;
+		default:
+			return null;
 		}
 	}
 }
