@@ -14,22 +14,20 @@ import java.util.Date;
  * 
  */
 public class Session {
-	/** the session id */
+	/** The session id. */
 	private int id;
 
-	/** the auth token */
+	/** The auth token. */
 	private String authToken;
 
-	/** the date when the session expires */
+	/** The date when the session expires. */
 	private Date expireDate;
 
 	/**
-	 * constructor
+	 * Constructor.
 	 */
 	public Session(Date expireDate) {
 		setExpireDate(expireDate);
-
-		// create authToken. This authToken is immutable.
 		authToken = new BigInteger(130, new SecureRandom()).toString(32);
 	}
 
@@ -63,7 +61,8 @@ public class Session {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;

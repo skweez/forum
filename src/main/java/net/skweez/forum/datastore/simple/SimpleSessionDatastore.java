@@ -17,10 +17,10 @@ import net.skweez.forum.model.Session;
  * 
  */
 public class SimpleSessionDatastore implements SessionDatastore {
-	/** the sessions */
+	/** The sessions for every user. */
 	private Map<String, Map<Integer, Session>> sessions = new HashMap<>();
 
-	/** the session id */
+	/** The session id. */
 	private int nextSessionId = 0;
 
 	@Override

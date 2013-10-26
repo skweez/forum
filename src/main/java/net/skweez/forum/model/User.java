@@ -12,14 +12,14 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  */
 @XStreamAlias("User")
 public class User {
-	/** the uid */
+	/** The uid. */
 	private String uid;
 
-	/** the roles */
+	/** The roles. */
 	private LinkedList<String> roles;
 
 	/**
-	 * constructor
+	 * Constructor.
 	 * 
 	 * @param uid
 	 *            the uid
