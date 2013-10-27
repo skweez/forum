@@ -21,9 +21,9 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import net.skweez.forum.adapters.AllowReadOnlyPropertiesBeanProvider;
-import net.skweez.forum.adapters.DiscussionAdapter;
-import net.skweez.forum.adapters.ModelAdapterConverter;
-import net.skweez.forum.adapters.PostAdapter;
+import net.skweez.forum.adapters.XStreamDiscussionAdapter;
+import net.skweez.forum.adapters.XStreamModelAdapterConverter;
+import net.skweez.forum.adapters.XStreamPostAdapter;
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 import net.skweez.forum.logic.ForumLogic;
@@ -84,15 +84,15 @@ public class DiscussionResource {
 		jsonOutStream.autodetectAnnotations(true);
 
 		jsonOutStream.registerConverter(
-				new ModelAdapterConverter(jsonOutStream.getMapper(),
+				new XStreamModelAdapterConverter(jsonOutStream.getMapper(),
 						new AllowReadOnlyPropertiesBeanProvider()), -10);
 		jsonInStream.registerConverter(
-				new ModelAdapterConverter(jsonOutStream.getMapper()), -10);
+				new XStreamModelAdapterConverter(jsonOutStream.getMapper()), -10);
 
 		// Autodetect does not work for incomming classes so read the
 		// annotations for all the classes by hand
-		jsonInStream.processAnnotations(new Class[] { DiscussionAdapter.class,
-				PostAdapter.class, User.class, Category.class });
+		jsonInStream.processAnnotations(new Class[] { XStreamDiscussionAdapter.class,
+				XStreamPostAdapter.class, User.class, Category.class });
 
 		// Use joda-time to be able to parse and generate ISO8601 date formats
 		// that are used by js 'Date()'

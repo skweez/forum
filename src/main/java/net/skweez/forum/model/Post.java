@@ -3,7 +3,8 @@ package net.skweez.forum.model;
 import java.util.Date;
 
 import net.skweez.forum.adapters.AdaptableModel;
-import net.skweez.forum.adapters.PostAdapter;
+import net.skweez.forum.adapters.XStreamModelAdapter;
+import net.skweez.forum.adapters.XStreamPostAdapter;
 
 /**
  * @author elm
@@ -83,12 +84,10 @@ public class Post implements AdaptableModel {
 	}
 
 	@Override
-	public boolean adapterExists() {
-		return true;
-	}
-
-	@Override
-	public Class<?> adapterClass() {
-		return PostAdapter.class;
+	public Object getAdapter(Class<?> adapterClass) {
+		if (adapterClass == XStreamModelAdapter.class) {
+			return new XStreamPostAdapter(this);
+		}
+		return null;
 	}
 }

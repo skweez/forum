@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.skweez.forum.adapters.AdaptableModel;
-import net.skweez.forum.adapters.DiscussionAdapter;
+import net.skweez.forum.adapters.XStreamDiscussionAdapter;
+import net.skweez.forum.adapters.XStreamModelAdapter;
 
 /**
  * A discussion with a title, a date, an id, a category and posts
@@ -145,12 +146,10 @@ public class Discussion implements AdaptableModel {
 	}
 
 	@Override
-	public boolean adapterExists() {
-		return true;
-	}
-
-	@Override
-	public Class<?> adapterClass() {
-		return DiscussionAdapter.class;
+	public Object getAdapter(Class<?> adapterClass) {
+		if (adapterClass == XStreamModelAdapter.class) {
+			return new XStreamDiscussionAdapter(this);
+		}
+		return null;
 	}
 }

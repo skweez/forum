@@ -3,9 +3,6 @@
  */
 package net.skweez.forum.adapters;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.javabean.JavaBeanConverter;
@@ -20,7 +17,7 @@ import com.thoughtworks.xstream.mapper.Mapper;
  * @author elm
  * 
  */
-public class ModelAdapterConverter extends JavaBeanConverter {
+public class XStreamModelAdapterConverter extends JavaBeanConverter {
 
 	/**
 	 * @see JavaBeanConverter#JavaBeanConverter(Mapper)
@@ -28,7 +25,7 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 	 * @param mapper
 	 *            a mapper
 	 */
-	public ModelAdapterConverter(Mapper mapper) {
+	public XStreamModelAdapterConverter(Mapper mapper) {
 		super(mapper);
 	}
 
@@ -40,7 +37,7 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 	 * @param beanProvider
 	 *            a bean provider
 	 */
-	public ModelAdapterConverter(Mapper mapper, JavaBeanProvider beanProvider) {
+	public XStreamModelAdapterConverter(Mapper mapper, JavaBeanProvider beanProvider) {
 		super(mapper, beanProvider);
 	}
 
@@ -56,22 +53,13 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 	@Override
 	public void marshal(Object source, HierarchicalStreamWriter writer,
 			MarshallingContext context) {
-		if (source instanceof AdaptableModel
-				&& ((AdaptableModel) source).adapterExists()) {
-			try {
-				Constructor<?> adapterConstructor = ((AdaptableModel) source)
-						.adapterClass().getDeclaredConstructor(
-								new Class[] { source.getClass() });
-
-				source = adapterConstructor.newInstance(source);
-			} catch (NoSuchMethodException | SecurityException
-					| InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException e) {
-				// TODO (elm): Add error handling (maybe ignore?)
-				e.printStackTrace();
+		if (source instanceof AdaptableModel) {
+			Object adapter = ((AdaptableModel) source)
+					.getAdapter(XStreamModelAdapter.class);
+			if (adapter != null) {
+				source = adapter;
 			}
 		}
-
 		super.marshal(source, writer, context);
 	}
 
@@ -88,8 +76,8 @@ public class ModelAdapterConverter extends JavaBeanConverter {
 			UnmarshallingContext context) {
 		Object object = super.unmarshal(reader, context);
 
-		if (object instanceof ModelAdapter<?>) {
-			object = ((ModelAdapter<?>) object).model();
+		if (object instanceof XStreamModelAdapter<?>) {
+			object = ((XStreamModelAdapter<?>) object).model();
 		}
 
 		return object;

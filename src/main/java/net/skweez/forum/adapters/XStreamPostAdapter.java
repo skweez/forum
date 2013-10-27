@@ -16,12 +16,12 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("Post")
-public class PostAdapter extends ModelAdapter<Post> {
+public class XStreamPostAdapter extends XStreamModelAdapter<Post> {
 
 	/**
 	 * Creates a new PostAdapter for a new Post object.
 	 */
-	public PostAdapter() {
+	public XStreamPostAdapter() {
 		model = new Post();
 	}
 
@@ -29,7 +29,7 @@ public class PostAdapter extends ModelAdapter<Post> {
 	 * @param post
 	 *            the post
 	 */
-	public PostAdapter(Post post) {
+	public XStreamPostAdapter(Post post) {
 		model = post;
 	}
 

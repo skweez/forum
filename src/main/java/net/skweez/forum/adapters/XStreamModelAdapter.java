@@ -13,7 +13,7 @@ package net.skweez.forum.adapters;
  * @author elm
  * 
  */
-public abstract class ModelAdapter<Model extends AdaptableModel> {
+public abstract class XStreamModelAdapter<Model extends AdaptableModel> {
 	/** The model. */
 	protected Model model;
 

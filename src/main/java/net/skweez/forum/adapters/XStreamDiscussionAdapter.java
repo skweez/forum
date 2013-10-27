@@ -17,11 +17,11 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("Discussion")
-public class DiscussionAdapter extends ModelAdapter<Discussion> {
+public class XStreamDiscussionAdapter extends XStreamModelAdapter<Discussion> {
 	/**
 	 * Creates a new DiscussionAdapter for a new discussion.
 	 */
-	public DiscussionAdapter() {
+	public XStreamDiscussionAdapter() {
 		model = new Discussion();
 	}
 
@@ -31,7 +31,7 @@ public class DiscussionAdapter extends ModelAdapter<Discussion> {
 	 * @param discussion
 	 *            the discussion
 	 */
-	public DiscussionAdapter(Discussion discussion) {
+	public XStreamDiscussionAdapter(Discussion discussion) {
 		model = discussion;
 	}
 

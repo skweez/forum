@@ -12,12 +12,13 @@ package net.skweez.forum.adapters;
  */
 public interface AdaptableModel {
 	/**
-	 * @return true if an adapter exists. false else
+	 * Returns an object which is an instance of the given class associated with
+	 * this object. Returns null if no such object can be found.
+	 * 
+	 * @param adapterClass
+	 *            - the adapter class to look up
+	 * @return a object castable to the given class, or null if this object does
+	 *         not have an adapter for the given class
 	 */
-	public boolean adapterExists();
-
-	/**
-	 * @return the class of the adapter.
-	 */
-	public Class<?> adapterClass();
+	public Object getAdapter(Class<?> adapterClass);
 }
