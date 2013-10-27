@@ -11,7 +11,7 @@ import net.skweez.forum.model.Post;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Adapter for Discussions.
+ * XStream adapter for Discussions.
  * 
  * @author elm
  * 
@@ -19,14 +19,14 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @XStreamAlias("Discussion")
 public class XStreamDiscussionAdapter extends XStreamModelAdapter<Discussion> {
 	/**
-	 * Creates a new DiscussionAdapter for a new discussion.
+	 * Creates a new XStreamDiscussionAdapter with a new discussion.
 	 */
 	public XStreamDiscussionAdapter() {
 		model = new Discussion();
 	}
 
 	/**
-	 * Creates a new DiscussionAdapter for a given discussion.
+	 * Creates a new XStreamDiscussionAdapter for a given discussion.
 	 * 
 	 * @param discussion
 	 *            the discussion

@@ -10,7 +10,7 @@ import net.skweez.forum.model.Post;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
- * Adapter for Posts.
+ * XStream adapter for Posts.
  * 
  * @author elm
  * 
@@ -19,13 +19,15 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class XStreamPostAdapter extends XStreamModelAdapter<Post> {
 
 	/**
-	 * Creates a new PostAdapter for a new Post object.
+	 * Creates a new XStreamPostAdapter with a new Post object.
 	 */
 	public XStreamPostAdapter() {
 		model = new Post();
 	}
 
 	/**
+	 * Creates a new XStreamPostAdapter for a given Post object.
+	 * 
 	 * @param post
 	 *            the post
 	 */

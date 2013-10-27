@@ -12,7 +12,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
- * A converter that transforms models to model adapters and vice versa.
+ * A converter that uses XStreamModelAdapter to transform model objects.
  * 
  * @author elm
  * 
@@ -37,13 +37,14 @@ public class XStreamModelAdapterConverter extends JavaBeanConverter {
 	 * @param beanProvider
 	 *            a bean provider
 	 */
-	public XStreamModelAdapterConverter(Mapper mapper, JavaBeanProvider beanProvider) {
+	public XStreamModelAdapterConverter(Mapper mapper,
+			JavaBeanProvider beanProvider) {
 		super(mapper, beanProvider);
 	}
 
 	/**
-	 * Checks if the source object has an adapter available and uses this
-	 * adapter.
+	 * Checks if the source object has an XStream adapter available and uses
+	 * this adapter.
 	 * 
 	 * @see com.thoughtworks.xstream.converters.javabean.JavaBeanConverter#marshal
 	 *      (java.lang.Object,
