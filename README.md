@@ -7,7 +7,7 @@
  * Modern Bootstrap based UI
  * Markdown in posts
  * Images are inlined, when linked to
- * we try to adhere to Clean Code principals, like KISS, DRY, peer reviews etc.
+ * We try to adhere to Clean Code principals, like KISS, DRY, peer reviews etc.
 
 ##Status
 Not yet fully functional, many pieces still missing for an actual useful forum.
