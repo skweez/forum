@@ -1,11 +1,16 @@
 #Simple forum software with REST API
 
-##Features
+##Features so far
  * REST API
- * LDAP authentication and user management (feature-jaas-authentication branch)
- * markdown in posts
- * single page app design
- * clean-code
+ * JAAS authentication and user management (supports LDAP)
+ * Single page app design
+ * Modern Bootstrap based UI
+ * Markdown in posts
+ * Images are inlined, when linked to
+ * we try to adhere to Clean Code principals, like KISS, DRY, peer reviews etc.
+
+##Status
+Not yet fully functional, many pieces still missing for an actual useful forum.
 
 ##Demo
  * https://skweez-forum.herokuapp.com/
@@ -13,7 +18,7 @@
  * Password: testPassword1
 
 ##Development
-We use Eclipse 4.2 for development and Maven for dependency management.
+We use Eclipse 4.3 for development and Maven for dependency management.
 
 ###Style
 We use the Eclipse auto formatter and organize imports features configured as
@@ -25,4 +30,4 @@ anything to apply them after importing the project into your workspace.
 The forum is a REST-like application communicating via JSON. For a starting
 point have a look at the Main class.
 
-The forum can be run as a standalone Java Application or deployed as a WAR.
+The app can be run as a standalone Java application or deployed as a WAR in a servlet container.
