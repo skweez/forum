@@ -25,4 +25,4 @@ anything to apply them after importing the project into your workspace.
 The forum is a REST-like application communicating via JSON. For a starting
 point have a look at the Main class.
 
-The forum can be run as a Java Application or a servlet can be generated.
+The forum can be run as a standalone Java Application or deployed as a WAR.
