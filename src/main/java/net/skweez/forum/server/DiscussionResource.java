@@ -1,7 +1,6 @@
 package net.skweez.forum.server;
 
 import java.io.InputStream;
-import java.io.Writer;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -24,19 +23,10 @@ import net.skweez.forum.config.Setting;
 import net.skweez.forum.logic.ForumLogic;
 import net.skweez.forum.logic.LogicException;
 import net.skweez.forum.logic.UserLogic;
-import net.skweez.forum.model.Category;
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
 import net.skweez.forum.model.User;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
-import com.thoughtworks.xstream.converters.extended.ISO8601DateConverter;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.json.AbstractJsonWriter;
-import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
-import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
-import com.thoughtworks.xstream.io.json.JsonWriter;
+import net.skweez.forum.utils.JsonUtils;
 
 /**
  * Discussions resource
@@ -55,49 +45,13 @@ public class DiscussionResource {
 	/** forumLogic */
 	private final ForumLogic forumLogic = new ForumLogic();
 
-	/** The XStream object used for serialization. */
-	private final XStream jsonOutStream = new XStream(
-			new JsonHierarchicalStreamDriver() {
-				@Override
-				public HierarchicalStreamWriter createWriter(Writer writer) {
-					return new JsonWriter(writer,
-							AbstractJsonWriter.DROP_ROOT_MODE);
-				}
-			});
-
-	/**
-	 * XStream object used to parse incoming objects. This needs to use
-	 * JettisonMappedXmlDriver.
-	 */
-	private final XStream jsonInStream = new XStream(
-			new JettisonMappedXmlDriver());
-
-	/**
-	 * Constructor
-	 */
-	public DiscussionResource() {
-		jsonOutStream.autodetectAnnotations(true);
-
-		jsonOutStream.omitField(Discussion.class, "posts");
-
-		// Autodetect does not work for incomming classes so read the
-		// annotations for all the classes by hand
-		jsonInStream.processAnnotations(new Class[] { Discussion.class,
-				Post.class, User.class, Category.class });
-
-		// Use joda-time to be able to parse and generate ISO8601 date formats
-		// that are used by js 'Date()'
-		jsonInStream.registerConverter(new ISO8601DateConverter());
-		jsonOutStream.registerConverter(new ISO8601DateConverter());
-	}
-
 	/**
 	 * @return all discussions.
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAllDiscussions() {
-		return jsonOutStream.toXML(forumLogic.getDiscussions());
+		return JsonUtils.serialize(forumLogic.getDiscussions());
 	}
 
 	/**
@@ -116,7 +70,7 @@ public class DiscussionResource {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 
-		return jsonOutStream.toXML(discussion);
+		return JsonUtils.serialize(discussion);
 	}
 
 	/**
@@ -135,7 +89,7 @@ public class DiscussionResource {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 
-		return jsonOutStream.toXML(discussion.getPosts());
+		return JsonUtils.serialize(discussion.getPosts());
 	}
 
 	/**
@@ -165,7 +119,7 @@ public class DiscussionResource {
 			throw new WebApplicationException(Response.Status.NOT_FOUND);
 		}
 
-		return jsonOutStream.toXML(post);
+		return JsonUtils.serialize(post);
 	}
 
 	/**
@@ -186,8 +140,8 @@ public class DiscussionResource {
 		Discussion discussion;
 		ResponseBuilder builder;
 		try {
-			discussion = (Discussion) jsonInStream.fromXML(inputStream);
-		} catch (XStreamException e) {
+			discussion = JsonUtils.deserialize(inputStream, Discussion.class);
+		} catch (Exception e) {
 			throw new WebApplicationException(Status.BAD_REQUEST);
 		}
 
@@ -231,9 +185,8 @@ public class DiscussionResource {
 		int postIndex;
 
 		try {
-			post = (Post) jsonInStream.fromXML(inputStream);
-		} catch (XStreamException e) {
-			System.err.println(e.getMessage());
+			post = JsonUtils.deserialize(inputStream, Post.class);
+		} catch (Exception e) {
 			builder = Response.status(Status.BAD_REQUEST);
 			return builder.build();
 		}
