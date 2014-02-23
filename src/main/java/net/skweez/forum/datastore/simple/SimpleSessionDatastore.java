@@ -17,34 +17,46 @@ import net.skweez.forum.model.Session;
  * 
  */
 public class SimpleSessionDatastore implements SessionDatastore {
-	/** the sessions */
-	private Map<String, Session> sessions = new HashMap<>();
+	/** The sessions for every user. */
+	private Map<String, Map<Integer, Session>> sessions = new HashMap<>();
+
+	/** The session id. */
+	private int nextSessionId = 0;
 
 	@Override
 	public Session createSession(String uid, Date expireDate) {
-		Session session = new Session(uid, expireDate);
-		sessions.put(uid, session);
+		Session session = new Session(expireDate);
+
+		session.setId(nextSessionId++);
+		findSessions(uid).put(session.getId(), session);
 		return session;
 	}
 
 	@Override
-	public Session findSession(String uid) {
-		Session session = sessions.get(uid);
-		if (session != null) {
-			return session;
+	public Map<Integer, Session> findSessions(String uid) {
+		Map<Integer, Session> userSessions = sessions.get(uid);
+
+		if (userSessions == null) {
+			userSessions = new HashMap<>();
+			sessions.put(uid, userSessions);
 		}
-		return null;
+		return userSessions;
+	}
+
+	@Override
+	public Session findSession(String uid, int sessionId) {
+		return findSessions(uid).get(sessionId);
 	}
 
 	@Override
 	public boolean updateSession(String uid, Session session) {
-		sessions.put(uid, session);
+		findSessions(uid).put(session.getId(), session);
 		return true;
 	}
 
 	@Override
-	public void deleteSession(String uid) {
-		sessions.remove(uid);
+	public void deleteSession(String uid, int sessionId) {
+		findSessions(uid).remove(sessionId);
 	}
 
 }

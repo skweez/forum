@@ -38,8 +38,6 @@ public class SessionLogic {
 	 * @return the new session
 	 */
 	public Session createSession(final String uid, final boolean longSession) {
-		sessionDatastore.deleteSession(uid);
-
 		Calendar cal = Calendar.getInstance();
 		if (longSession) {
 			cal.add(Calendar.DATE, LONG_SESSION_LIFETIME);
@@ -56,8 +54,8 @@ public class SessionLogic {
 	 * @param uid
 	 *            the uid
 	 */
-	public void deleteSession(String uid) {
-		sessionDatastore.deleteSession(uid);
+	public void deleteSession(String uid, int sessionId) {
+		sessionDatastore.deleteSession(uid, sessionId);
 	}
 
 	/**
@@ -70,8 +68,8 @@ public class SessionLogic {
 	 * @return true if the authToken is valid. False else.
 	 */
 	public boolean validateAuthTokenForUID(final String authToken,
-			final String uid) {
-		Session session = sessionDatastore.findSession(uid);
+			final String uid, int sessionId) {
+		Session session = sessionDatastore.findSession(uid, sessionId);
 		return (session != null && authToken.equals(session.getAuthToken()));
 	}
 }

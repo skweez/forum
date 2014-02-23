@@ -3,6 +3,7 @@
  */
 package net.skweez.forum.server;
 
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.UriInfo;
 
 import net.skweez.forum.logic.SessionLogic;
 import net.skweez.forum.logic.UserLogic;
+import net.skweez.forum.model.Session;
 import net.skweez.forum.model.User;
 
 import org.slf4j.Logger;
@@ -69,9 +71,9 @@ public class UserResource {
 
 		logger.debug("Login successful: " + uid);
 
+		Session session = sessionLogic.createSession(uid, stayloggedin);
 		// get authentication token
-		String authToken = sessionLogic.createSession(uid, stayloggedin)
-				.getAuthToken();
+		String authToken = session.getAuthToken();
 
 		User user = userLogic.findOrCreateUser(uid, sec);
 
@@ -82,11 +84,16 @@ public class UserResource {
 
 		return Response
 				.ok()
-				// The uid cookie has to be readable from javascript. Therefore
-				// the path is / and httpOnly is false.
+				// The uid cookie and the sessionid cookie has to be readable
+				// from javascript. Therefore the path is / and httpOnly is
+				// false.
 				.cookie(new NewCookie("uid", user.getUid(), "/", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						max_age, null, false, false))
+				.cookie(new NewCookie("sessionId", String.valueOf(session
+						.getId()), "/", uriInfo.getBaseUri().getHost(),
+						Cookie.DEFAULT_VERSION, null, max_age, null, false,
+						false))
 				.cookie(new NewCookie("authToken", authToken, "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						max_age, null, false, true)).build();
@@ -102,14 +109,15 @@ public class UserResource {
 	 */
 	@GET
 	@Path("logout")
-	public Response logout(@Context SecurityContext sec) {
+	public Response logout(@Context SecurityContext sec,
+			@CookieParam(value = "sessionId") int sessionId) {
 		if (sec.getUserPrincipal() == null) {
 			throw new WebApplicationException(Response.status(
 					Status.UNAUTHORIZED).build());
 		}
 
 		String uid = sec.getUserPrincipal().getName();
-		sessionLogic.deleteSession(uid);
+		sessionLogic.deleteSession(uid, sessionId);
 		logger.debug("Logout: " + uid);
 
 		return Response
@@ -117,6 +125,9 @@ public class UserResource {
 				.cookie(new NewCookie("uid", "", "/", uriInfo.getBaseUri()
 						.getHost(), Cookie.DEFAULT_VERSION, null, 0, null,
 						false, false))
+				.cookie(new NewCookie("sessionId", "", "/", uriInfo
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
+						0, null, false, false))
 				.cookie(new NewCookie("authToken", "", "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						0, null, false, true)).build();
