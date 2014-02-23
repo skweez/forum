@@ -87,16 +87,16 @@ public class UserResource {
 				// The uid cookie and the sessionid cookie has to be readable
 				// from javascript. Therefore the path is / and httpOnly is
 				// false.
-				.cookie(new NewCookie("uid", user.getUid(), "/", uriInfo
-						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
-						max_age, null, false, false))
-				.cookie(new NewCookie("sessionId", String.valueOf(session
-						.getId()), "/", uriInfo.getBaseUri().getHost(),
-						Cookie.DEFAULT_VERSION, null, max_age, null, false,
-						false))
-				.cookie(new NewCookie("authToken", authToken, "/api", uriInfo
-						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
-						max_age, null, false, true)).build();
+				.cookie(new NewCookie(CookieKey.UID, user.getUid(), "/",
+						uriInfo.getBaseUri().getHost(), Cookie.DEFAULT_VERSION,
+						null, max_age, null, false, false))
+				.cookie(new NewCookie(CookieKey.SESSION_ID, String
+						.valueOf(session.getId()), "/", uriInfo.getBaseUri()
+						.getHost(), Cookie.DEFAULT_VERSION, null, max_age,
+						null, false, false))
+				.cookie(new NewCookie(CookieKey.AUTH_TOKEN, authToken, "/api",
+						uriInfo.getBaseUri().getHost(), Cookie.DEFAULT_VERSION,
+						null, max_age, null, false, true)).build();
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class UserResource {
 	@GET
 	@Path("logout")
 	public Response logout(@Context SecurityContext sec,
-			@CookieParam(value = "sessionId") int sessionId) {
+			@CookieParam(value = CookieKey.SESSION_ID) int sessionId) {
 		if (sec.getUserPrincipal() == null) {
 			throw new WebApplicationException(Response.status(
 					Status.UNAUTHORIZED).build());
@@ -122,13 +122,13 @@ public class UserResource {
 
 		return Response
 				.status(Status.UNAUTHORIZED)
-				.cookie(new NewCookie("uid", "", "/", uriInfo.getBaseUri()
-						.getHost(), Cookie.DEFAULT_VERSION, null, 0, null,
-						false, false))
-				.cookie(new NewCookie("sessionId", "", "/", uriInfo
+				.cookie(new NewCookie(CookieKey.UID, "", "/", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						0, null, false, false))
-				.cookie(new NewCookie("authToken", "", "/api", uriInfo
+				.cookie(new NewCookie(CookieKey.SESSION_ID, "", "/", uriInfo
+						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
+						0, null, false, false))
+				.cookie(new NewCookie(CookieKey.AUTH_TOKEN, "", "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						0, null, false, true)).build();
 
