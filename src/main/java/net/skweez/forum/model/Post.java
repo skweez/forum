@@ -2,13 +2,10 @@ package net.skweez.forum.model;
 
 import java.util.Date;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 /**
  * @author elm
  * 
  */
-@XStreamAlias("Post")
 public class Post {
 	/**
 	 * The id of the post

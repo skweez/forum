@@ -2,15 +2,12 @@ package net.skweez.forum.model;
 
 import java.util.LinkedList;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
 /**
  * User class.
  * 
  * @author elm
  * 
  */
-@XStreamAlias("User")
 public class User {
 	/** The uid. */
 	private String uid;

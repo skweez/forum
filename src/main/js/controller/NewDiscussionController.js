@@ -18,14 +18,10 @@ function NewDiscussionController() {
 
 				$scope.createDiscussion = function() {
 					var newDiscussion = new Object({
-						'Discussion' : {
-							title : $scope.title,
-							posts : {
-								'Post' : {
-									content : $scope.content
-								}
-							}
-						}
+						title : $scope.title,
+						posts : [ {
+							content : $scope.content
+						} ]
 					});
 					discussions.save(newDiscussion, function(data,
 							getResponseHeaders) {
