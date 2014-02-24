@@ -9,8 +9,7 @@ import java.util.Properties;
  * settings from {@value #CONFIG_FILE}.
  * 
  * <p>
- * TODO We should try different locations like /etc/, $HOME/.config/. But these
- * should be OS dependent!
+ * Currently we do not try different locations like /etc/, $HOME/.config/.
  * 
  * @author mks
  */
@@ -35,7 +34,18 @@ public class Config {
 	}
 
 	/**
-	 * Get the value of a setting as configured in the config file. All
+	 * Get a boolean value from a setting in the configuration file.
+	 * 
+	 * @return <code>true</code> if the setting is set to <code>"true"</code>
+	 *         (ignoring case).
+	 */
+	public static boolean getBoolean(Setting setting) {
+		return Boolean.parseBoolean(getValue(setting));
+
+	}
+
+	/**
+	 * Get the value of a setting as configured in the configuration file. All
 	 * available keys are enumerated in {@link Setting}.
 	 * 
 	 * @return The String as configured or <code>null</code> if it is not

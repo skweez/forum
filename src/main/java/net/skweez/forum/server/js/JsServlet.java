@@ -9,6 +9,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import net.skweez.forum.config.Config;
+import net.skweez.forum.config.Setting;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -23,19 +26,35 @@ import com.google.javascript.jscomp.SourceFile;
  * The servlet that serves js files.
  * 
  * @author mks
- * 
  */
 @Path("js")
 public class JsServlet {
 
-	/**
-	 * @return the compiled js
-	 */
+	/** The compiled Javascript. */
+	private String compiledJavascript;
+
+	/** @return the compiled Javascript. */
 	@GET
 	@Path("skweez.js")
 	@Produces("application/javascript")
 	public String getCompiledJavascript() {
-		return compileJavascript();
+		if (alwaysRecompile()) {
+			return compileJavascript();
+		} else if (compiledJavascript == null) {
+			compiledJavascript = compileJavascript();
+		}
+		return compiledJavascript;
+	}
+
+	/**
+	 * Checks if the Javascript sources should be compiled on every request.
+	 * 
+	 * @return <code>true</code> if the option
+	 *         {@link Setting#SERVER_ALWAYS_COMPILE_JS} is set to
+	 *         <code>'true'</code> (ignoring case).
+	 */
+	private boolean alwaysRecompile() {
+		return Config.getBoolean(Setting.SERVER_ALWAYS_COMPILE_JS);
 	}
 
 	/**
