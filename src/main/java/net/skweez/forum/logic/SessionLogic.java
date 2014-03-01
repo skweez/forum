@@ -7,7 +7,7 @@ import java.util.Calendar;
 
 import net.skweez.forum.datastore.DatastoreFactory;
 import net.skweez.forum.datastore.SessionDatastore;
-import net.skweez.forum.model.Session;
+import net.skweez.forum.model.UserSession;
 
 /**
  * The session logic. Handles all session related tasks.
@@ -37,7 +37,7 @@ public class SessionLogic {
 	 *            days
 	 * @return the new session
 	 */
-	public Session createSession(final String uid, final boolean longSession) {
+	public UserSession createSession(final String uid, final boolean longSession) {
 		Calendar cal = Calendar.getInstance();
 		if (longSession) {
 			cal.add(Calendar.DATE, LONG_SESSION_LIFETIME);
@@ -69,7 +69,7 @@ public class SessionLogic {
 	 */
 	public boolean validateAuthTokenForUID(final String authToken,
 			final String uid, int sessionId) {
-		Session session = sessionDatastore.findSession(uid, sessionId);
+		UserSession session = sessionDatastore.findSession(uid, sessionId);
 		return (session != null && authToken.equals(session.getAuthToken()));
 	}
 }

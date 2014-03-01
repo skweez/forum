@@ -5,8 +5,8 @@ package net.skweez.forum.server;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -56,12 +56,12 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 			return;
 		}
 
+		User user = userLogic.getUser(uid);
+
 		// return without security context if the auth token is invalid
 		if (!sessionLogic.validateAuthTokenForUID(authToken, uid, sessionId)) {
 			return;
 		}
-
-		User user = userLogic.getUser(uid);
 
 		ForumSecurityContext sec = new ForumSecurityContext(user);
 		requestContext.setSecurityContext(sec);
@@ -82,7 +82,7 @@ public class AuthCookieFilter implements ContainerRequestFilter {
 		/**
 		 * the roles
 		 */
-		private LinkedList<String> roles;
+		private Set<String> roles;
 
 		/**
 		 * constructor

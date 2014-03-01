@@ -18,8 +18,8 @@ import javax.ws.rs.core.UriInfo;
 
 import net.skweez.forum.logic.SessionLogic;
 import net.skweez.forum.logic.UserLogic;
-import net.skweez.forum.model.Session;
 import net.skweez.forum.model.User;
+import net.skweez.forum.model.UserSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,11 +71,11 @@ public class UserResource {
 
 		logger.debug("Login successful: " + uid);
 
-		Session session = sessionLogic.createSession(uid, stayloggedin);
+		User user = userLogic.findOrCreateUser(uid, sec);
+
+		UserSession session = sessionLogic.createSession(uid, stayloggedin);
 		// get authentication token
 		String authToken = session.getAuthToken();
-
-		User user = userLogic.findOrCreateUser(uid, sec);
 
 		int max_age = NewCookie.DEFAULT_MAX_AGE;
 		if (stayloggedin) {
@@ -116,9 +116,9 @@ public class UserResource {
 					Status.UNAUTHORIZED).build());
 		}
 
-		String uid = sec.getUserPrincipal().getName();
-		sessionLogic.deleteSession(uid, sessionId);
-		logger.debug("Logout: " + uid);
+		User user = userLogic.getUser(sec.getUserPrincipal().getName());
+		sessionLogic.deleteSession(user.getUid(), sessionId);
+		logger.debug("Logout: " + user.getUid());
 
 		return Response
 				.status(Status.UNAUTHORIZED)
@@ -131,6 +131,5 @@ public class UserResource {
 				.cookie(new NewCookie(CookieKey.AUTH_TOKEN, "", "/api", uriInfo
 						.getBaseUri().getHost(), Cookie.DEFAULT_VERSION, null,
 						0, null, false, true)).build();
-
 	}
 }

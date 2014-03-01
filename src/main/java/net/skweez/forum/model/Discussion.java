@@ -2,7 +2,15 @@ package net.skweez.forum.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -13,11 +21,14 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("Discussion")
+@Entity
 public class Discussion {
 
 	/**
 	 * the id
 	 */
+	@Id
+	@GeneratedValue
 	private Integer id;
 
 	/**
@@ -33,16 +44,19 @@ public class Discussion {
 	/**
 	 * the user
 	 */
+	@ManyToOne
 	private User user;
 
 	/**
 	 * the posts in this discussion
 	 */
+	@OneToMany(cascade = CascadeType.ALL)
 	private final List<Post> posts;
 
 	/**
 	 * the category this discussion belongs to
 	 */
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Category category;
 
 	/**
@@ -95,9 +109,30 @@ public class Discussion {
 	 *            the post to add
 	 * @return the id of the post
 	 */
-	public int addPost(Post post) {
+	public void addPost(Post post) {
 		posts.add(post);
-		return posts.indexOf(post);
+	}
+
+	/**
+	 * @param postId
+	 *            the index of the post to remove
+	 */
+	public void deletePost(int postId) {
+		Iterator<Post> postsIterator = posts.iterator();
+		while (postsIterator.hasNext()) {
+			Post post = postsIterator.next();
+			if (post.getId().equals(postId)) {
+				postsIterator.remove();
+			}
+		}
+	}
+
+	/**
+	 * @param category
+	 *            the category
+	 */
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	/**

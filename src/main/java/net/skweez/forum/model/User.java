@@ -1,6 +1,14 @@
 package net.skweez.forum.model;
 
-import java.util.LinkedList;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -11,12 +19,29 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  * 
  */
 @XStreamAlias("User")
+@Entity
 public class User {
+	/** The name of the uid column. */
+	public static final String UID_COLUMN_NAME = "uid";
+
+	/** The id */
+	@Id
+	@GeneratedValue
+	private int id;
+
 	/** The uid. */
+	@Column(unique = true, name = UID_COLUMN_NAME)
 	private String uid;
 
 	/** The roles. */
-	private LinkedList<String> roles;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private Set<String> roles;
+
+	/**
+	 * Only used by hibernate. Needs to be package visible.
+	 */
+	/* package */User() {
+	}
 
 	/**
 	 * Constructor.
@@ -26,7 +51,7 @@ public class User {
 	 */
 	public User(String uid) {
 		setUid(uid);
-		roles = new LinkedList<>();
+		roles = new HashSet<>();
 	}
 
 	/**
@@ -47,7 +72,7 @@ public class User {
 	/**
 	 * @return the roles
 	 */
-	public LinkedList<String> getRoles() {
+	public Set<String> getRoles() {
 		return roles;
 	}
 

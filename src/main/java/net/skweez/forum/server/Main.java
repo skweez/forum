@@ -3,6 +3,8 @@
  */
 package net.skweez.forum.server;
 
+import java.sql.SQLException;
+
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
 
@@ -32,9 +34,14 @@ public class Main {
 
 	/**
 	 * @param args
+	 * @throws SQLException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		Server server = new Server(8080);
+
+		/** Start h2 webserver to inspect database when the app is running. */
+		org.h2.tools.Server webServer = org.h2.tools.Server.createWebServer()
+				.start();
 
 		WebAppContext context = new WebAppContext();
 		context.setDescriptor("../WEB-INF/web.xml");

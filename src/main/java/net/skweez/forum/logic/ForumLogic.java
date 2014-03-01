@@ -2,14 +2,16 @@ package net.skweez.forum.logic;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
-import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.DiscussionDatastore;
-import net.skweez.forum.datastore.PostDatastore;
 import net.skweez.forum.model.Discussion;
 import net.skweez.forum.model.Post;
+import net.skweez.forum.model.User;
+import net.skweez.forum.server.HibernateHelper;
 
 import org.apache.commons.lang3.Validate;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
 
@@ -23,17 +25,6 @@ public class ForumLogic {
 			.and(Sanitizers.IMAGES).and(Sanitizers.LINKS)
 			.and(Sanitizers.FORMATTING);
 
-	/** the datastore factory */
-	private final DatastoreFactory factory = DatastoreFactory
-			.createConfigured();
-
-	/** the discussion datastore */
-	private final DiscussionDatastore discussionDatastore = factory
-			.getDiscussionDatastore();
-
-	/** the post datastore */
-	private final PostDatastore postDatastore = factory.getPostDatastore();
-
 	/**
 	 * @param discussion
 	 *            the new discussion
@@ -42,17 +33,28 @@ public class ForumLogic {
 	 * @throws IllegalArgumentException
 	 *             if the discussion has no post attached
 	 */
-	public int createDiscussion(Discussion discussion) throws LogicException {
-		int discussionId;
-
+	public int createDiscussion(Discussion discussion, User user)
+			throws LogicException {
 		Validate.isTrue(discussion.getPosts().size() == 1);
 
+		discussion.setUser(user);
 		discussion.setDate(new Date());
 
-		discussionId = discussionDatastore.createDiscussion(discussion);
-		postDatastore.createPost(discussion.getPosts().get(0));
+		Session session = HibernateHelper.getSessionFactory()
+				.getCurrentSession();
+		session.beginTransaction();
 
-		return discussionId;
+		session.save(discussion.getPosts().get(0));
+		session.save(discussion);
+
+		try {
+			session.getTransaction().commit();
+		} catch (HibernateException e) {
+			session.getTransaction().rollback();
+			throw e;
+		}
+
+		return discussion.getId();
 	}
 
 	/**
@@ -60,14 +62,39 @@ public class ForumLogic {
 	 * @return the discussion. null if no discussion is found
 	 */
 	public Discussion getDiscussion(int discussionId) {
-		return discussionDatastore.findDiscussion(discussionId);
+		Session session = HibernateHelper.getSessionFactory()
+				.getCurrentSession();
+		session.beginTransaction();
+		Discussion discussion = (Discussion) session.get(Discussion.class,
+				discussionId);
+		session.getTransaction().commit();
+		return discussion;
 	}
 
 	/**
 	 * @return all discussions
 	 */
 	public Collection<Discussion> getDiscussions() {
-		return discussionDatastore.selectAllDiscussions();
+		Session session = HibernateHelper.getSessionFactory()
+				.getCurrentSession();
+		session.beginTransaction();
+		Collection<Discussion> discussions = session.createCriteria(
+				Discussion.class).list();
+		session.getTransaction().commit();
+		return discussions;
+	}
+
+	/**
+	 * @param discussionId
+	 *            the discussionId
+	 * @return the posts in a simple ArrayList
+	 */
+	public List<Post> getPostsAsListForDiscussion(int discussionId) {
+		Discussion discussion = getDiscussion(discussionId);
+		if (discussion == null) {
+			return null;
+		}
+		return discussion.getPosts();
 	}
 
 	/**
@@ -79,23 +106,27 @@ public class ForumLogic {
 	 * @throws LogicException
 	 *             Exception is thrown if no discussion with discusionId exists.
 	 */
-	public int addPostToDiscussion(Post post, int discussionId)
+	public int addPostToDiscussion(Post post, int discussionId, User user)
 			throws LogicException {
-		Discussion discussion = discussionDatastore
-				.findDiscussion(discussionId);
+		Discussion discussion = getDiscussion(discussionId);
 
 		if (discussion == null) {
 			throw new LogicException("No such discussion with id"
 					+ discussionId);
 		}
 
+		post.setUser(user);
 		post.setDate(new Date());
 		post.setContent(htmlSanitizer.sanitize(post.getContent()));
 
-		postDatastore.createPost(post);
+		discussion.addPost(post);
 
-		int postId = discussion.addPost(post);
-		discussionDatastore.updateDiscussion(discussionId, discussion);
-		return postId;
+		Session session = HibernateHelper.getSessionFactory()
+				.getCurrentSession();
+		session.beginTransaction();
+		session.save(discussion);
+		session.getTransaction().commit();
+
+		return post.getId();
 	}
 }

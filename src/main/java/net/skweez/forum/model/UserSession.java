@@ -13,7 +13,7 @@ import java.util.Date;
  * @author elm
  * 
  */
-public class Session {
+public class UserSession {
 	/** The session id. */
 	private int id;
 
@@ -26,7 +26,7 @@ public class Session {
 	/**
 	 * Constructor.
 	 */
-	public Session(Date expireDate) {
+	public UserSession(Date expireDate) {
 		setExpireDate(expireDate);
 		authToken = new BigInteger(130, new SecureRandom()).toString(32);
 	}

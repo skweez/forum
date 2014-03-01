@@ -11,15 +11,6 @@ import net.skweez.forum.datastore.simple.SimpleDatastoreFactory;
  */
 public abstract class DatastoreFactory {
 
-	/** @return The discussions datastore. */
-	public abstract DiscussionDatastore getDiscussionDatastore();
-
-	/** @return The posts datastore. */
-	public abstract PostDatastore getPostDatastore();
-
-	/** @return The users datastore. */
-	public abstract UserDatastore getUserDatastore();
-
 	/** @return The session datastore */
 	public abstract SessionDatastore getSessionDatastore();
 

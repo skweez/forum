@@ -7,9 +7,11 @@ import javax.ws.rs.core.SecurityContext;
 
 import net.skweez.forum.config.Config;
 import net.skweez.forum.config.Setting;
-import net.skweez.forum.datastore.DatastoreFactory;
-import net.skweez.forum.datastore.UserDatastore;
 import net.skweez.forum.model.User;
+import net.skweez.forum.server.HibernateHelper;
+
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * The user logic handles all user related tasks
@@ -18,10 +20,6 @@ import net.skweez.forum.model.User;
  * 
  */
 public class UserLogic {
-	/** The user datastore. */
-	private final UserDatastore userDatastore = DatastoreFactory
-			.createConfigured().getUserDatastore();
-
 	/**
 	 * Find a user by its uid. If non is found create a new user. Role
 	 * informations for the new user are extracted from the security context.
@@ -34,9 +32,9 @@ public class UserLogic {
 	 *         returned
 	 */
 	public User findOrCreateUser(String uid, SecurityContext sec) {
-		User user = userDatastore.findUser(uid);
+		User user = getUser(uid);
 
-		if (user != null) {
+		if (user != null || sec == null) {
 			return user;
 		}
 
@@ -49,7 +47,11 @@ public class UserLogic {
 			user.addRole(Config.getValue(Setting.ROLE_NAME_ADMIN));
 		}
 
-		userDatastore.createUser(user);
+		Session session = HibernateHelper.getSessionFactory()
+				.getCurrentSession();
+		session.beginTransaction();
+		session.save(user);
+		session.getTransaction().commit();
 
 		return user;
 	}
@@ -60,6 +62,12 @@ public class UserLogic {
 	 * @return the user for the uid. Returns null if no such user exists.
 	 */
 	public User getUser(String uid) {
-		return userDatastore.findUser(uid);
+		Session session = HibernateHelper.getSessionFactory()
+				.getCurrentSession();
+		session.beginTransaction();
+		User user = (User) session.createCriteria(User.class)
+				.add(Restrictions.eq(User.UID_COLUMN_NAME, uid)).uniqueResult();
+		session.getTransaction().commit();
+		return user;
 	}
 }
