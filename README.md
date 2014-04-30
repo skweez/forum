@@ -13,6 +13,7 @@
 Not yet fully functional, many pieces still missing for an actual useful forum.
 
 ##Demo
+The demo is a bit out of date, but gives a first impression, of what the app will look like.
  * https://skweez-forum.herokuapp.com/
  * User: testUser1
  * Password: testPassword1
